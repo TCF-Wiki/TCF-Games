@@ -5,18 +5,15 @@
 <template>
 	<header>
 		<img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-		<div class="wrapper">
-			<HelloWorld msg="You did it!" />
-
-			<nav>
-				<RouterLink to="/">Home</RouterLink>
-				<RouterLink to="/about">About</RouterLink>
-			</nav>
-		</div>
+		<nav class="nav center">
+			<RouterLink v-for="route in $router.options.routes" :to="route.path" class="navlink center">
+				<p>{{ route.name }}</p>
+			</RouterLink>
+		</nav>
 	</header>
-
-	<RouterView />
+	<main>
+		<RouterView />
+	</main>
 </template>
 
 <style scoped>
