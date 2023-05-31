@@ -1,11 +1,11 @@
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
-const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
-const cors = require("cors");
+import express from "express";
+import bodyParser from "body-parser";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import cors from "cors";
 
 //Setup server settings
+export const app = express();
 const limiter = rateLimit({
 	windowMs: 1 * 60 * 1000, // 1 minutes
 	max: 1000 // limit each IP to 100 requests per windowMs
@@ -16,13 +16,21 @@ app.use(limiter);
 app.use(express.json());
 app.use(cors());
 
-app.use(express.static("../frontend/dist"));
-
 //Content Security Policy
 app.use(function (req, res, next) {
-	res.setHeader("Content-Security-Policy", "default-src 'self'; frame-src *");
+	res.setHeader("Content-Security-Policy", "default-src 'self';");
 	next();
 });
+//Redirect http to https
+app.use(function (request, response, next) {
+	if (request.hostname != "localhost" && request.hostname != "127.0.0.1" && !request.secure) {
+		return response.redirect("https://" + request.headers.host + request.url);
+	}
+	next();
+});
+
+//Static files
+app.use(express.static("../frontend/dist"));
 
 //Index page
 app.get("/", (req, res) => {
@@ -30,7 +38,7 @@ app.get("/", (req, res) => {
 });
 
 //Setup http & https server
-const http = require("http");
+import http from "http";
 ///const https = require('https');
 
 // Certificate
@@ -56,26 +64,26 @@ httpServer.listen(5000, () => {
 });
 
 //Setup socket.io
-const io = require("socket.io")(httpServer, {
+export const io = require("socket.io")(httpServer, {
 	cors: {
 		origin: "*",
 		methods: ["GET", "POST"]
 	}
 });
 
-//Export app
-module.exports = {
-	app: app,
-	io: io
-};
-
 //Load logic
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 const logicPath = path.join(__dirname, "games");
 const logicFiles = fs.readdirSync(logicPath);
 for (const file of logicFiles) {
-	require(path.join(logicPath, file));
+	if (fs.lstatSync(path.join(logicPath, file)).isDirectory()) {
+		if (fs.existsSync(path.join(logicPath, file, "main.ts"))) {
+			require(path.join(logicPath, file, "main.ts"));
+		}
+	} else {
+		require(path.join(logicPath, file));
+	}
 }
 
 //Redirect everything else to index

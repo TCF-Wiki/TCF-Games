@@ -1,6 +1,6 @@
 console.log("Test");
 
-const {app, io} = require("../server.js");
+import {app, io} from "../server";
 
 app.get("/api/test", (req, res) => {
 	res.send("Test");
