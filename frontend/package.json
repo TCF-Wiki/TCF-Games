@@ -10,12 +10,19 @@
 		"type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
 	},
 	"dependencies": {
+		"@fortawesome/fontawesome-svg-core": "^6.4.0",
+		"@fortawesome/free-brands-svg-icons": "^6.4.0",
+		"@fortawesome/free-solid-svg-icons": "^6.4.0",
+		"@fortawesome/vue-fontawesome": "^3.0.3",
+		"leaflet": "^1.9.4",
 		"socket.io-client": "^4.6.1",
 		"vue": "^3.3.2",
-		"vue-router": "^4.2.1"
+		"vue-router": "^4.2.1",
+		"vue-toast-notification": "^3.1.1"
 	},
 	"devDependencies": {
 		"@tsconfig/node18": "^2.0.1",
+		"@types/leaflet": "^1.9.3",
 		"@types/node": "^18.16.8",
 		"@vitejs/plugin-vue": "^4.2.3",
 		"@vue/tsconfig": "^0.4.0",

@@ -1,0 +1,54 @@
+.text-input {
+    position: relative;
+    padding: 1em 0 0;
+    margin-bottom: 1em;
+}
+
+.text-input input[type="text"] {
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid var(--primary-accent);
+  outline: 0;
+  color: var(--secondary);
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+  .text-input input[type="text"]::placeholder {
+    color: transparent;
+  }
+
+  .text-input input[type="text"]:placeholder-shown ~ label {
+    cursor: text;
+    top: 20px;
+  }
+
+
+.text-input label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    color: var(--accept);
+    font-size: 1.2em;
+    padding-bottom: 6px;
+    user-select: none;
+}
+
+.text-input input[type="text"]:focus ~ label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    color: var(--secondary);
+  }
+ .text-input input[type="text"]:focus { 
+    padding-bottom: 6px;  
+    border-bottom: 3px solid var(--tertairy)
+}
+
+/* reset input */
+.text-input input[type="text"]:required,
+.text-input input[type="text"]:invalid {
+   box-shadow:none; 
+}
