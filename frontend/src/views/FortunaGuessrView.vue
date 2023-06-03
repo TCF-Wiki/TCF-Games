@@ -1,8 +1,8 @@
 <template>
 	<main class="container">
-		<Start v-if="state == 'Start'" @startGame="StartGameFromOptions" @startFromSeed="StartGameFromSeed"></Start>
 		<Game v-if="state == 'Guessing'" :location="locations[currentRound]" :game-options="gameOptions" @guess="Guess">
 		</Game>
+		<Start v-if="state == 'Start'" @startGame="StartGameFromOptions" @startFromSeed="StartGameFromSeed"></Start>
 		<ShowingGuesses v-if="state == 'ShowingGuesses'" @nextRound="NextRound"></ShowingGuesses>
 		<End v-if="state == 'End'" @backToLobby="BackToLobby" @restartGame="StartGameFromOptions"></End>
 	</main>
