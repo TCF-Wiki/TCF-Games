@@ -23,9 +23,8 @@ main {
 
 @media screen and (min-width: 1000px) {
 	main {
-		padding-left: calc(var(--padding-page) * 4);
-		padding-right: var(--padding-page);
-		margin-top: var(--space-md);
+		margin-left: calc(2.8 * var(--padding-page));
+		margin-top: var(--space-lg);
 	}
 }
 

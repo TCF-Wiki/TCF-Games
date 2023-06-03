@@ -27,7 +27,7 @@ app.use(ToastPlugin, {
 	position: "top-right",
 	duration: 5000,
 	dismissible: true
-});
+}).use(FloatingVue);
 
 export const toast = app.config.globalProperties.$toast;
 
