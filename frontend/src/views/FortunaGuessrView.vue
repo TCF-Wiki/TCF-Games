@@ -1,10 +1,10 @@
 <template>
-	<main class="container">
+	<section class="container">
 		<Start v-if="state == 'Start'"></Start>
 		<Game v-if="state == 'Guessing'" :location="locations[currentRound]" :game-options="gameOptions"></Game>
 		<ShowingGuesses v-if="state == 'ShowingGuesses'"></ShowingGuesses>
 		<End v-if="state == 'End'"></End>
-	</main>
+	</section>
 </template>
 
 <script lang="ts">

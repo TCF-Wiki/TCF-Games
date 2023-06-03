@@ -21,7 +21,7 @@ app.use(ToastPlugin, {
 	position: "top-right",
 	duration: 8000,
 	dismissible: true
-});
+}).use(FloatingVue);
 
 //Mount
 app.mount("body");

@@ -1,10 +1,9 @@
 <template>
 	<div class="map-selector">
-		<button class="button" type="button" @click="requestMap(1)">Map 1</button>
-		<button class="button" type="button" @click="requestMap(2)">Map 2</button>
-		<button class="button" type="button" @click="requestMap(3)">Map 3</button>
+		<button type="button" @click="requestMap(1)">Bright Sands</button>
+		<button type="button" @click="requestMap(2)">Crescent Falls</button>
+		<button type="button" @click="requestMap(3)">Tharis Island</button>
 	</div>
-	{{ state }}
 </template>
 
 <script lang="ts">
@@ -23,4 +22,29 @@
 	});
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.map-selector {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-md);
+    border: 1px solid var(--border-color-base);
+    border-bottom: none;
+}
+
+button {
+    padding: 0;
+    margin: 0;
+
+    background-color: var(--color-surface-4);
+    color: var(--color-base);
+    padding: var(--space-sm);
+    
+    transition: background 0.3s ease-in-out;
+
+    &:hover {
+        background-color: var(--color-surface-1);
+    }
+}
+</style>

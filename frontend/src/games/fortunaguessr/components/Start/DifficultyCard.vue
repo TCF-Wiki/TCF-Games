@@ -53,7 +53,7 @@ export default {
 			<p>
 				{{ description }}
 			</p>
-			<button class="button" type="button" @click.prevent="startGame()">Start Game</button>
+			<button type="button" @click.prevent="startGame()">Start Game</button>
 		</div>
 		<div class="card-icons">
 			<ul>
@@ -121,7 +121,7 @@ export default {
 	</section>
 </template>
 
-<style scoped>
+<style scoped lang="less">
 * {
 	margin: 0;
 	padding: 0;
@@ -135,12 +135,12 @@ export default {
 	flex-direction: row;
 	justify-content: center;
 	align-items: space-between;
-	height: 1.75em;
+	height: 1.75rem;
 }
 
 .checkbox-container span {
-	width: 3em;
-	padding: 0.4em;
+	width: 3rem;
+	padding: 0.4rem;
 	transform: translateY(-6px);
 }
 
@@ -148,7 +148,7 @@ input[type="range"] {
 	-webkit-appearance: none;
 	appearance: none;
 	height: 7px;
-	background: var(--color-base--subtle);
+	background: var(--color-base);
 	border-radius: 5px;
 	background-size: 50% 100%;
 	background-repeat: no-repeat;
@@ -161,8 +161,8 @@ input[type="range"] {
 /* Input Thumb */
 input[type="range"]::-webkit-slider-thumb {
 	-webkit-appearance: none;
-	height: 20px;
-	width: 20px;
+	height: 1.5rem;
+	width: 1.5rem;
 	border-radius: 50%;
 	background: var(--rarity-color-rare);
 	cursor: ew-resize;
@@ -172,8 +172,8 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="range"]::-moz-range-thumb {
 	-webkit-appearance: none;
 	appearance: none;
-	height: 20px;
-	width: 20px;
+	height: 1.5rem;
+	width: 1.5rem;
 	border-radius: 50%;
 	background: var(--rarity-color-rare);
 	cursor: ew-resize;
@@ -183,8 +183,8 @@ input[type="range"]::-moz-range-thumb {
 input[type="range"]::-ms-thumb {
 	-webkit-appearance: none;
 	appearance: none;
-	height: 20px;
-	width: 20px;
+	height: 1.5rem;
+	width: 1.5rem;
 	border-radius: 50%;
 	background: var(--rarity-color-rare);
 	cursor: ew-resize;
@@ -222,7 +222,8 @@ input[type="range"]::-moz-range-track {
 
 .card {
 	position: relative;
-	width: 24em;
+	width: 24rem;
+	max-width: 80vw;
 	aspect-ratio: 1 / 1;
 	clip-path: polygon(5% 0%, 100% 0, 100% 95%, 95% 100%, 0 100%, 0% 5%);
 
@@ -274,11 +275,18 @@ input[type="range"]::-moz-range-track {
 
 .card .card-context h2 {
 	position: relative;
-	left: 1em;
+	padding-left: 1rem;
+	text-align: left;
 	color: var(--color-base--emphasized);
-	font-size: 2em;
+	font-size: 2rem;
 	font-weight: 700;
+
+	@media screen and (max-width: 900px) {
+		font-size: 1.5rem
+	}
 }
+
+
 
 .card .card-context p {
 	position: relative;
@@ -291,19 +299,29 @@ input[type="range"]::-moz-range-track {
 	opacity: 0;
 	transition: 0.2s ease-out;
 	padding-bottom: 2em;
+
+	@media screen and (max-width: 900px) {
+		font-size: .7rem
+	}
 }
 
 .card:hover .card-context p {
 	opacity: 1;
 }
 
-.card .card-context .button {
+.card .card-context button {
 	position: absolute;
-	right: 0.6em;
-	top: 28%;
-	border: 1px solid var(--border-color-base);
+	background-color: var(--color-base--subtle);
+	right: 0.6rem;
+	top: 25%;
+	color: var(--color-surface-0);
+	padding: var(--space-xs) var(--space-sm);
 	font-weight: bold;
-	padding: 0.1em;
+	clip-path: polygon(5% 0%, 100% 0, 100% 85%, 95% 100%, 0 100%, 0% 15%);
+
+	&:hover {
+		filter: brightness(110%);
+	}
 }
 
 .card .card-icons {
@@ -323,7 +341,7 @@ input[type="range"]::-moz-range-track {
 
 .card .card-icons li {
 	cursor: pointer;
-	background: var(--color-surface-2);
+	background: var(--color-surface-1);
 	font-size: 22px;
 	margin: 0 0 10px;
 	width: 2em;
@@ -332,6 +350,12 @@ input[type="range"]::-moz-range-track {
 	transition: 0.2s ease-out;
 	overflow: hidden;
 	clip-path: polygon(10% 0%, 100% 0, 100% 90%, 90% 100%, 0 100%, 0% 10%);
+
+	@media screen and (max-width: 900px) {
+		width: 2rem;
+		height: 2rem;
+		font-size: 18px;
+	}
 }
 
 .card .card-icons li svg {
@@ -339,7 +363,7 @@ input[type="range"]::-moz-range-track {
 }
 
 .card .card-icons li:hover {
-	background: var(--color-surface-1);
+	background: var(--color-surface-2);
 	transform: translateX(-5px);
 	width: 8em;
 	height: 8em;
@@ -419,6 +443,6 @@ input[type="range"]::-moz-range-track {
 }
 
 svg {
-	fill: var(--color-base);
+	fill: var(--color-base--emphasized);
 }
 </style>

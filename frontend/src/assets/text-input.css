@@ -7,9 +7,9 @@
 .text-input input[type="text"] {
 	width: 100%;
 	border: 0;
-	border-bottom: 2px solid var(--primary-accent);
+	border-bottom: 1px solid var(--border-color-base);
 	outline: 0;
-	color: var(--secondary);
+	color: var(--color-base--emphasized);
 	padding: 7px 0;
 	background: transparent;
 	transition: border-color 0.2s;
@@ -28,7 +28,7 @@
 	top: 0;
 	display: block;
 	transition: 0.2s;
-	color: var(--accept);
+	color: var(--color-base);
 	font-size: 1.2em;
 	padding-bottom: 6px;
 	user-select: none;
@@ -39,11 +39,11 @@
 	top: 0;
 	display: block;
 	transition: 0.2s;
-	color: var(--secondary);
+	color: var(--color-base--subtle);
 }
 .text-input input[type="text"]:focus {
 	padding-bottom: 6px;
-	border-bottom: 3px solid var(--tertairy);
+	border-bottom: 2px solid var(--border-color-base);
 }
 
 /* reset input */
