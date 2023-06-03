@@ -1,28 +1,21 @@
-<template>
-	<div class="loader"></div>
-	<header>
-		<div class="top">
-			<h1>Fortuna Guessr</h1>
-		</div>
-		<div class="bottom">
-			<div id="info"></div>
-		</div>
-	</header>
-	<page>
-		<div id="all"></div>
-		<div id="left" class="side"></div>
-		<div id="right" class="side"></div>
-	</page>
-	<div id="buttons"></div>
-	<div id="footer"></div>
-</template>
+<template></template>
 
 <script lang="ts">
-	import "@/games/fortunaguessr/main";
+	//Import dependencies
+	import "leaflet/dist/leaflet.css";
+	import "leaflet";
+	import {app} from "@/main";
+	const toast = app.config.globalProperties.$toast;
 
+	//Create vue app
 	export default {
-		name: "FortunaGuessrView"
+		name: "FortunaGuessrView",
+		data: () => ({
+			select: true,
+			playing: false,
+			showingGuess: false,
+			end: false
+		}),
+		mounted() {}
 	};
 </script>
-
-<style scoped></style>

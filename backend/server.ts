@@ -18,11 +18,12 @@ app.use(cors());
 
 //Content Security Policy
 app.use(function (req, res, next) {
-	res.setHeader("Content-Security-Policy", "default-src 'self';");
+	res.setHeader("Content-Security-Policy", "default-src 'self';script-src 'self' 'sha256-reBsRZd5I88opZSwT59Ir+QlBhrEhdRJ1aQUr4GXhyw=';style-src 'self' 'unsafe-inline';");
 	next();
 });
 //Redirect http to https
 app.use(function (request, response, next) {
+	console.log(request.path);
 	if (request.hostname != "localhost" && request.hostname != "127.0.0.1" && !request.secure) {
 		return response.redirect("https://" + request.headers.host + request.url);
 	}
@@ -31,11 +32,6 @@ app.use(function (request, response, next) {
 
 //Static files
 app.use(express.static("../frontend/dist"));
-
-//Index page
-app.get("/", (req, res) => {
-	res.sendFile("../frontend/dist/index.html");
-});
 
 //Setup http & https server
 import http from "http";
@@ -86,5 +82,5 @@ for (const file of logicFiles) {
 	}
 }
 
-//Redirect everything else to index
-app.use("/*", express.static("../frontend/dist/index.html"));
+//Redirect everything else to dist
+app.use("/*", express.static("../frontend/dist"));
