@@ -33,7 +33,9 @@
 				this.$emit("guess", this.guessInfo);
 			}
 		},
-		mounted() {}
+		mounted() {
+			console.log(this.location);
+		}
 	};
 </script>
 <style scoped></style>

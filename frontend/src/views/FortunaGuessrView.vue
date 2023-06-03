@@ -15,7 +15,8 @@
 	import {app} from "@/main";
 	const toast = app.config.globalProperties.$toast;
 	//Location data
-	import locationData from "@/games/fortunaguessr/locationList.json";
+	import rawLocationData from "@/games/fortunaguessr/locationList.json";
+	const locationData = rawLocationData as locationType[];
 
 	//Vue components
 	import Start from "@/games/fortunaguessr/components/Start.vue";
@@ -24,9 +25,9 @@
 	import End from "@/games/fortunaguessr/components/End.vue";
 
 	//Data types
-	export type locationType = {map: number; src: string; x: number; y: number; difficulty: number[]};
-	export type guessInfoType = {score: number; distance: number; time: number; location: number[]; map: number; imageData: locationType};
-	export type gameInfoType = {length: number; difficulty: number; timeLimit: number; maps: number[]; seed: string};
+	export type locationType = {map: 1 | 2 | 3; src: string; x: number; y: number; difficulty: number[]};
+	export type guessInfoType = {score: number; distance: number; time: number; location: number[]; map: 1 | 2 | 3; imageData: locationType};
+	export type gameInfoType = {length: number; difficulty: number; timeLimit: number; maps: (1 | 2 | 3)[]; seed: string};
 
 	//Create vue app
 	export default {
@@ -44,13 +45,12 @@
 			locations: [] as locationType[] //Game locations
 		}),
 		methods: {
-			StartGameFromOptions(recievedOptions: {length: number | null; difficulty: number | null; timeLimit: number | null; maps: number[] | null} | null) {
-				console.log("Received start game event", recievedOptions);
+			StartGameFromOptions(recievedOptions: {length: number | null; difficulty: number | null; timeLimit: number | null; maps: (1 | 2 | 3)[] | null} | null) {
 				let options = {} as {
 					length: number;
 					difficulty: number;
 					timeLimit: number;
-					maps: number[];
+					maps: (1 | 2 | 3)[];
 				};
 				//Retrieve game options
 				if (recievedOptions) {
@@ -64,6 +64,7 @@
 				//Check if all options are set
 				if (!options.length || !options.difficulty || !options.timeLimit || !options.maps) {
 					toast.error("Game options has not been set");
+					console.log("Game options has not been set");
 					return;
 				}
 				//Generate game seed
@@ -71,15 +72,20 @@
 
 				//Generate game locations
 				let availableLocations: locationType[] = locationData.filter((a) => a.difficulty.includes(options.difficulty) && options.maps.includes(a.map));
-				for (let i = 0; i < length; i++) {
-					//Get random location
-					let index = Math.floor(Math.random() * availableLocations.length);
-					//Add location to game seed
-					seed += `-${locationData.indexOf(availableLocations[index])}`;
-					//Remove location from available locations
-					availableLocations.filter((a) => a != availableLocations[index]);
+				if (availableLocations.length < options.length) {
+					toast.error("Not enough locations available with the selected options");
+					console.log("Not enough locations available with the selected options");
+					return;
 				}
-				console.log("Game seed", seed);
+				for (let i = 0; i < options.length; i++) {
+					//Get random location
+					let location = availableLocations[Math.floor(Math.random() * availableLocations.length)];
+					//Add location to game seed
+					let dataIndex = locationData.indexOf(location);
+					seed += `-${dataIndex}`;
+					//Remove location from available locations
+					availableLocations = availableLocations.filter((a) => a != location);
+				}
 				//Start game
 				this.StartGameFromSeed(seed);
 			},
@@ -94,10 +100,10 @@
 					difficulty: parseInt(splitSeed[1]),
 					timeLimit: parseInt(splitSeed[2]),
 					maps: (() => {
-						let maps = [];
-						if (splitSeed[3] == "1") maps.push(1);
-						if (splitSeed[4] == "1") maps.push(2);
-						if (splitSeed[5] == "1") maps.push(3);
+						let maps = [] as (1 | 2 | 3)[];
+						if (splitSeed[3].charAt(0) == "1") maps.push(1);
+						if (splitSeed[3].charAt(1) == "1") maps.push(2);
+						if (splitSeed[3].charAt(2) == "1") maps.push(3);
 						return maps;
 					})(),
 					seed: seed
@@ -105,8 +111,10 @@
 				//Set game locations
 				this.locations = [];
 				for (let i = 0; i < this.gameOptions.length; i++) {
-					this.locations.push(locationData[parseInt(splitSeed[i + 6])]);
+					this.locations.push(locationData[parseInt(splitSeed[i + 4])]);
 				}
+				console.log("Locations", this.locations);
+				console.log("Game options", this.gameOptions);
 				//Set state to guessing
 				this.state = "Guessing";
 			},
