@@ -8,25 +8,27 @@
 	</main>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
-import EndMap from './End/EndMap.vue';
+	import {defineComponent} from "vue";
+	import {emitter} from "@/main";
+	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
-export default defineComponent({
-	name: "End",
-	data: () => ({}),
-	emits: ["restartGame", "backToLobby"],
-	methods: {
-		restartGame() {
-			console.log("Restarting game");
-			this.$emit("restartGame");
+	import EndMap from "./End/EndMap.vue";
+
+	export default defineComponent({
+		name: "End",
+		data: () => ({}),
+		methods: {
+			restartGame() {
+				console.log("Restarting game");
+				emitter.emit("StartGameWithOptions", null);
+			},
+			backToLobby() {
+				console.log("Back to lobby");
+				emitter.emit("BackToLobby");
+			}
 		},
-		backToLobby() {
-			console.log("Back to lobby");
-			this.$emit("backToLobby");
-		}
-	},
-	mounted() { },
-	components: { EndMap }
-});
+		mounted() {},
+		components: {EndMap}
+	});
 </script>
 <style scoped></style>

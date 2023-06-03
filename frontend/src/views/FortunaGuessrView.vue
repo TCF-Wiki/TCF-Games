@@ -1,9 +1,9 @@
 <template>
 	<main class="container">
-		<Start v-if="state == 'Start'" @startGame="StartGameFromOptions" @startFromSeed="StartGameFromSeed"></Start>
-		<Game v-if="state == 'Guessing'" :location="locations[currentRound]" :game-options="gameOptions" @guess="Guess"></Game>
-		<ShowingGuesses v-if="state == 'ShowingGuesses'" @nextRound="NextRound"></ShowingGuesses>
-		<End v-if="state == 'End'" @backToLobby="BackToLobby" @restartGame="StartGameFromOptions"></End>
+		<Start v-if="state == 'Start'"></Start>
+		<Game v-if="state == 'Guessing'" :location="locations[currentRound]" :game-options="gameOptions"></Game>
+		<ShowingGuesses v-if="state == 'ShowingGuesses'"></ShowingGuesses>
+		<End v-if="state == 'End'"></End>
 	</main>
 </template>
 
@@ -12,11 +12,13 @@
 	import "leaflet/dist/leaflet.css";
 	import "leaflet";
 	import {defineComponent} from "vue";
+	import {emitter} from "@/main";
 	//Toast notifications
 	import {app} from "@/main";
 	const toast = app.config.globalProperties.$toast;
 	//Location data
-	import locationData from "@/games/fortunaguessr/locationList.json";
+	import rawLocationData from "@/games/fortunaguessr/locationList.json";
+	const locationData = rawLocationData as locationType[];
 
 	//Vue components
 	import Start from "@/games/fortunaguessr/components/Start.vue";
@@ -25,9 +27,9 @@
 	import End from "@/games/fortunaguessr/components/End.vue";
 
 	//Data types
-	export type locationType = {map: number; src: string; x: number; y: number; difficulty: number[]};
-	export type guessInfoType = {score: number; distance: number; time: number; location: number[]; map: number; imageData: locationType};
-	export type gameInfoType = {length: number; difficulty: number; timeLimit: number; maps: number[]; seed: string};
+	export type locationType = {map: 1 | 2 | 3; src: string; x: number; y: number; difficulty: number[]};
+	export type guessInfoType = {score: number; distance: number; time: number; location: number[]; map: 1 | 2 | 3; imageData: locationType};
+	export type gameInfoType = {length: number; difficulty: number; timeLimit: number; maps: (1 | 2 | 3)[]; seed: string};
 
 	//Create vue app
 	export default defineComponent({
@@ -44,14 +46,39 @@
 			gameOptions: {} as gameInfoType, //Game options
 			locations: [] as locationType[] //Game locations
 		}),
+		mounted() {
+			emitter.on("StartGameWithSeed", (seed: string) => {
+				this.StartGameFromSeed(seed);
+			});
+			emitter.on("StartGameWithOptions", (options: {length: number | null; difficulty: number | null; timeLimit: number | null; maps: (1 | 2 | 3)[] | null} | null) => {
+				this.StartGameFromOptions(options);
+			});
+			emitter.on("Guess", (guessData: guessInfoType) => {
+				console.log("Received guess event", guessData);
+				this.state = "ShowingGuesses";
+			});
+			emitter.on("NextRound", () => {
+				console.log("Recieved next round event");
+				this.currentRound++;
+				if (this.currentRound >= this.gameOptions.length) {
+					this.state = "End";
+				} else {
+					this.state = "Guessing";
+				}
+			});
+			emitter.on("BackToMenu", () => {
+				console.log("Received back to lobby event");
+				this.state = "Start";
+			});
+		},
 		methods: {
-			StartGameFromOptions(recievedOptions: {length: number | null; difficulty: number | null; timeLimit: number | null; maps: number[] | null} | null) {
+			StartGameFromOptions(recievedOptions: {length: number | null; difficulty: number | null; timeLimit: number | null; maps: (1 | 2 | 3)[] | null} | null) {
 				console.log("Received start game event", recievedOptions);
 				let options = {} as {
 					length: number;
 					difficulty: number;
 					timeLimit: number;
-					maps: number[];
+					maps: (1 | 2 | 3)[];
 				};
 				//Retrieve game options
 				if (recievedOptions) {
@@ -62,6 +89,7 @@
 				} else {
 					options = this.gameOptions;
 				}
+				console.log("Game options", options);
 				//Check if all options are set
 				if (!options.length || !options.difficulty || !options.timeLimit || !options.maps) {
 					toast.error("Game options has not been set");
@@ -72,13 +100,20 @@
 
 				//Generate game locations
 				let availableLocations: locationType[] = locationData.filter((a) => a.difficulty.includes(options.difficulty) && options.maps.includes(a.map));
-				for (let i = 0; i < length; i++) {
+				console.log("Available locations", availableLocations);
+				if (availableLocations.length < options.length) {
+					toast.error("Not enough locations available with the selected options");
+					console.log("Not enough locations available with the selected options");
+					return;
+				}
+				for (let i = 0; i < options.length; i++) {
 					//Get random location
-					let index = Math.floor(Math.random() * availableLocations.length);
+					let location = availableLocations[Math.floor(Math.random() * availableLocations.length)];
 					//Add location to game seed
-					seed += `-${locationData.indexOf(availableLocations[index])}`;
+					let dataIndex = locationData.indexOf(location);
+					seed += `-${dataIndex}`;
 					//Remove location from available locations
-					availableLocations.filter((a) => a != availableLocations[index]);
+					availableLocations = availableLocations.filter((a) => a != location);
 				}
 				console.log("Game seed", seed);
 				//Start game
@@ -95,10 +130,10 @@
 					difficulty: parseInt(splitSeed[1]),
 					timeLimit: parseInt(splitSeed[2]),
 					maps: (() => {
-						let maps = [];
-						if (splitSeed[3] == "1") maps.push(1);
-						if (splitSeed[4] == "1") maps.push(2);
-						if (splitSeed[5] == "1") maps.push(3);
+						let maps = [] as (1 | 2 | 3)[];
+						if (splitSeed[3].charAt(0) == "1") maps.push(1);
+						if (splitSeed[3].charAt(1) == "1") maps.push(2);
+						if (splitSeed[3].charAt(2) == "1") maps.push(3);
 						return maps;
 					})(),
 					seed: seed
@@ -106,32 +141,13 @@
 				//Set game locations
 				this.locations = [];
 				for (let i = 0; i < this.gameOptions.length; i++) {
-					this.locations.push(locationData[parseInt(splitSeed[i + 6])]);
+					this.locations.push(locationData[parseInt(splitSeed[i + 4])]);
 				}
+				console.log("Game options", this.gameOptions);
+				console.log("Game locations", this.locations);
 				//Set state to guessing
 				this.state = "Guessing";
-			},
-			Guess(guessData: guessInfoType) {
-				console.log("Received guess event", guessData);
-				this.state = "ShowingGuesses";
-			},
-			NextRound() {
-				console.log("Recieved next round event");
-				this.currentRound++;
-				if (this.currentRound >= this.gameOptions.length) {
-					this.state = "End";
-				} else {
-					this.state = "Guessing";
-				}
-			},
-			BackToLobby() {
-				console.log("Received back to lobby event");
-				this.state = "Start";
 			}
-		},
-		mounted() {
-			console.log("Mounted FortunaGuessrView");
-			toast.success("FortunaGuessr loaded");
 		}
 	});
 </script>

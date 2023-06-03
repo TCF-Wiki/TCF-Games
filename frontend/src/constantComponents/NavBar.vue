@@ -1,14 +1,13 @@
 <template>
-    <header class="mw-header citizen-header">
-        <div class="header-outer">
-            <div class="header-item" v-tooltip.right="{ content: 'Official Wiki' }">
-                <a href="https://thecyclefrontier.wiki/wiki/Main_Page" target="_blank">
-                    <img src="/wiki_logo_square.png">
-                </a>
-            </div>
-            <RouterLink v-for="route in $router.options.routes" :to="route.path" class="navlink center">
-                <div class="header-item" v-tooltip.right="route.name" v-html="route.meta?.icon">
-                </div>
+	<header class="mw-header citizen-header">
+		<div class="header-outer">
+			<div class="header-item" v-tooltip.right="{content: 'Official Wiki'}">
+				<a href="https://thecyclefrontier.wiki/wiki/Main_Page" target="_blank">
+					<img src="/wiki_logo_square.png" />
+				</a>
+			</div>
+			<RouterLink v-for="route in $router.options.routes" :to="route.path" class="navlink center">
+				<div class="header-item" v-tooltip.right="route.name" v-html="route.meta?.icon"></div>
 			</RouterLink>
 		</div>
 	</header>

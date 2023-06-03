@@ -7,21 +7,29 @@
 	</main>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
-import ShowingGuessesMap from './ShowingGuesses/ShowingGuessesMap.vue';
+	import {defineComponent} from "vue";
+	import {emitter} from "@/main";
+	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
-export default defineComponent({
-	name: "ShowingGuesses",
-	data: () => ({}),
-	emits: ["nextRound"],
-	methods: {
-		nextRound() {
-			console.log("Next round");
-			this.$emit("nextRound");
-		}
-	},
-	mounted() { },
-	components: { ShowingGuessesMap }
-});
+	import ShowingGuessesMap from "./ShowingGuesses/ShowingGuessesMap.vue";
+
+	export default defineComponent({
+		name: "ShowingGuesses",
+		data: () => ({
+			guessData: {} as guessInfoType
+		}),
+		methods: {
+			nextRound() {
+				console.log("Next round");
+				emitter.emit("NextRound");
+			}
+		},
+		mounted() {
+			emitter.on("Guess", (guessData: guessInfoType) => {
+				this.guessData = guessData;
+			});
+		},
+		components: {ShowingGuessesMap}
+	});
 </script>
 <style scoped></style>

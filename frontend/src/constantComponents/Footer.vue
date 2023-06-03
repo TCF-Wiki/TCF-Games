@@ -63,6 +63,7 @@
 	import {defineComponent} from "vue";
 
 	export default defineComponent({
+		name: "Footer",
 		data() {
 			return {
 				META: {} as any

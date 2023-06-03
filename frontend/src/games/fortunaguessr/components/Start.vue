@@ -3,10 +3,10 @@
 		<h1>Start</h1>
 		<section>
 			<form class="container">
-				<DifficultyCard @startGame="startGame" difficulty="Easy" description="A set of locations of easy difficulty, fit for new players. This set only includes Bright Sand locations." image="EasyDifficultyImage.png" mapIcon="false" />
-				<DifficultyCard @startGame="startGame" difficulty="Medium" description="A tricky set of locations for people familiar with the game. A decent challenge to test your knowledge." image="MediumDifficultyImage.png" />
-				<DifficultyCard @startGame="startGame" difficulty="Hard" description="A set of locations of hard difficulty, good for a difficult challenge." image="HardDifficultyImage.png" />
-				<DifficultyCard @startGame="startGame" difficulty="Insane" description="An unfair set of locations. Good luck." image="InsaneDifficultyImage.png" />
+				<DifficultyCard difficulty="Easy" description="A set of locations of easy difficulty, fit for new players. This set only includes Bright Sand locations." image="EasyDifficultyImage.png" mapIcon="false" />
+				<DifficultyCard difficulty="Medium" description="A tricky set of locations for people familiar with the game. A decent challenge to test your knowledge." image="MediumDifficultyImage.png" />
+				<DifficultyCard difficulty="Hard" description="A set of locations of hard difficulty, good for a difficult challenge." image="HardDifficultyImage.png" />
+				<DifficultyCard difficulty="Insane" description="An unfair set of locations. Good luck." image="InsaneDifficultyImage.png" />
 			</form>
 			<section class="container second-container">
 				<section class="seed-container">
@@ -28,12 +28,14 @@
 	</main>
 </template>
 <script lang="ts">
+	import {defineComponent} from "vue";
+	import {emitter} from "@/main";
 	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
+
 	import DifficultyCard from "./Start/DifficultyCard.vue";
 
 	export default {
 		name: "Start",
-		emits: ["startGame", "startFromSeed"],
 		data: () => ({
 			enteredSeed: "" as string
 		}),
@@ -41,11 +43,8 @@
 			DifficultyCard
 		},
 		methods: {
-			startGame(options: gameInfoType) {
-				this.$emit("startGame", options);
-			},
 			startWithSeed() {
-				this.$emit("startFromSeed", this.enteredSeed);
+				emitter.emit("StartGameWithSeed", this.enteredSeed);
 			}
 		},
 		mounted() {}

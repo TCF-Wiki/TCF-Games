@@ -1,18 +1,28 @@
-<script setup lang="ts">
+<script lang="ts">
 	import {RouterLink, RouterView} from "vue-router";
+	import NavBar from "./constantComponents/NavBar.vue";
+	import Footer from "./constantComponents/Footer.vue";
+
+	export default {
+		name: "App",
+		components: {
+			NavBar,
+			Footer,
+			RouterView
+		}
+	};
 </script>
 
 <template>
 	<header>
-		<nav class="nav center">
-			<RouterLink v-for="route in $router.options.routes" :to="route.path" class="navlink center">
-				<p>{{ route.name }}</p>
-			</RouterLink>
-		</nav>
+		<NavBar />
 	</header>
 	<main>
 		<RouterView />
 	</main>
+	<footer>
+		<Footer />
+	</footer>
 </template>
 
 <style scoped>

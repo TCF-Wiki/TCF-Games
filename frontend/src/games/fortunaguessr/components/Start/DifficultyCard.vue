@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {emitter} from "@/main";
 	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
 	export default {
@@ -12,7 +13,6 @@
 				threeChecked: true
 			};
 		},
-		emits: ["startGame"],
 		props: ["difficulty", "description", "image", "mapIcon"],
 		methods: {
 			startGame() {
@@ -24,11 +24,12 @@
 
 				let options = {
 					length: this.gameLength,
-					difficulty: this.difficulty,
+					difficulty: this.difficulty == "Easy" ? 1 : this.difficulty == "Medium" ? 2 : this.difficulty == "Hard" ? 3 : this.difficulty == "Insane" ? 4 : -1,
 					timeLimit: this.timeLength,
 					maps: maps
 				} as gameInfoType;
-				this.$emit("startGame", options);
+				console.log("Starting game with options: ", options);
+				emitter.emit("StartGameWithOptions", options);
 			},
 			sliderRatio: function (e: any): void {
 				let target = e.target;
@@ -137,6 +138,7 @@
 
 	input[type="range"] {
 		-webkit-appearance: none;
+		appearance: none;
 		height: 7px;
 		background: var(--primary);
 		border-radius: 5px;
@@ -161,6 +163,7 @@
 
 	input[type="range"]::-moz-range-thumb {
 		-webkit-appearance: none;
+		appearance: none;
 		height: 20px;
 		width: 20px;
 		border-radius: 50%;
@@ -171,6 +174,7 @@
 
 	input[type="range"]::-ms-thumb {
 		-webkit-appearance: none;
+		appearance: none;
 		height: 20px;
 		width: 20px;
 		border-radius: 50%;
@@ -194,6 +198,7 @@
 	/* Input Track */
 	input[type="range"]::-webkit-slider-runnable-track {
 		-webkit-appearance: none;
+		appearance: none;
 		box-shadow: none;
 		border: none;
 		background: transparent;
@@ -201,6 +206,7 @@
 
 	input[type="range"]::-moz-range-track {
 		-webkit-appearance: none;
+		appearance: none;
 		box-shadow: none;
 		border: none;
 		background: transparent;
