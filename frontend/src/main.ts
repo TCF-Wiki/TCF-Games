@@ -1,5 +1,11 @@
+// @ts-ignore
+import mitt from "mitt";
+export const emitter = mitt();
+
 //Multiplayer
 import {IO, App} from "./multiplayer";
+IO.init();
+IO.socket.connect();
 
 //Style sheet
 import "./assets/main.css";
@@ -19,13 +25,11 @@ import "vue-toast-notification/dist/theme-default.css";
 
 app.use(ToastPlugin, {
 	position: "top-right",
-	duration: 8000,
+	duration: 5000,
 	dismissible: true
 });
 
+export const toast = app.config.globalProperties.$toast;
+
 //Mount
 app.mount("body");
-
-// @ts-ignore
-import mitt from "mitt";
-export const emitter = mitt();

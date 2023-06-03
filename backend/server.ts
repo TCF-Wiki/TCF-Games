@@ -59,12 +59,16 @@ httpServer.listen(5000, () => {
 });
 
 //Setup socket.io
-export const io = require("socket.io")(httpServer, {
-	cors: {
-		origin: "*",
-		methods: ["GET", "POST"]
-	}
-});
+import {Server as IOServer} from "socket.io";
+export const io = new IOServer(httpServer);
+
+setInterval(function () {
+	console.log("Connected sockets", io.engine.clientsCount);
+	console.log("Rooms", io.sockets.adapter.rooms);
+}, 5000);
+
+//Load main logic
+import "./mainLogic";
 
 //Load logic
 import fs from "fs";

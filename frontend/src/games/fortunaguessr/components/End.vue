@@ -24,7 +24,7 @@
 			},
 			backToLobby() {
 				console.log("Back to lobby");
-				emitter.emit("BackToLobby");
+				emitter.emit("BackToMenu");
 			}
 		},
 		mounted() {},
