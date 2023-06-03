@@ -4,7 +4,6 @@
 
 <template>
 	<header>
-		<img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 		<nav class="nav center">
 			<RouterLink v-for="route in $router.options.routes" :to="route.path" class="navlink center">
 				<p>{{ route.name }}</p>
