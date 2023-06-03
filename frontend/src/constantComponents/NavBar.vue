@@ -7,8 +7,7 @@
                 </a>
             </div>
             <RouterLink v-for="route in $router.options.routes" :to="route.path" class="navlink center">
-                <div class="header-item" v-tooltip.right="route.name" 
-                v-html="route.meta?.icon">
+                <div class="header-item" v-tooltip.right="route.name" v-html="route.meta?.icon">
                 </div>
 			</RouterLink>
         </div>
