@@ -1,3 +1,5 @@
+import FortunaGuessrViewVue from "./views/FortunaGuessrView.vue";
+
 const defaultValues = {
 	component: null as any,
 	meta: {

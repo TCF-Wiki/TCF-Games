@@ -1,9 +1,9 @@
 <template>
     <section class="map-container">
         <div class="map-selector-container" @change-map="console.log('Yes!')">
-            <MapSelector state="end" />
+            <MapSelector state="showguess" />
         </div>
-        <div id="EndMap"></div>
+        <div id="GuessMap"></div>
     </section>
 </template>
     
@@ -19,7 +19,7 @@ export default defineComponent({
         MapSelector
     },
     async mounted() {
-        let map = L.map("EndMap", {
+        let map = L.map("GuessMap", {
 			crs: L.CRS.Simple,
 			zoom: 1,
 			minZoom: 1,
@@ -70,7 +70,7 @@ export default defineComponent({
 			}
 		}
 
-        emitter.on('changeMapEnd', (mapNumber : number) => {
+        emitter.on('changeMapShowGuess', (mapNumber : number) => {
             initiateMapToMapNumber(mapNumber).addTo(map)
         })
     }
@@ -83,7 +83,7 @@ export default defineComponent({
     height: 48rem;
 }
 
-#GameMap {
+#GuessMap {
 	width: 100%;
 	height: 100%;
 	z-index: 0;

@@ -24,7 +24,7 @@ app.use(ToastPlugin, {
 });
 
 //Mount
-app.mount("main");
+app.mount("#main");
 
 import NavBar from "./constantComponents/NavBar.vue";
 const NavbarApp = createApp(NavBar).use(FloatingVue).use(router);
@@ -33,3 +33,7 @@ NavbarApp.mount("#header");
 import Footer from "./constantComponents/Footer.vue";
 const FooterApp = createApp(Footer);
 FooterApp.mount("#footer");
+
+// @ts-ignore
+import mitt from 'mitt'
+export const emitter = mitt()

@@ -53,23 +53,12 @@ button {
 	cursor: pointer;
 }
 
-.button {
-	background-color: var(--color-base--emphasized);
-	color: var(--color-surface-0);
-
-	text-transform: uppercase;
-	font-size: 1.25rem;
-	line-height: 1.75rem;
-	letter-spacing: 0.05rem;
-	white-space: nowrap;
-	border: 3px solid var(--color-base--subtle);
-	border-radius: 2px;
-	cursor: pointer;
-	transition: all 0.2s ease-in-out;
-}
-
-.button:hover {
-	background-color: var(--color-base);
+button {
+    background-color: var(--rarity-color-rare);
+    padding: var(--space-sm) var(--space-md);
+    margin: var(--space-sm);
+	border: none;
+    text-align: center;
 }
 
 /* SLIDER */
