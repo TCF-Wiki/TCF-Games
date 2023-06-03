@@ -18,12 +18,11 @@ app.use(cors());
 
 //Content Security Policy
 app.use(function (req, res, next) {
-	res.setHeader("Content-Security-Policy", "default-src *; script-src * 'sha256-reBsRZd5I88opZSwT59Ir+QlBhrEhdRJ1aQUr4GXhyw=';style-src * 'unsafe-inline';");
+	res.setHeader("Content-Security-Policy", "default-src *; img-src * data:; script-src * 'sha256-reBsRZd5I88opZSwT59Ir+QlBhrEhdRJ1aQUr4GXhyw=';style-src * 'unsafe-inline';");
 	next();
 });
 //Redirect http to https
 app.use(function (request, response, next) {
-	console.log(request.path);
 	if (request.hostname != "localhost" && request.hostname != "127.0.0.1" && !request.secure) {
 		return response.redirect("https://" + request.headers.host + request.url);
 	}
