@@ -39,7 +39,7 @@ const routes = [
 	{
 		path: "/fortunaguessr",
 		name: "FortunaGuessr",
-
+		file: "FortunaGuessrView.vue",
 		component: null as any,
 		meta: {
 			title: "FortunaGuessr | TCF Games",
