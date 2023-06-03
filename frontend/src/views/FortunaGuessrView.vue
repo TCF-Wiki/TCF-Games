@@ -14,8 +14,7 @@
 	import {defineComponent} from "vue";
 	import {emitter} from "@/main";
 	//Toast notifications
-	import {app} from "@/main";
-	const toast = app.config.globalProperties.$toast;
+	import {toast} from "@/main";
 	//Location data
 	import rawLocationData from "@/games/fortunaguessr/locationList.json";
 	const locationData = rawLocationData as locationType[];

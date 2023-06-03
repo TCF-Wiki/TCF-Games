@@ -56,7 +56,7 @@ export var App = {
 	host: false,
 
 	//Functions:
-	async CreateRoom() {
+	CreateRoom() {
 		IO.socket.emit("createRoom");
 		IO.socket.on("roomCreated", (roomId: string) => {
 			App.roomId = roomId;

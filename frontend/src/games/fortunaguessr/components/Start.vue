@@ -1,110 +1,105 @@
 <template>
 	<div class="container">
 		<div class="title-container">
-			<h1> Fortuna Guessr</h1>
-			<p class="subtitle"> By The Cycle: Frontier Wiki</p>
+			<h1>Fortuna Guessr</h1>
+			<p class="subtitle">By The Cycle: Frontier Wiki</p>
 		</div>
 		<section class="content-container">
-			<div class="selector-container"> 
-				<DifficultyCard difficulty="Easy"
-					description="A set of locations of easy difficulty, fit for new players. This set only includes Bright Sand locations."
-					image="EasyDifficultyImage.png" mapIcon="false" />
-				<DifficultyCard difficulty="Medium"
-					description="A tricky set of locations for people familiar with the game. A decent challenge to test your knowledge."
-					image="MediumDifficultyImage.png" />
-				<DifficultyCard difficulty="Hard"
-					description="A set of locations of hard difficulty, good for a difficult challenge for experienced players."
-					image="HardDifficultyImage.png" />
-				<DifficultyCard difficulty="Insane" description="An unfair set of locations. Good luck."
-					image="InsaneDifficultyImage.png" />
+			<div class="selector-container">
+				<DifficultyCard difficulty="Easy" description="A set of locations of easy difficulty, fit for new players. This set only includes Bright Sand locations." image="EasyDifficultyImage.png" mapIcon="false" />
+				<DifficultyCard difficulty="Medium" description="A tricky set of locations for people familiar with the game. A decent challenge to test your knowledge." image="MediumDifficultyImage.png" />
+				<DifficultyCard difficulty="Hard" description="A set of locations of hard difficulty, good for a difficult challenge for experienced players." image="HardDifficultyImage.png" />
+				<DifficultyCard difficulty="Insane" description="An unfair set of locations. Good luck." image="InsaneDifficultyImage.png" />
 			</div>
 			<section class="options-container">
 				<div class="seed-container">
 					<h2>Seed</h2>
-					<p> This will start a game with the provided seed </p>
+					<p>This will start a game with the provided seed</p>
 					<div class="text-input">
 						<input type="text" v-model="enteredSeed" placeholder="Game Seed" id="gameSeedInput" />
 						<label for="gameSeedInput"> Enter game seed... </label>
 					</div>
 					<div class="btn-container">
-						<button class="button" type="submit" @click.prevent="startWithSeed()" value="submit">Start
-							Game
-						</button>
+						<button class="button" type="submit" @click.prevent="startWithSeed()" value="submit">Start Game</button>
 					</div>
 				</div>
+				<MultiplayerLobby />
 			</section>
 		</section>
 	</div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { emitter } from "@/main";
-import type { locationType, guessInfoType, gameInfoType } from "@/views/FortunaGuessrView.vue";
+	import {defineComponent} from "vue";
+	import {emitter} from "@/main";
+	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
-import DifficultyCard from "./Start/DifficultyCard.vue";
+	import DifficultyCard from "./Start/DifficultyCard.vue";
+	import MultiplayerLobby from "./Start/MultiplayerLobby.vue";
 
-export default defineComponent({
-	name: "Start",
-	data: () => ({
-		enteredSeed: "" as string
-	}),
-	components: {
-		DifficultyCard
-	},
-	methods: {
-		startWithSeed() {
-			emitter.emit("StartGameWithSeed", this.enteredSeed);
-		}
-	},
-	mounted() { }
-});
+	export default defineComponent({
+		name: "Start",
+		data: () => ({
+			enteredSeed: "" as string
+		}),
+		components: {
+			DifficultyCard,
+			MultiplayerLobby
+		},
+		methods: {
+			startWithSeed() {
+				emitter.emit("StartGameWithSeed", this.enteredSeed);
+			}
+		},
+		mounted() {}
+	});
 </script>
 <style scoped lang="less">
-@import "@/assets/text-input.css";
+	@import "@/assets/text-input.css";
 
-h1 {
-	font-size: 3rem;
-	line-height: 1;	
-	text-align: center;
-	width: 100%;
-}
+	h1 {
+		font-size: 3rem;
+		line-height: 1;
+		text-align: center;
+		width: 100%;
+	}
 
-.subtitle {
-	color: var(--color-base--subtle);
-	text-align: center;
-}
-
-.selector-container,
-.options-container {
-	display: flex;
-	gap: var(--space-lg);
-	padding: var(--space-lg);
-	flex-wrap: wrap;
-	justify-content: center;
-}
-
-.seed-container {
-	border: 1px solid var(--border-color-base);
-	padding: var(--space-md);
-
-	& h2 {
+	.subtitle {
+		color: var(--color-base--subtle);
 		text-align: center;
 	}
-}
 
-@keyframes hourglass {
-	0% {
-		transform: rotate(0deg);
-		box-shadow: inset var(--tertairy) 0 -0em 0 0, inset #181818 0 -2em 0 0, inset var(--tertairy) 0 -4em 0 0;
+	.selector-container,
+	.options-container {
+		display: flex;
+		gap: var(--space-lg);
+		padding: var(--space-lg);
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 
-	80% {
-		transform: rotate(0deg);
-		box-shadow: inset var(--tertairy) 0 -2em 0 0, inset #181818 0 -2em 0 0, inset var(--tertairy) 0 -2em 0 0;
+	.seed-container {
+		border: 1px solid var(--border-color-base);
+		padding: var(--space-md);
+
+		& h2 {
+			text-align: center;
+		}
 	}
 
-	100% {
-		transform: rotate(180deg);
-		box-shadow: inset var(--tertairy) 0 -2em 0 0, inset #181818 0 -2em 0 0, inset var(--tertairy) 0 -2em 0 0;
+	@keyframes hourglass {
+		0% {
+			transform: rotate(0deg);
+			box-shadow: inset var(--tertairy) 0 -0em 0 0, inset #181818 0 -2em 0 0, inset var(--tertairy) 0 -4em 0 0;
+		}
+
+		80% {
+			transform: rotate(0deg);
+			box-shadow: inset var(--tertairy) 0 -2em 0 0, inset #181818 0 -2em 0 0, inset var(--tertairy) 0 -2em 0 0;
+		}
+
+		100% {
+			transform: rotate(180deg);
+			box-shadow: inset var(--tertairy) 0 -2em 0 0, inset #181818 0 -2em 0 0, inset var(--tertairy) 0 -2em 0 0;
+		}
 	}
-}</style>
+</style>
