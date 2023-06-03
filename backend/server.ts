@@ -18,7 +18,7 @@ app.use(cors());
 
 //Content Security Policy
 app.use(function (req, res, next) {
-	res.setHeader("Content-Security-Policy", "default-src 'self';script-src 'self' 'sha256-reBsRZd5I88opZSwT59Ir+QlBhrEhdRJ1aQUr4GXhyw=';style-src 'self' 'unsafe-inline';");
+	res.setHeader("Content-Security-Policy", "default-src *; script-src * 'sha256-reBsRZd5I88opZSwT59Ir+QlBhrEhdRJ1aQUr4GXhyw=';style-src * 'unsafe-inline';");
 	next();
 });
 //Redirect http to https
