@@ -1,7 +1,8 @@
 <template>
 	<main class="container">
 		<h1>Start</h1>
-		<button @onclick="startGame('Test', 5, 60)">Start (test)</button>
+		<!--This is a temporary test button-->
+		<button @click="startGame('Test', 5, 60)">Start</button>
 	</main>
 </template>
 <script lang="ts">

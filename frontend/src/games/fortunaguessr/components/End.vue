@@ -1,8 +1,9 @@
 <template>
 	<main class="container">
 		<h1>End</h1>
-		<button @onclick="restartGame()">Restart Game</button>
-		<button @onclick="backToLobby()">Back to Lobby</button>
+		<!--These are temporary test buttons-->
+		<button @click="restartGame()">Restart Game</button>
+		<button @click="backToLobby()">Back to Lobby</button>
 	</main>
 </template>
 <script lang="ts">

@@ -1,7 +1,8 @@
 <template>
 	<main class="container">
 		<h1>Guessing</h1>
-		<button @onclick="guess()">Start (test)</button>
+		<!--This is a temporary test button-->
+		<button @click="guess()">Guess</button>
 	</main>
 </template>
 <script lang="ts">
