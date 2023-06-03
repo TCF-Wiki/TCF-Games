@@ -1,2 +1,2 @@
 console.log("Loaded fortunaguessr");
-import {app, io} from "../../server";
+import { app, io } from "../../server";

@@ -5,26 +5,25 @@ import Footer from "./constantComponents/Footer.vue";
 
 import { defineComponent } from "vue";
 export default defineComponent({
-	name: "App",
-	components: {
-		NavBar,
-		Footer,
-		RouterView
-	}
+  name: "App",
+  components: {
+    NavBar,
+    Footer,
+    RouterView,
+  },
 });
 </script>
 
 <template>
-	<header>
-		<NavBar />
-	</header>
-	<main>
-		<RouterView />
-	</main>
-	<footer>
-		<Footer />
-	</footer>
+  <header>
+    <NavBar />
+  </header>
+  <main>
+    <RouterView />
+  </main>
+  <footer>
+    <Footer />
+  </footer>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
