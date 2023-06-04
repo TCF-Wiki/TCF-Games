@@ -7,6 +7,8 @@ const {siteMapRoutes} = require("./src/routes");
 import Pages from "vite-plugin-pages";
 import generateSitemap from "vite-plugin-pages-sitemap";
 
+import FontAwesome from "unplugin-vue-fontawesome/vite";
+
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [
@@ -22,6 +24,23 @@ export default defineConfig({
 				});
 				console.log("Sitemap generated");
 			}
+		}),
+		FontAwesome({
+			// the fontawesome collections to use
+			collections: "free",
+
+			// collection that is used if no collection is specified
+			defaultCollection: "solid",
+
+			// prop names to be tested for icons
+			props: ["icon"],
+
+			// component names to be tested for icons, use an empty array to check all components
+			components: ["icon", "font-awesome-icon"],
+
+			// filters for transforming targets
+			include: [/\.vue$/, /\.vue\?vue/],
+			exclude: [/node_modules/, /\.git/]
 		})
 	],
 	resolve: {

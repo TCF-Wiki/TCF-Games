@@ -1,53 +1,59 @@
-.text-input {
+.input-field {
 	position: relative;
-	padding: 1em 0 0;
-	margin-bottom: 1em;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
 }
 
-.text-input input[type="text"] {
-	width: 100%;
-	border: 0;
-	border-bottom: 1px solid var(--border-color-base);
-	outline: 0;
-	color: var(--color-base--emphasized);
-	padding: 7px 0;
-	background: transparent;
-	transition: border-color 0.2s;
-}
-.text-input input[type="text"]::placeholder {
-	color: transparent;
-}
-
-.text-input input[type="text"]:placeholder-shown ~ label {
-	cursor: text;
-	top: 20px;
-}
-
-.text-input label {
-	position: absolute;
-	top: 0;
-	display: block;
-	transition: 0.2s;
+.input-field input[type="text"] {
 	color: var(--color-base);
-	font-size: 1.2em;
-	padding-bottom: 6px;
-	user-select: none;
-}
-
-.text-input input[type="text"]:focus ~ label {
-	position: absolute;
-	top: 0;
-	display: block;
-	transition: 0.2s;
-	color: var(--color-base--subtle);
-}
-.text-input input[type="text"]:focus {
-	padding-bottom: 6px;
-	border-bottom: 2px solid var(--border-color-base);
-}
-
-/* reset input */
-.text-input input[type="text"]:required,
-.text-input input[type="text"]:invalid {
+	background-color: transparent;
+	border: none;
+	border: 1px solid var(--border-color-base);
+	border-radius: 5px;
+	outline: none;
+	height: 3rem;
+	width: 97%;
+	font-size: 16px;
+	margin: 0 0 8px 0;
+	padding: var(--space-xs);
+	-webkit-box-shadow: none;
 	box-shadow: none;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+	-webkit-transition: border 0.3s, -webkit-box-shadow 0.3s;
+	transition: border 0.3s, -webkit-box-shadow 0.3s;
+	transition: box-shadow 0.3s, border 0.3s;
+	transition: box-shadow 0.3s, border 0.3s, -webkit-box-shadow 0.3s;
+}
+
+.input-field input[type="text"]:focus {
+	border-color: var(--color-base--emphasized);
+}
+
+.input-field>label {
+	color: var(--color-base--subtle);
+	background-color: var(--color-surface-0);
+	position: absolute;
+	padding: 0 var(--space-xs);
+	top: 0;
+	left: 0;
+	font-size: 1rem;
+	cursor: text;
+	-webkit-transition: color 0.2s ease-out, -webkit-transform 0.2s ease-out;
+	transition: color 0.2s ease-out, -webkit-transform 0.2s ease-out;
+	transition: transform 0.2s ease-out, color 0.2s ease-out;
+	transition: transform 0.2s ease-out, color 0.2s ease-out, -webkit-transform 0.2s ease-out;
+	-webkit-transform-origin: 0% 100%;
+	transform-origin: 0% 100%;
+	text-align: initial;
+	-webkit-transform: translateY(12px);
+	transform: translateY(12px);
+}
+
+.input-field>label.active {
+	-webkit-transform: translateY(-10px) scale(0.8);
+	transform: translateY(-10px) scale(0.8);
+	-webkit-transform-origin: 0 0;
+	transform-origin: 0 0;
+	left: 0.75rem;
 }
