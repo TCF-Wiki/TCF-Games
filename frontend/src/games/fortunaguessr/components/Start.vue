@@ -18,8 +18,8 @@
 						<p class="subtitle no-color">This will start a game with the provided seed</p>
 					</div>
 					<div class="input-field">
-						<input type="text" v-model="enteredSeed" placeholder="Game Seed" id="gameSeedInput" />
-						<label for="gameSeedInput" class="active"> Enter game seed... </label>
+						<input type="text" v-model="enteredSeed" placeholder="Enter game seed..." id="gameSeedInput" />
+						<label for="gameSeedInput" class="active"> Game seed </label>
 					</div>
 					<div class="btn-container">
 						<button class="button" type="submit" @click.prevent="startWithSeed()" value="submit">Start Game</button>
@@ -68,11 +68,17 @@
 <style scoped lang="less">
 	@import url("@/assets/text-input.css");
 
+	.title-container {
+		display: flex;
+		justify-content: center;
+		max-width: calc(100vw - 2.8 * var(--padding-page));
+		flex-direction: column;
+	}
 	h1 {
 		font-size: 3rem;
 		line-height: 1;
 		text-align: center;
-		width: 100%;
+
 	}
 
 	.subtitle {

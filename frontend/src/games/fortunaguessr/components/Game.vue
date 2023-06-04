@@ -1,15 +1,23 @@
 <template>
-	<main class="container">
-		<h1>Guessing</h1>
-		<button @click="guess()">Guess</button>
+	<section class="container">
+		<div class="header">
+			<div id="countdown" :style="{'--countdown-length': gameOptions.timeLimit.toString() + 's', '--color': countDownColor, '--color-pulse': pulseColor}">
+				<div id="countdown-number"> {{ countdownNumber }}</div>
+				<svg>
+					<circle r="36" cx="40" cy="40"></circle>
+				</svg>
+			</div>
+			<div class="round-number-container"> {{ currentRound + 1 }} / {{  gameOptions.length }} </div>
+		</div>
+		<button @click="guess"> Confirm guess</button>
 		<section>
-			<GameMap :currentRound="currentRound" />
+			<GameMap :gameOptions="gameOptions"/>
 		</section>
 		<section>
 			<h2>Image</h2>
 			<img :src="'/fortunaguessr/' + location.src" alt="Image" />
 		</section>
-	</main>
+	</section>
 </template>
 
 <script lang="ts">
@@ -24,7 +32,10 @@
 	export default defineComponent({
 		name: "Guessing",
 		data: () => ({
-			showControls: App.host
+			showControls: App.host,
+			countdownNumber: 0,
+			countDownColor: 'var(--color-base--emphasized)',
+			pulseColor: 'var(--color-base--emphasized)',
 		}),
 		components: {
 			GameMap
@@ -57,11 +68,93 @@
 		mounted() {
 			console.log(this.$props);
 			console.log(this.location);
+			this.countdownNumber = this.gameOptions.timeLimit
 			emitter.on("HostChanged", () => {
 				this.showControls = App.host;
 			});
+
+			const frame = this;
+			setInterval(function() {
+				frame.countdownNumber = Math.max(0, --frame.countdownNumber)
+				if (frame.countdownNumber <= 10) {
+					frame.countDownColor = 'var(--color-destructive)'
+					frame.pulseColor = 'var(--color-base--subtle)'
+				}	
+			}, 1000);
+
+
 		}
 	});
 </script>
 
-<style scoped></style>
+<style scoped lang="less">
+.header {
+	max-width: calc(100vw - 2.8 * var(--padding-page));
+	justify-content: center;
+	font-size: 2.5rem;
+	height: 80px;
+
+	display: flex;
+	flex-direction: row;
+	gap: var(--space-md);
+}
+
+.round-number-container {
+	color: var(--color-base--subtle);
+  	display: inline-block;
+  	line-height: 80px;
+	font-size: 1.3rem;
+}
+
+#countdown {
+  position: relative;
+  height: 80px;
+  width: 80px;
+  text-align: center;
+}
+
+#countdown-number {
+  color: var(--color);
+  display: inline-block;
+  line-height: 80px;
+  animation:  pulse .25s linear alternate infinite
+}
+
+svg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  transform: rotateY(-180deg) rotateZ(-90deg);
+}
+
+svg circle {
+  stroke-dasharray: 228px;
+  stroke-dashoffset: 0px;
+  stroke-linecap: round;
+  stroke-width: 4px;
+  stroke: var(--color);
+  fill: none;
+  transition: stroke .5s ease-out;
+  animation: countdown var(--countdown-length) linear forwards;
+}
+
+@keyframes countdown {
+  from {
+    stroke-dashoffset: 0px;
+  }
+  to {
+    stroke-dashoffset: 228px;
+  }
+}
+
+@keyframes pulse {
+	from {
+		color: var(--color-pulse)
+	}
+	to {
+		color: var(--color)
+	}
+}
+</style>

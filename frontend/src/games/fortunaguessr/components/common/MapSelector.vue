@@ -1,16 +1,23 @@
 <template>
-	<div class="map-selector">
-		<button type="button" @click="requestMap(1)">Bright Sands</button>
-		<button type="button" @click="requestMap(2)">Crescent Falls</button>
-		<button type="button" @click="requestMap(3)">Tharis Island</button>
+	<div class="map-selector" :style="{'--amount-of-maps': gameOptions.maps.length}" v-if="gameOptions.maps.length > 1">
+		<button v-if="gameOptions.maps.includes(1)" type="button" @click="requestMap(1)">Bright Sands</button>
+		<button v-if="gameOptions.maps.includes(2)" type="button" @click="requestMap(2)">Crescent Falls</button>
+		<button v-if="gameOptions.maps.includes(3)" type="button" @click="requestMap(3)">Tharis Island</button>
 	</div>
 </template>
 
 <script lang="ts">
-	import {defineComponent} from "vue";
+	import {defineComponent, type PropType} from "vue";
 	import {emitter, toast} from "@/main";
+	import { type gameInfoType } from "@/views/FortunaGuessrView.vue";
 	export default defineComponent({
 		emits: ["changeMap"],
+		props: {
+			gameOptions: {
+				type: Object as PropType<gameInfoType>,
+				required: true
+			},
+		},
 		methods: {
 			requestMap(mapNumber: number) {
 				emitter.emit("changeMap", mapNumber);
@@ -24,16 +31,15 @@
 		width: 100%;
 
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: repeat(var(--amount-of-maps), 1fr);
 		gap: var(--space-md);
 		border: 1px solid var(--border-color-base);
 		border-bottom: none;
 	}
 
 	button {
-		padding: 0;
 		margin: 0;
-
+		border-radius: 0;
 		background-color: var(--color-surface-4);
 		color: var(--color-base);
 		padding: var(--space-sm);

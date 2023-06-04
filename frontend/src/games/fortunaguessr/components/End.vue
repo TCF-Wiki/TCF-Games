@@ -1,13 +1,13 @@
 <template>
-	<main class="container">
+	<section class="container">
 		<h1>End</h1>
-		<EndMap />
+		<EndMap :gameOptions="gameOptions"/>
 		<button @click="restartGame()" v-if="showControls">Restart Game</button>
 		<button @click="backToLobby()" v-if="showControls">Back to Lobby</button>
-	</main>
+	</section>
 </template>
 <script lang="ts">
-	import {defineComponent} from "vue";
+	import {defineComponent, type PropType} from "vue";
 	import {emitter, toast} from "@/main";
 	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
@@ -17,6 +17,12 @@
 
 	export default defineComponent({
 		name: "End",
+		props: {
+			gameOptions: {
+				type: Object as PropType<gameInfoType>,
+				required: true
+			},
+		},
 		data: () => ({
 			showControls: App.host
 		}),

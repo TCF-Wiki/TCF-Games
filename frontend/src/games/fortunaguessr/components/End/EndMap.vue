@@ -1,7 +1,7 @@
 <template>
 	<section class="map-container">
 		<div class="map-selector-container">
-			<MapSelector />
+			<MapSelector :gameOptions="gameOptions"/>
 		</div>
 		<div id="EndMap"></div>
 	</section>
@@ -11,12 +11,19 @@
 	import L, {TileLayer} from "leaflet";
 	import {bounds, tileLayerOptions, tilelayerURL} from "../../mapConstants";
 	import MapSelector from "../common/MapSelector.vue";
-	import {defineComponent} from "vue";
+	import {defineComponent, type PropType} from "vue";
 
 	import {emitter, toast} from "@/main";
+import type { gameInfoType } from "@/views/FortunaGuessrView.vue";
 	export default defineComponent({
 		components: {
 			MapSelector
+		},
+		props: {
+			gameOptions: {
+				type: Object as PropType<gameInfoType>,
+				required: true
+			},
 		},
 		async mounted() {
 			let map = L.map("EndMap", {
