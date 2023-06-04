@@ -86,7 +86,7 @@
 			"label": "startup",
 			"type": "shell",
 			"group": "none",
-			"command": "npx prettier --write .;cd frontend;npm i;cd ../backend;npm i",
+			"command": "cd frontend;npm i;cd ../backend;npm i",
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
