@@ -50,6 +50,8 @@ io.on("connection", (socket: Socket) => {
 		//Find and check room
 		const room = GetRoom(data.roomId, socket);
 		if (!room) return;
+		//Check if player is host
+		if (GetHost(data.roomId) != socket.id) return;
 		//Update player list
 		roomData.find((a) => a.roomId == data.roomId)!.playerList = data.playerList;
 		//Send player list to all players in room
@@ -71,6 +73,12 @@ export function EmitToHost(roomId: string, event: string, data: any) {
 	let room = roomData.find((a) => a.roomId == roomId);
 	if (!room) return;
 	io.to(room.hostSocket).emit(event, data);
+}
+
+export function GetHost(roomId: string) {
+	let room = roomData.find((a) => a.roomId == roomId);
+	if (!room) return;
+	return room.hostSocket;
 }
 
 export function GetRoom(roomId: string, socket: Socket): string[] | null {

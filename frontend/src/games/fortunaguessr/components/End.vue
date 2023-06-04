@@ -13,6 +13,7 @@
 
 	import EndMap from "./End/EndMap.vue";
 	import {App} from "@/multiplayer";
+	import {GameApp} from "../multiplayer";
 
 	export default defineComponent({
 		name: "End",
@@ -26,7 +27,7 @@
 			},
 			backToLobby() {
 				console.log("Back to lobby");
-				emitter.emit("BackToLobby");
+				GameApp.SendBackToLobby();
 			}
 		},
 		mounted() {

@@ -103,7 +103,7 @@
 					this.state = "Guessing";
 				}
 			});
-			emitter.on("BackToMenu", () => {
+			emitter.on("BackToLobby", () => {
 				console.log("Received back to lobby event");
 				this.state = "Start";
 			});

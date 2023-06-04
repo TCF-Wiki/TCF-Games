@@ -13,13 +13,12 @@ export var GameIO = {
 		IO.socket.on("gameStarted", GameApp.GameStarted);
 		IO.socket.on("nextRoundStarted", GameApp.NextRoundStarted);
 		IO.socket.on("guessSubmitted", GameApp.GuessSubmitted);
+		IO.socket.on("backToLobby", GameApp.BackToLobby);
 	}
 };
 
 export var GameApp = {
 	StartGame(seed: string) {
-		//Only host can start game
-		if (!App.host) return;
 		IO.socket.emit("startGame", {seed: seed, roomId: App.roomId});
 		//Reset player game data
 		App.UpdatePlayerData(
@@ -33,7 +32,6 @@ export var GameApp = {
 		);
 	},
 	GameStarted(seed: string) {
-		console.log("Game started");
 		emitter.emit("StartGameWithSeed", seed);
 	},
 	StartNextRound() {
@@ -56,5 +54,11 @@ export var GameApp = {
 				return player;
 			})
 		);
+	},
+	SendBackToLobby() {
+		IO.socket.emit("backToLobby", App.roomId);
+	},
+	BackToLobby() {
+		emitter.emit("BackToLobby");
 	}
 };
