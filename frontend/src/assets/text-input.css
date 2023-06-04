@@ -30,7 +30,7 @@
 	border-color: var(--color-base--emphasized);
 }
 
-.input-field>label {
+.input-field > label {
 	color: var(--color-base--subtle);
 	background-color: var(--color-surface-0);
 	position: absolute;
@@ -50,7 +50,7 @@
 	transform: translateY(12px);
 }
 
-.input-field>label.active {
+.input-field > label.active {
 	-webkit-transform: translateY(-10px) scale(0.8);
 	transform: translateY(-10px) scale(0.8);
 	-webkit-transform-origin: 0 0;

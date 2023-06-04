@@ -25,15 +25,13 @@
 	<section class="container">
 		<div class="title-container">
 			<h2>Players</h2>
-			<p class="subtitle"> <span class="current-player-amount"> {{ playerList.length }} / 10 </span> players </p>
+			<p class="subtitle">
+				<span class="current-player-amount"> {{ playerList.length }} / 10 </span> players
+			</p>
 			<ul>
-				<li v-for="player in playerList">{{ player.name }} 
-					<button 
-						@click="kickPlayer(player)" 
-						class="small-button leave" 
-						v-if="showControls && playerList.length > 1 && player.socketId == getOwnId()"> 
-						Kick 
-					</button>
+				<li v-for="player in playerList">
+					{{ player.name }}
+					<button @click="kickPlayer(player)" class="small-button leave" v-if="showControls && playerList.length > 1 && player.socketId == getMyRoomId()">Kick</button>
 				</li>
 			</ul>
 		</div>
@@ -41,12 +39,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { app, emitter, toast } from "@/main";
+	import {defineComponent} from "vue";
+	import {app, emitter, toast} from "@/main";
 
-import "@/games/fortunaguessr/multiplayer";
-import { App } from "@/multiplayer";
-import type { PlayerDataType } from "@/multiplayer";
+	import "@/games/fortunaguessr/multiplayer";
+	import {App} from "@/multiplayer";
+	import type {PlayerDataType} from "@/multiplayer";
 
 	export default defineComponent({
 		name: "TestView",
@@ -54,7 +52,8 @@ import type { PlayerDataType } from "@/multiplayer";
 			name: App.myPlayerData.name,
 			roomId: "",
 			currentRoomId: "",
-			playerList: [] as PlayerDataType[]
+			playerList: [] as PlayerDataType[],
+			showControls: App.host
 		}),
 		mounted() {
 			emitter.on("RoomJoined", (roomId: string) => {
@@ -66,6 +65,11 @@ import type { PlayerDataType } from "@/multiplayer";
 			});
 			this.currentRoomId = App.roomId ?? "";
 			this.playerList = App.playerList ?? [];
+
+			emitter.on("HostChanged", () => {
+				this.showControls = App.host;
+				console.log(App.host);
+			});
 		},
 		methods: {
 			joinRoom() {
@@ -76,68 +80,82 @@ import type { PlayerDataType } from "@/multiplayer";
 			},
 			changeName() {
 				App.ChangeName(this.name);
+			},
+			getMyRoomId() {
+				return App.myPlayerData.socketId;
+			},
+			kickPlayer(player: PlayerDataType) {
+				return;
+			},
+			copyRoomId() {
+				navigator.clipboard.writeText(this.currentRoomId);
+				toast.success("Copied Room ID to clipboard!");
 			}
 		}
 	});
 </script>
 
 <style scoped lang="less">
-@import url('@/assets/text-input.css');
+	@import url("@/assets/text-input.css");
 
-.container {
-	border: 1px solid var(--border-color-base);
-	padding: var(--space-md);
+	.container {
+		border: 1px solid var(--border-color-base);
+		padding: var(--space-md);
+		min-width: 25rem;
+		
+		& h2 {
+			text-align: center;
+		}
 
-	& h2 {
-		text-align: center;
+		@media screen and (max-width: 900px) {
+			min-width: 100%
+		}
 	}
-}
 
-.subtitle {
-	text-align: center;
-	font-size: 0.8rem;
-	margin-bottom: var(--space-sm);
-}
+	.subtitle {
+		text-align: center;
+		font-size: 0.8rem;
+		margin-bottom: var(--space-sm);
+	}
 
-.roomID {
-	color: var(--color-base--subtle);
-	border: 1px solid var(--border-color-base);
-	border-radius: 3px;
-	padding: var(--space-xs);
-	cursor: copy;
-}
+	.roomID {
+		color: var(--color-base--subtle);
+		border: 1px solid var(--border-color-base);
+		border-radius: 3px;
+		padding: var(--space-xs);
+		cursor: copy;
+	}
 
-.current-player-amount {
-	color: var(--color-base--subtle)
-}
+	.current-player-amount {
+		color: var(--color-base--subtle);
+	}
 
+	.button-container {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: var(--space-sm);
 
-.button-container {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	gap: var(--space-sm);
+		button {
+			margin: 0;
+		}
+	}
 
-	button {
+	.small-button {
+		padding: var(--space-xs);
+		margin: 0;
+
+		&.join {
+			background-color: var(--color-success);
+		}
+
+		&.leave {
+			background-color: var(--color-destructive);
+		}
+	}
+
+	ul {
+		list-style: none;
+		padding: 0;
 		margin: 0;
 	}
-}
-
-.small-button {
-	padding: var(--space-xs);
-	margin: 0;
-
-	&.join {
-		background-color: var(--color-success);
-	}
-
-	&.leave {
-		background-color: var(--color-destructive);
-	}
-}
-
-ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
 </style>
