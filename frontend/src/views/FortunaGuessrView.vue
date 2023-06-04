@@ -98,6 +98,7 @@
 				console.log("Recieved next round event");
 				this.currentRound++;
 				if (this.currentRound >= this.gameOptions.length) {
+					if (App.host) GameApp.SendGameEnded();
 					this.state = "End";
 				} else {
 					this.state = "Guessing";

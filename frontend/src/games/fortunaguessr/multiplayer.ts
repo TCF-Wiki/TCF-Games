@@ -60,5 +60,11 @@ export var GameApp = {
 	},
 	BackToLobby() {
 		emitter.emit("BackToLobby");
+	},
+	SendGameEnded() {
+		IO.socket.emit("endGame", App.roomId);
+	},
+	GameEnded() {
+		emitter.emit("GameEnded");
 	}
 };

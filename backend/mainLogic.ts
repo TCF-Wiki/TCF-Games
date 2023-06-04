@@ -7,9 +7,19 @@ export type PlayerDataType = {
 	gameData?: any;
 };
 
-export let roomData = [] as {roomId: string; hostSocket: string; playerList: PlayerDataType[]}[];
+export type RoomDataType = {roomId: string; hostSocket: string; gameState: "waiting" | "playing" | "done"; playerList: PlayerDataType[]};
+
+export let roomData = [] as RoomDataType[];
+export function SetRoomGameState(roomId: string, gameState: "waiting" | "playing" | "done") {
+	let room = roomData.find((a) => a.roomId == roomId);
+	if (!room) {
+		console.log("Room not found: ", roomId);
+		return;
+	}
+	room.gameState = gameState;
+}
 setInterval(function () {
-	//console.log("RoomData", roomData);
+	console.log("RoomData", roomData);
 }, 5000);
 
 io.on("connection", (socket: Socket) => {
@@ -22,16 +32,21 @@ io.on("connection", (socket: Socket) => {
 		const roomId = GetNewRoomId();
 		socket.join(roomId);
 		socket.emit("roomCreated", roomId);
-		roomData.push({roomId: roomId, hostSocket: socket.id, playerList: [] as PlayerDataType[]});
+		roomData.push({roomId: roomId, hostSocket: socket.id, gameState: "waiting", playerList: [] as PlayerDataType[]});
 	});
 	socket.on("joinRoom", (roomId: string, name: string) => {
 		console.log("Joining room: ", roomId);
 		//Find and check room
 		const room = GetRoom(roomId, socket);
 		if (!room) return;
-		if (room.length > 10) {
+		if (room.playerList.length > 10) {
 			socket.emit("error", "Room with id: '" + roomId + "' is full.");
 			console.log("Room with id: '" + roomId + "' is full.");
+			return;
+		}
+		if (room.gameState == "playing") {
+			socket.emit("error", "Room with id: '" + roomId + "' is currently playing.");
+			console.log("Room with id: '" + roomId + "' is is currently playing.");
 			return;
 		}
 		//Leave old rooms
@@ -81,14 +96,15 @@ export function GetHost(roomId: string) {
 	return room.hostSocket;
 }
 
-export function GetRoom(roomId: string, socket: Socket): string[] | null {
-	const room = io.sockets.adapter.rooms.get(roomId);
+export function GetRoom(roomId: string, socket: Socket): RoomDataType | null {
+	///const room = io.sockets.adapter.rooms.get(roomId);
+	const room = roomData.find((a) => a.roomId == roomId);
 	if (!room) {
 		socket.emit("error", "Room with id: '" + roomId + "' not found.");
 		console.log("Room with id: '" + roomId + "' not found.");
 		return null;
 	}
-	return Array.from(room.values());
+	return room;
 }
 
 function GetNewRoomId(): string {

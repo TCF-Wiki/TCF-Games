@@ -26,8 +26,9 @@ export var IO = {
 			socketId: IO.socket.id
 		};
 	},
-	error: function (data: any) {
-		alert("Something went wrong! " + data.ToString());
+	error: function (error: string) {
+		console.log(error);
+		toast.error("Error: " + error);
 	}
 };
 
