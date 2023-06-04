@@ -5,6 +5,7 @@ import {toast} from "@/main";
 export var IO = {
 	socket: io(),
 	init: function () {
+		console.log("Initializing socket.io");
 		IO.bindEvents();
 	},
 	// While connected, Socket.IO will listen to the following events and run the correct function.
@@ -18,6 +19,7 @@ export var IO = {
 		IO.socket.on("nameChanged", App.NameChanged);
 	},
 	onConnected: function () {
+		console.log("Connected to server");
 		App.CreateRoom();
 		App.myPlayerData = {
 			name: "Player",

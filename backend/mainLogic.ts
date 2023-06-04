@@ -13,6 +13,7 @@ setInterval(function () {
 }, 5000);
 
 io.on("connection", (socket: Socket) => {
+	console.log("New connection: ", socket.id);
 	socket.emit("connected");
 	socket.on("createRoom", () => {
 		//Leave old rooms
