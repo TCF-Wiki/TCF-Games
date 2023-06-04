@@ -111,7 +111,8 @@
 		}
 
 		@media screen and (max-width: 900px) {
-			min-width: 100%
+			max-width: 90vw;
+			min-width: unset;
 		}
 	}
 

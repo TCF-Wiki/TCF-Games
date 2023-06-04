@@ -88,11 +88,16 @@
 
 	.selector-container,
 	.options-container {
+		max-width: calc(100vw - 2.8 * var(--padding-page));
 		display: flex;
 		gap: var(--space-lg);
-		padding: var(--space-lg);
+		padding: var(--space-lg) 0;
 		flex-wrap: wrap;
 		justify-content: center;
+
+		@media screen and (max-width: 900px) {
+			max-width: 98vw;
+		}
 	}
 
 
@@ -106,13 +111,13 @@
 		background-color: var(--color-surface-3);
 		border-radius: 2rem;
 		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-		
+
 		& h2 {
 			text-align: center;
 		}
 
 		@media screen and (max-width: 900px) {
-			min-width: 100%
+			min-width: 90%;
 		}
 	}
 
