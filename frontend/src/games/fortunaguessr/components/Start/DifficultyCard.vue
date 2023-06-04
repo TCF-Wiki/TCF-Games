@@ -45,7 +45,7 @@
 <template>
 	<section class="card">
 		<div class="card-bg">
-			<img :src="image" :alt="difficulty + ' represented by creature'" />
+			<img :src="'/' + image" :alt="difficulty + ' represented by creature'" />
 		</div>
 		<div class="card-context">
 			<div class="dark-bg"></div>
