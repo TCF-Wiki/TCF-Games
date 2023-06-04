@@ -44,7 +44,7 @@
 		name: "Start",
 		data: () => ({
 			enteredSeed: "" as string,
-			showControls: true // App.host
+			showControls: App.host
 		}),
 		components: {
 			DifficultyCard,
