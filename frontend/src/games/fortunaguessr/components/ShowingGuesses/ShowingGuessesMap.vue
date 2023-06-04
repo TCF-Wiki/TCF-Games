@@ -13,7 +13,7 @@
 	import MapSelector from "../common/MapSelector.vue";
 	import {defineComponent} from "vue";
 
-	import {emitter} from "@/main";
+	import {emitter, toast} from "@/main";
 	export default defineComponent({
 		components: {
 			MapSelector

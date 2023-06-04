@@ -8,7 +8,7 @@
 
 <script lang="ts">
 	import {defineComponent} from "vue";
-	import {emitter} from "@/main";
+	import {emitter, toast} from "@/main";
 	export default defineComponent({
 		props: ["state"],
 		emits: ["changeMap"],

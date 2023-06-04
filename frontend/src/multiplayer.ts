@@ -14,7 +14,7 @@ export var IO = {
 		IO.socket.on("error", IO.error);
 		IO.socket.on("newPlayerJoinedRoom", App.NewPlayerJoinedRoom);
 		IO.socket.on("playerLeftRoom", App.PlayerLeftRoom);
-		IO.socket.on("playerList", App.UpdatePlayerList);
+		IO.socket.on("playerList", App.RecievedUpdatedPlayerList);
 		IO.socket.on("hostLeft", App.HostLeft);
 		IO.socket.on("nameChanged", App.NameChanged);
 	},
@@ -27,7 +27,7 @@ export var IO = {
 		};
 	},
 	error: function (data: any) {
-		alert("Something went wrong");
+		alert("Something went wrong! " + data.ToString());
 	}
 };
 
@@ -51,8 +51,9 @@ export var App = {
 			App.playerList = [] as PlayerDataType[];
 			App.host = true;
 			App.playerList.push(App.myPlayerData);
-			App.UpdatePlayerList(App.playerList);
+			App.RecievedUpdatedPlayerList(App.playerList);
 			emitter.emit("RoomJoined", roomId);
+			emitter.emit("HostChanged", true);
 			toast.success("Room created!");
 		});
 	},
@@ -63,6 +64,7 @@ export var App = {
 			App.playerList = [] as PlayerDataType[];
 			App.host = false;
 			emitter.emit("RoomJoined", roomId);
+			emitter.emit("HostChanged", false);
 			toast.success("Room joined!");
 		});
 	},
@@ -95,8 +97,13 @@ export var App = {
 			App.host = false;
 			toast.error("The host left the game. A new host has been assigned!");
 		}
+		emitter.emit("HostChanged");
 	},
-	UpdatePlayerList(data: PlayerDataType[]) {
+	UpdatePlayerData(data: PlayerDataType[]) {
+		App.playerList = data;
+		IO.socket.emit("playerList", {roomId: App.roomId, playerList: App.playerList});
+	},
+	RecievedUpdatedPlayerList(data: PlayerDataType[]) {
 		App.playerList = data;
 		console.log("New player list: ", App.playerList);
 		toast.info("Player list updated!", {duration: 1000});

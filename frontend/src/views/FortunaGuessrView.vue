@@ -12,13 +12,13 @@
 	import "leaflet/dist/leaflet.css";
 	import "leaflet";
 	import {defineComponent} from "vue";
-	import {emitter} from "@/main";
-	//Toast notifications
-	import {app} from "@/main";
-	const toast = app.config.globalProperties.$toast;
+	import {emitter, toast} from "@/main";
 	//Location data
 	import rawLocationData from "@/games/fortunaguessr/locationList.json";
 	const locationData = rawLocationData as locationType[];
+	//Import multiplayer
+	import {GameIO, GameApp} from "@/games/fortunaguessr/multiplayer";
+	import {IO, App} from "@/multiplayer";
 
 	//Vue components
 	import Start from "@/games/fortunaguessr/components/Start.vue";
@@ -40,6 +40,7 @@
 		time: number;
 		location: number[];
 		map: 1 | 2 | 3;
+		round: number;
 		imageData: locationType;
 	};
 	export type gameInfoType = {
@@ -66,6 +67,7 @@
 			locations: [] as locationType[] //Game locations
 		}),
 		mounted() {
+			GameIO.init();
 			emitter.on("StartGameWithSeed", (seed: string) => {
 				this.StartGameFromSeed(seed);
 			});
@@ -84,7 +86,13 @@
 			);
 			emitter.on("Guess", (guessData: guessInfoType) => {
 				console.log("Received guess event", guessData);
+				GameApp.SubmitGuess(guessData);
 				this.state = "ShowingGuesses";
+			});
+			emitter.on("StartNextRound", () => {
+				if (App.host) {
+					GameApp.StartNextRound();
+				}
 			});
 			emitter.on("NextRound", () => {
 				console.log("Recieved next round event");
@@ -153,7 +161,7 @@
 				}
 				console.log("Game seed", seed);
 				//Start game
-				this.StartGameFromSeed(seed);
+				GameApp.StartGame(seed);
 			},
 			StartGameFromSeed(seed: string) {
 				console.log("Starting game from seed", seed);
@@ -183,6 +191,8 @@
 				console.log("Game locations", this.locations);
 				//Set state to guessing
 				this.state = "Guessing";
+				//Show toast
+				toast.success("Game started");
 			}
 		}
 	});

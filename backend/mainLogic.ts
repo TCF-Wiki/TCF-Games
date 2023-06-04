@@ -7,9 +7,9 @@ export type PlayerDataType = {
 	gameData?: any;
 };
 
-let roomData = [] as {roomId: string; hostSocket: string; playerList: PlayerDataType[]}[];
+export let roomData = [] as {roomId: string; hostSocket: string; playerList: PlayerDataType[]}[];
 setInterval(function () {
-	console.log("RoomData", roomData);
+	//console.log("RoomData", roomData);
 }, 5000);
 
 io.on("connection", (socket: Socket) => {
@@ -67,13 +67,13 @@ io.on("connection", (socket: Socket) => {
 	});
 });
 
-function EmitToHost(roomId: string, event: string, data: any) {
+export function EmitToHost(roomId: string, event: string, data: any) {
 	let room = roomData.find((a) => a.roomId == roomId);
 	if (!room) return;
 	io.to(room.hostSocket).emit(event, data);
 }
 
-function GetRoom(roomId: string, socket: Socket): string[] | null {
+export function GetRoom(roomId: string, socket: Socket): string[] | null {
 	const room = io.sockets.adapter.rooms.get(roomId);
 	if (!room) {
 		socket.emit("error", "Room with id: '" + roomId + "' not found.");

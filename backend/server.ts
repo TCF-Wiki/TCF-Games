@@ -63,8 +63,8 @@ import {Server as IOServer} from "socket.io";
 export const io = new IOServer(httpServer);
 
 setInterval(function () {
-	console.log("Connected sockets", io.engine.clientsCount);
-	console.log("Rooms", io.sockets.adapter.rooms);
+	//console.log("Connected sockets", io.engine.clientsCount);
+	//console.log("Rooms", io.sockets.adapter.rooms);
 }, 5000);
 
 //Load main logic

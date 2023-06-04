@@ -5,14 +5,14 @@
 			<p class="subtitle">By The Cycle: Frontier Wiki</p>
 		</div>
 		<section class="content-container">
-			<div class="selector-container">
+			<div class="selector-container" v-if="showControls">
 				<DifficultyCard difficulty="Easy" description="A set of locations of easy difficulty, fit for new players. This set only includes Bright Sand locations." image="EasyDifficultyImage.png" mapIcon="false" />
 				<DifficultyCard difficulty="Medium" description="A tricky set of locations for people familiar with the game. A decent challenge to test your knowledge." image="MediumDifficultyImage.png" />
 				<DifficultyCard difficulty="Hard" description="A set of locations of hard difficulty, good for a difficult challenge for experienced players." image="HardDifficultyImage.png" />
 				<DifficultyCard difficulty="Insane" description="An unfair set of locations. Good luck." image="InsaneDifficultyImage.png" />
 			</div>
 			<section class="options-container">
-				<div class="seed-container">
+				<div class="seed-container" v-if="showControls">
 					<h2>Seed</h2>
 					<p>This will start a game with the provided seed</p>
 					<div class="text-input">
@@ -28,18 +28,21 @@
 		</section>
 	</div>
 </template>
+
 <script lang="ts">
 	import {defineComponent} from "vue";
-	import {emitter} from "@/main";
+	import {emitter, toast} from "@/main";
 	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
 	import DifficultyCard from "./Start/DifficultyCard.vue";
 	import MultiplayerLobby from "./Start/MultiplayerLobby.vue";
+	import {App} from "@/multiplayer";
 
 	export default defineComponent({
 		name: "Start",
 		data: () => ({
-			enteredSeed: "" as string
+			enteredSeed: "" as string,
+			showControls: App.host
 		}),
 		components: {
 			DifficultyCard,
@@ -50,9 +53,16 @@
 				emitter.emit("StartGameWithSeed", this.enteredSeed);
 			}
 		},
-		mounted() {}
+		mounted() {
+			console.log(App.host);
+			emitter.on("HostChanged", () => {
+				this.showControls = App.host;
+				console.log(App.host);
+			});
+		}
 	});
 </script>
+
 <style scoped lang="less">
 	@import "@/assets/text-input.css";
 

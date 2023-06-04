@@ -27,8 +27,7 @@
 
 <script lang="ts">
 	import {defineComponent} from "vue";
-	import {emitter} from "@/main";
-	import {toast} from "@/main";
+	import {emitter, toast} from "@/main";
 
 	import "@/games/fortunaguessr/multiplayer";
 	import {App} from "@/multiplayer";

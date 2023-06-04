@@ -1,5 +1,5 @@
 <script lang="ts">
-	import {emitter} from "@/main";
+	import {emitter, toast} from "@/main";
 	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
 	export default {
