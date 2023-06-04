@@ -1,87 +1,117 @@
 import {io} from "socket.io-client";
+import {emitter} from "./main";
+import {toast} from "@/main";
 
 export var IO = {
 	socket: io(),
 	init: function () {
 		IO.bindEvents();
 	},
-
 	// While connected, Socket.IO will listen to the following events and run the correct function.
 	bindEvents: function () {
 		IO.socket.on("connected", IO.onConnected);
-		IO.socket.on("successfullyJoinedRoom", App.Player.updateWaitingScreen);
-		IO.socket.on("closeGame", App.Player.onLeaveClick);
-		IO.socket.on("error", function (e) {
-			console.error(e.stack);
-		});
+		IO.socket.on("error", IO.error);
+		IO.socket.on("newPlayerJoinedRoom", App.NewPlayerJoinedRoom);
+		IO.socket.on("playerLeftRoom", App.PlayerLeftRoom);
+		IO.socket.on("playerList", App.UpdatePlayerList);
+		IO.socket.on("hostLeft", App.HostLeft);
+		IO.socket.on("nameChanged", App.NameChanged);
 	},
-
 	onConnected: function () {
-		// cache a copy of the clients socket.IO section on this app instance
-		App.mySocketId = IO.socket.id;
+		App.CreateRoom();
+		App.myPlayerData = {
+			name: "Player",
+			socketId: IO.socket.id
+		};
 	},
-
 	error: function (data: any) {
 		alert("Something went wrong");
 	}
 };
 
+export type PlayerDataType = {
+	name: string;
+	socketId: string;
+	gameData?: any;
+};
+
 export var App = {
-	gameId: "0", // identical to id of Socket.IO room
-	myRole: "", //Player or Host browser
-	mySocketId: "", //Socket.io socket object identifier. Unique to user when browser initially connects
+	roomId: null as string | null,
+	playerList: [] as PlayerDataType[],
+	myPlayerData: {} as PlayerDataType,
+	host: false,
 
-	setupPlayerData: function () {
-		var playerData = {
-			gameId: App.gameId,
-			playerName: App.Player.myName,
-			mySocketId: App.mySocketId,
-			state: "waiting",
-			role: "Player"
-		};
-		return playerData;
+	//Functions:
+	CreateRoom() {
+		IO.socket.emit("createRoom");
+		IO.socket.on("roomCreated", (roomId: string) => {
+			App.roomId = roomId;
+			App.playerList = [] as PlayerDataType[];
+			App.host = true;
+			App.playerList.push(App.myPlayerData);
+			App.UpdatePlayerList(App.playerList);
+			emitter.emit("RoomJoined", roomId);
+			toast.success("Room created!");
+		});
 	},
-	// code for the host browser
-	Host: {
-		// handler to start the first game
-		onCreateClick: function () {
-			//console.log('Clicked create a game');
-			IO.socket.emit("hostCreateNewRoom");
-		},
-		onCloseClick: function () {
-			//console.log('Close game');
-			IO.socket.emit("closeGame", App.gameId);
-			IO.socket.close();
-			location.reload();
+	JoinRoom(roomId: string) {
+		IO.socket.emit("joinRoom", roomId, App.myPlayerData.name);
+		IO.socket.on("roomJoined", (roomId: string) => {
+			App.roomId = roomId;
+			App.playerList = [] as PlayerDataType[];
+			App.host = false;
+			emitter.emit("RoomJoined", roomId);
+			toast.success("Room joined!");
+		});
+	},
+	LeaveRoom() {
+		IO.socket.emit("leaveRoom");
+		App.roomId = null;
+		App.playerList = [];
+		emitter.emit("PlayerListUpdated", [] as PlayerDataType[]);
+		toast.info("Left room!");
+		App.CreateRoom();
+	},
+	NewPlayerJoinedRoom(data: PlayerDataType) {
+		App.playerList.push(data);
+		IO.socket.emit("playerList", {roomId: App.roomId, playerList: App.playerList});
+		toast.success(`${data.name} joined the game!`);
+	},
+	PlayerLeftRoom(data: PlayerDataType) {
+		App.playerList = App.playerList.filter((player) => player.socketId !== data.socketId);
+		IO.socket.emit("playerList", {roomId: App.roomId, playerList: App.playerList});
+		toast.error(`${data.name} left the game!`);
+	},
+	HostLeft(data: {oldHost: string; newHost: string}) {
+		console.log("Host left");
+		if (App.myPlayerData.socketId === data.newHost) {
+			App.host = true;
+			toast.error("The host left the game. You are the new host!");
+			App.playerList = App.playerList.filter((player) => player.socketId !== data.oldHost);
+			IO.socket.emit("playerList", {roomId: App.roomId, playerList: App.playerList});
+		} else {
+			App.host = false;
+			toast.error("The host left the game. A new host has been assigned!");
 		}
 	},
-
-	// Code for the player browsers
-	Player: {
-		HostSocketId: "", // A reference to the socket ID of the Host
-		myName: "", // The player's name entered on the join screen
-
-		// The player entered their name and gameId and clicks join server
-		onJoinClick: function (id: number, name: string) {
-			//console.log('clicked to join room ' + id);
-			App.gameId = id.toString();
-			App.myRole = "Player";
-			App.Player.myName = name || "Guest";
-			var data = App.setupPlayerData();
-			// Send the player data to the server
-			IO.socket.emit("playerJoinGame", data);
-		},
-		onLeaveClick: function () {
-			//console.log('Leave game');
-			IO.socket.close();
-			location.reload();
-		},
-		updateWaitingScreen: function (data: any) {
-			//console.log('Update screen');
-			if (IO.socket.id == data.mySocketId) {
-				App.myRole = "Player";
-				App.gameId = data.gameId;
+	UpdatePlayerList(data: PlayerDataType[]) {
+		App.playerList = data;
+		console.log("New player list: ", App.playerList);
+		toast.info("Player list updated!", {duration: 1000});
+		emitter.emit("PlayerListUpdated", App.playerList);
+	},
+	ChangeName(newName: string) {
+		App.myPlayerData.name = newName;
+		IO.socket.emit("changeName", newName);
+	},
+	NameChanged(data: PlayerDataType) {
+		App.playerList = App.playerList.map((player) => {
+			if (player.socketId === data.socketId) {
+				player.name = data.name;
 			}
-		}
+			return player;
+		});
+		IO.socket.emit("playerList", {roomId: App.roomId, playerList: App.playerList});
+		toast.info(`${data.name} has changed their name!`);
 	}
 };

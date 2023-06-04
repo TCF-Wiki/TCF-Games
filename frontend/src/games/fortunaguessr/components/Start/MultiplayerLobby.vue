@@ -55,13 +55,13 @@
 		},
 		methods: {
 			joinRoom() {
-				emitter.emit("JoinRoom", this.roomId);
+				App.JoinRoom(this.roomId);
 			},
 			leaveRoom() {
-				emitter.emit("LeaveRoom");
+				App.LeaveRoom();
 			},
 			changeName() {
-				emitter.emit("ChangeName", this.name);
+				App.ChangeName(this.name);
 			}
 		}
 	});
