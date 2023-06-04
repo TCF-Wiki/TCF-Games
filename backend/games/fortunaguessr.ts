@@ -1,6 +1,6 @@
 console.log("Loaded fortunaguessr");
-import {app, io} from "../../server";
-import {EmitToHost, GetRoom, GetHost, SetRoomGameState} from "../../mainLogic";
+import {app, io} from "../server";
+import {EmitToHost, GetRoom, GetHost, SetRoomGameState} from "../mainLogic";
 import type {Socket} from "socket.io";
 
 io.on("connection", (socket: Socket) => {

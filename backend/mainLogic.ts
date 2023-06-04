@@ -19,7 +19,7 @@ export function SetRoomGameState(roomId: string, gameState: "waiting" | "playing
 	room.gameState = gameState;
 }
 setInterval(function () {
-	console.log("RoomData", roomData);
+	///console.log("RoomData", roomData);
 }, 5000);
 
 io.on("connection", (socket: Socket) => {
