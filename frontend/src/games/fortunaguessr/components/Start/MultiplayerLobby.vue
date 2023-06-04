@@ -100,9 +100,12 @@
 
 	.container {
 		border: 1px solid var(--border-color-base);
-		padding: var(--space-md);
+		padding: var(--space-lg);
 		min-width: 25rem;
-		
+
+		background-color: var(--color-surface-3);
+		border-radius: 2rem;
+		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 		& h2 {
 			text-align: center;
 		}
@@ -120,6 +123,7 @@
 
 	.roomID {
 		color: var(--color-base--subtle);
+		background-color: var(--color-surface-0);
 		border: 1px solid var(--border-color-base);
 		border-radius: 3px;
 		padding: var(--space-xs);

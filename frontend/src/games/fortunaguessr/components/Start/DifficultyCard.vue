@@ -230,13 +230,13 @@
 		width: 24rem;
 		max-width: 80vw;
 		aspect-ratio: 1 / 1;
-		clip-path: polygon(5% 0%, 100% 0, 100% 95%, 95% 100%, 0 100%, 0% 5%);
+
+		border-radius: 3rem;
+		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 
 		overflow: hidden;
 		-webkit-user-select: none;
 		user-select: none;
-		-webkit-box-shadow: 5px 5px 21px 4px rgba(4, 4, 4, 0.47);
-		box-shadow: 5px 5px 21px 4px rgba(0, 0, 0, 0.47);
 	}
 
 	.card .card-bg {
@@ -320,7 +320,8 @@
 		color: var(--color-surface-0);
 		padding: var(--space-xs) var(--space-sm);
 		font-weight: bold;
-		clip-path: polygon(5% 0%, 100% 0, 100% 85%, 95% 100%, 0 100%, 0% 15%);
+
+		border-radius: 2rem;
 
 		&:hover {
 			filter: brightness(110%);
@@ -352,7 +353,7 @@
 		text-align: center;
 		transition: 0.2s ease-out;
 		overflow: hidden;
-		clip-path: polygon(10% 0%, 100% 0, 100% 90%, 90% 100%, 0 100%, 0% 10%);
+		border-radius: .8rem;
 
 		@media screen and (max-width: 900px) {
 			width: 2rem;

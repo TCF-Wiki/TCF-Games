@@ -49,15 +49,13 @@ a {
 }
 
 button {
-	cursor: pointer;
-}
-
-button {
 	background-color: var(--rarity-color-rare);
 	padding: var(--space-sm) var(--space-md);
 	margin: var(--space-sm);
 	border: none;
 	text-align: center;
+	border-radius: 2rem;
+	cursor: pointer;
 }
 
 /* SLIDER */

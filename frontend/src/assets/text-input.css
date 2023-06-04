@@ -6,7 +6,7 @@
 
 .input-field input[type="text"] {
 	color: var(--color-base);
-	background-color: transparent;
+	background-color: var(--color-surface-2);
 	border: none;
 	border: 1px solid var(--border-color-base);
 	border-radius: 5px;
@@ -32,7 +32,7 @@
 
 .input-field > label {
 	color: var(--color-base--subtle);
-	background-color: var(--color-surface-0);
+	background: linear-gradient(to bottom, var(--color-surface-3) 0% , var(--color-surface-3) 50% ,var(--color-surface-2) 50% , var(--color-surface-2) 100%);
 	position: absolute;
 	padding: 0 var(--space-xs);
 	top: 0;

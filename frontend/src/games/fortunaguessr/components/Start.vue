@@ -44,7 +44,7 @@
 		name: "Start",
 		data: () => ({
 			enteredSeed: "" as string,
-			showControls: App.host
+			showControls: true // App.host
 		}),
 		components: {
 			DifficultyCard,
@@ -98,9 +98,15 @@
 
 	.seed-container {
 		border: 1px solid var(--border-color-base);
+
+		background-color: var(--color-surface-3);
 		padding: var(--space-md);
 		min-width: 25rem;
 
+		background-color: var(--color-surface-3);
+		border-radius: 2rem;
+		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+		
 		& h2 {
 			text-align: center;
 		}
