@@ -14,6 +14,7 @@ export var GameIO = {
 		IO.socket.on("nextRoundStarted", GameApp.NextRoundStarted);
 		IO.socket.on("guessSubmitted", GameApp.GuessSubmitted);
 		IO.socket.on("backToLobby", GameApp.BackToLobby);
+		IO.socket.on("gameEnded", GameApp.GameEnded);
 	}
 };
 

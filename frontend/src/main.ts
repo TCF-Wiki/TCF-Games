@@ -9,6 +9,7 @@ IO.socket.connect();
 
 //Style sheet
 import "./assets/main.css";
+import "leaflet/dist/leaflet.css";
 // floating vue
 import FloatingVue from "floating-vue";
 import "floating-vue/dist/style.css";

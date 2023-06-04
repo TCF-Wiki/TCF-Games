@@ -99,10 +99,13 @@
 				this.currentRound++;
 				if (this.currentRound >= this.gameOptions.length) {
 					if (App.host) GameApp.SendGameEnded();
-					this.state = "End";
 				} else {
 					this.state = "Guessing";
 				}
+			});
+			emitter.on("GameEnded", () => {
+				console.log("Received game ended event");
+				this.state = "End";
 			});
 			emitter.on("BackToLobby", () => {
 				console.log("Received back to lobby event");
