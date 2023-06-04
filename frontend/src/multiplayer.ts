@@ -22,7 +22,7 @@ export var IO = {
 		console.log("Connected to server");
 		App.CreateRoom();
 		App.myPlayerData = {
-			name: "Player",
+			name: "Player" + Math.floor(Math.random() * 100000).toString(),
 			socketId: IO.socket.id
 		};
 	},

@@ -36,7 +36,7 @@
 	export default defineComponent({
 		name: "TestView",
 		data: () => ({
-			name: "Player",
+			name: App.myPlayerData.name,
 			roomId: "",
 			currentRoomId: "",
 			playerList: [] as PlayerDataType[]

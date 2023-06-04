@@ -77,6 +77,7 @@ io.on("connection", (socket: Socket) => {
 	});
 	socket.on("changeName", (name: string) => {
 		socket.rooms.forEach((roomId) => {
+			if (roomId == socket.id) return;
 			const room = GetRoom(roomId, socket);
 			if (!room) return;
 			EmitToHost(roomId, "nameChanged", {name: name, socketId: socket.id} as PlayerDataType);
