@@ -10,13 +10,10 @@
 	import {defineComponent} from "vue";
 	import {emitter, toast} from "@/main";
 	export default defineComponent({
-		props: ["state"],
 		emits: ["changeMap"],
 		methods: {
 			requestMap(mapNumber: number) {
-				if (this.state == "game") emitter.emit("changeMapGame", mapNumber);
-				if (this.state == "showguess") emitter.emit("changeMapShowGuess", mapNumber);
-				if (this.state == "end") emitter.emit("changeMapEnd", mapNumber);
+				emitter.emit("changeMap", mapNumber);
 			}
 		}
 	});

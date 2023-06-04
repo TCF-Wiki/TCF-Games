@@ -1,6 +1,6 @@
 // @ts-ignore
-import mitt from "mitt";
-export const emitter = mitt();
+import mitt, {Emitter} from "mitt";
+export const emitter: Emitter = mitt();
 
 //Multiplayer
 import {IO, App} from "./multiplayer";

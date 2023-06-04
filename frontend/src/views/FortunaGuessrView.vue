@@ -1,9 +1,6 @@
 <template>
 	<section class="container">
-		<Start v-if="state == 'Start'"></Start>
-		<Game v-if="state == 'Guessing'" :currentRound="currentRound" :location="locations[currentRound]" :game-options="gameOptions"></Game>
-		<ShowingGuesses v-if="state == 'ShowingGuesses'"></ShowingGuesses>
-		<End v-if="state == 'End'"></End>
+		<div id="component"></div>
 	</section>
 </template>
 
@@ -11,7 +8,7 @@
 	//Import dependencies
 	import "leaflet/dist/leaflet.css";
 	import "leaflet";
-	import {defineComponent} from "vue";
+	import {defineComponent, createApp} from "vue";
 	import {emitter, toast} from "@/main";
 	//Location data
 	import rawLocationData from "@/games/fortunaguessr/locationList.json";
@@ -54,19 +51,15 @@
 	//Create vue app
 	export default defineComponent({
 		name: "FortunaGuessrView",
-		components: {
-			Start,
-			Game,
-			ShowingGuesses,
-			End
-		},
 		data: () => ({
 			state: "Start" as "Start" | "Guessing" | "ShowingGuesses" | "End", //Current state
 			currentRound: 0 as number, //Current round
 			gameOptions: {} as gameInfoType, //Game options
-			locations: [] as locationType[] //Game locations
+			locations: [] as locationType[], //Game locations
+			currentComponent: createApp(Start) as any //Currently mounted vue component
 		}),
 		mounted() {
+			this.currentComponent.mount("#component");
 			GameIO.init();
 			emitter.on("StartGameWithSeed", (seed: string) => {
 				this.StartGameFromSeed(seed);
@@ -111,6 +104,37 @@
 				console.log("Received back to lobby event");
 				this.state = "Start";
 			});
+			this.state = "Start";
+		},
+		watch: {
+			state() {
+				console.log("State changed to", this.state);
+				let VueFile = (() => {
+					switch (this.state) {
+						case "Start":
+							return Start;
+						case "Guessing":
+							return Game;
+						case "ShowingGuesses":
+							return ShowingGuesses;
+						case "End":
+							return End;
+					}
+				})();
+				let VueApp = createApp(VueFile, {
+					location: this.locations[this.currentRound],
+					currentRound: this.currentRound,
+					gameOptions: this.gameOptions
+				});
+
+				//Unmount old component
+				if (this.currentComponent) {
+					this.currentComponent.unmount();
+				}
+				//Mount new component
+				VueApp.mount("#component");
+				this.currentComponent = VueApp;
+			}
 		},
 		methods: {
 			StartGameFromOptions(

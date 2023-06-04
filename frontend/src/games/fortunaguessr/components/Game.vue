@@ -55,6 +55,8 @@
 			}
 		},
 		mounted() {
+			console.log(this.$props);
+			console.log(this.location);
 			emitter.on("HostChanged", () => {
 				this.showControls = App.host;
 			});

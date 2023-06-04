@@ -12,7 +12,7 @@ export const crescentfallsColor: string = "#020619";
 // pixel size divided by map length in meters.
 export const scaleFactor: number = 2048 / 1400;
 
-const tileLayerOptions: TileLayerOptions = {
+export const tileLayerOptions: TileLayerOptions = {
 	minZoom: 0,
 	minNativeZoom: 0,
 	maxZoom: 7,
@@ -20,9 +20,6 @@ const tileLayerOptions: TileLayerOptions = {
 	tileSize: 256,
 	noWrap: true
 };
-
-export const map1TileLayer: TileLayer = L.tileLayer("map-images/1/{z}/{x}/{y}.png", tileLayerOptions);
-
-export const map2TileLayer: TileLayer = L.tileLayer("map-images/2/{z}/{x}/{y}.png", tileLayerOptions);
-
-export const map3TileLayer: TileLayer = L.tileLayer("map-images/3/{z}/{x}/{y}.png", tileLayerOptions);
+export const tilelayerURL = (map: number) => {
+	return `/map-images/${map}/{z}/{x}/{y}.png`;
+};
