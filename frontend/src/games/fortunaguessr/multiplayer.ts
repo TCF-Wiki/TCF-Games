@@ -1,6 +1,6 @@
 import {emitter, toast} from "@/main";
 import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
-import {IO, App} from "@/multiplayer";
+import {IO, App, type PlayerDataType} from "@/multiplayer";
 
 export var GameIO = {
 	started: false,
