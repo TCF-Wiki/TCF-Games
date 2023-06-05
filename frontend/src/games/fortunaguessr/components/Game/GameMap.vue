@@ -79,7 +79,7 @@
 				const icon = createIcon(frame.currentRound);
 
 				if (currentMarker) map.removeLayer(currentMarker);
-				currentMarker = L.marker(event.latlng, {icon: icon, riseOnHover: true}).addTo(map);
+				currentMarker = L.marker(event.latlng, {icon: icon, riseOnHover: true /**, title: "Location: (" + event.latlng.lat + "; " + event.latlng.lng + ")"*/}).addTo(map);
 				// emit our guess event
 				emitter.emit("PlacedGuess", {lat: event.latlng.lat, lng: event.latlng.lng, map: frame.mapNumber});
 			});
