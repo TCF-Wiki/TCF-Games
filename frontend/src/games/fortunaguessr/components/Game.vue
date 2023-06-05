@@ -101,7 +101,10 @@
 					frame.isTimeUp = true
 					toast.info('Cleared timer, game over!')
 
-					if (JSON.stringify(frame.currentGuess) == '{}') {
+					// if we haven't confirmed our guess yet, default to making a guess
+					if (!frame.hasGuessed) {
+						if (JSON.stringify(frame.currentGuess) == '{}') {
+						// no marker has been placed, emit no proper guess made info
 						emitter.emit("Guess", {
 							location: [0, 0],
 							map: 0,
@@ -112,18 +115,21 @@
 							score: 0
 						}
 						)
-					} else {
-						emitter.emit("Guess", {
-							location: [frame.currentGuess.lat, frame.currentGuess.lng],
-							map: frame.currentGuess.map,
-							round: frame.currentRound,
-							time: frame.countdownNumber,
-							imageData: frame.location,
-							// add scoring here
-							distance: 0,
-							score: 0,
-						} as guessInfoType)
+						} else {
+							// a marker has been placed, emit that as our guessed
+							emitter.emit("Guess", {
+								location: [frame.currentGuess.lat, frame.currentGuess.lng],
+								map: frame.currentGuess.map,
+								round: frame.currentRound,
+								time: frame.countdownNumber,
+								imageData: frame.location,
+								// add scoring here
+								distance: 0,
+								score: 0,
+							} as guessInfoType)
+						}
 					}
+					
 				}
 			}, 1000);
 
