@@ -11,11 +11,11 @@
 		</div>
 		<button @click="guess"> Confirm guess</button>
 		<section>
-			<GameMap :gameOptions="gameOptions"/>
+			<GameMap :gameOptions="gameOptions" :isTimeUp="isTimeUp" :currentRound="currentRound"/>
 		</section>
 		<section>
 			<h2>Image</h2>
-			<img :src="'/fortunaguessr/' + location.src" alt="Image" />
+			<img v-if="!isTimeUp" :src="'/fortunaguessr/' + location.src" alt="Image" />
 		</section>
 	</section>
 </template>
@@ -36,6 +36,9 @@
 			countdownNumber: 0,
 			countDownColor: 'var(--color-base--emphasized)',
 			pulseColor: 'var(--color-base--emphasized)',
+			isTimeUp: false,
+			currentGuess: {} as any,
+			hasGuessed: false
 		}),
 		components: {
 			GameMap
@@ -56,13 +59,25 @@
 		},
 		methods: {
 			guess() {
+				if (this.hasGuessed) return;	
 				console.log("Making guess");
+				if (JSON.stringify(this.currentGuess) == '{}') {
+					toast.info('You have not placed a guess yet.')
+					return
+				}
 				emitter.emit("Guess", {
-					lat: 0,
-					lng: 0,
+					location: [this.currentGuess.lat, this.currentGuess.lng],
+					map: this.currentGuess.map,
+					round: this.currentRound,
+					time: this.countdownNumber,
+					imageData: this.location,
+					// add scoring here
 					distance: 0,
-					score: 0
-				});
+					score: 0,
+				} as guessInfoType);
+
+				this.hasGuessed = true;
+
 			}
 		},
 		mounted() {
@@ -74,14 +89,47 @@
 			});
 
 			const frame = this;
-			setInterval(function() {
+			const timer = setInterval(function() {
 				frame.countdownNumber = Math.max(0, --frame.countdownNumber)
 				if (frame.countdownNumber <= 10) {
 					frame.countDownColor = 'var(--color-destructive)'
 					frame.pulseColor = 'var(--color-base--subtle)'
 				}	
+				if (frame.countdownNumber <= 0) {
+					clearInterval(timer)
+					frame.pulseColor = 'var(--color-destructive)'
+					frame.isTimeUp = true
+					toast.info('Cleared timer, game over!')
+
+					if (JSON.stringify(frame.currentGuess) == '{}') {
+						emitter.emit("Guess", {
+							location: [0, 0],
+							map: 0,
+							round: frame.currentRound,
+							time: -1,
+							imageData: frame.location,
+							distance: -1,
+							score: 0
+						}
+						)
+					} else {
+						emitter.emit("Guess", {
+							location: [frame.currentGuess.lat, frame.currentGuess.lng],
+							map: frame.currentGuess.map,
+							round: frame.currentRound,
+							time: frame.countdownNumber,
+							imageData: frame.location,
+							// add scoring here
+							distance: 0,
+							score: 0,
+						} as guessInfoType)
+					}
+				}
 			}, 1000);
 
+			emitter.on('PlacedGuess', (data : Object) => {
+				this.currentGuess = data;
+			})
 
 		}
 	});
