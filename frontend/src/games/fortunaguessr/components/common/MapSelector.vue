@@ -29,12 +29,8 @@
 <style scoped lang="less">
 	.map-selector {
 		width: 100%;
-
 		display: grid;
 		grid-template-columns: repeat(var(--amount-of-maps), 1fr);
-		gap: var(--space-md);
-		border: 1px solid var(--border-color-base);
-		border-bottom: none;
 	}
 
 	button {
@@ -48,6 +44,18 @@
 
 		&:hover {
 			background-color: var(--color-surface-1);
+		}
+
+		&:first-of-type {
+			border-top-left-radius: 3rem;
+		}
+
+		&:last-of-type {
+			border-top-right-radius: 3rem;
+		}
+
+		&:not(:last-of-type) {
+			border-right: 1px solid var(--border-color-base);
 		}
 	}
 </style>
