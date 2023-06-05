@@ -31,7 +31,7 @@
 			<ul>
 				<li v-for="player in playerList">
 					{{ player.name }}
-					<button @click="kickPlayer(player)" class="small-button leave" v-if="showControls && playerList.length > 1 && player.socketId != getMyRoomId()">Kick</button>
+					<button @click="kickPlayer(player)" class="small-button leave" v-if="showControls && playerList.length > 1 && player.socketId != getMySocketId()">Kick</button>
 				</li>
 			</ul>
 		</div>
@@ -81,7 +81,7 @@
 			changeName() {
 				App.ChangeName(this.name);
 			},
-			getMyRoomId() {
+			getMySocketId() {
 				return App.myPlayerData.socketId;
 			},
 			kickPlayer(player: PlayerDataType) {

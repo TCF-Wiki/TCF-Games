@@ -3,6 +3,7 @@
 		<h1>Showing Guesses</h1>
 		<button v-if="showControls" @click="nextRound()">Next Round</button>
 		<ShowingGuessesMap :gameOptions="gameOptions" :currentRound="currentRound" :location="location" />
+		<Results :currentRound="currentRound" />
 	</section>
 </template>
 <script lang="ts">
@@ -11,6 +12,7 @@
 	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
 	import ShowingGuessesMap from "./ShowingGuesses/ShowingGuessesMap.vue";
+	import Results from "./ShowingGuesses/Results.vue";
 	import {App} from "@/multiplayer";
 	import type {PlayerDataType} from "@/multiplayer";
 
@@ -73,7 +75,7 @@
 				this.checkControl();
 			});
 		},
-		components: {ShowingGuessesMap}
+		components: {ShowingGuessesMap, Results}
 	});
 </script>
 <style scoped></style>

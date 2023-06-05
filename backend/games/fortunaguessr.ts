@@ -44,19 +44,17 @@ io.on("connection", (socket: Socket) => {
 			//Distance between guess and actual location
 			let distanceX = Math.abs(data.guess.location[0] - data.guess.imageData.x);
 			let distanceY = Math.abs(data.guess.location[1] - data.guess.imageData.y);
-			distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+			distance = Math.round(Math.sqrt(distanceX * distanceX + distanceY * distanceY) * 8 * 100) / 100;
 			//Precision variance
-			if (distance - 5 < 0) distance = 0;
-			else distance -= 5;
+			if (distance - 7 < 0) distance = 0;
+			else distance -= 7;
 			//Actual score
-			score = Math.round(0.0425 * Math.pow(distance, 2) - 30 * distance + 5000);
+			score = Math.round(Math.pow(Math.E, -0.01 * distance) * 5000);
 			if (score <= 0) score = 0;
-			if (distance > 350) score = 0;
 		}
 		data.guess.distance = distance;
 		data.guess.score = score;
 		//Submit guess
-		console.log("Guess submitted", data.guess);
 		EmitToHost(data.roomId, "guessSubmitted", {guess: data.guess, socket: socket.id});
 	});
 	socket.on("backToLobby", (roomId: string) => {
