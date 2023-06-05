@@ -17,7 +17,7 @@
 				<h2>Image</h2>
 				<div v-if="!isTimeUp">
 					<img v-if="!isTimeUp" :src="'/fortunaguessr/' + location.src" alt="Image" />
-					<p class="subtitle"> ID: {{  location.src.replace('.wepb', '') }}</p>
+					<p class="subtitle"> ID: {{  location.src.replace('.webp', '') }}</p>
 					<button type="button" @click="guess"> Confirm Guess </button>
 				</div>
 				<div v-else> <p> Time is up! </p> </div>

@@ -10,7 +10,7 @@
 				gameLength: 5,
 				oneChecked: true,
 				twoChecked: true,
-				threeChecked: true
+				threeChecked: this.difficulty == 'Hard' || this.difficulty == 'Insane' ? true : false
 			};
 		},
 		props: ["difficulty", "description", "image", "mapIcon"],
@@ -98,7 +98,7 @@
 							<div class="checkbox-container">
 								<span> TI </span>
 								<div class="toggle-pill-color">
-									<input :id="'map3checkbox' + difficulty" type="checkbox" value="3" checked @change="threeChecked = !threeChecked" :disabled="threeChecked && !twoChecked && !oneChecked ? true : false" />
+									<input :id="'map3checkbox' + difficulty" type="checkbox" value="3" :checked="difficulty == 'Hard' || difficulty == 'Insane' ? true : false " @change="threeChecked = !threeChecked" :disabled="threeChecked && !twoChecked && !oneChecked ? true : false" />
 									<label :for="'map3checkbox' + difficulty"> </label>
 								</div>
 							</div>
