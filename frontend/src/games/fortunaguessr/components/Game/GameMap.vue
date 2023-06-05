@@ -98,5 +98,7 @@
 		height: 100%;
 		z-index: 0;
 		background-color: #081021;
+		border-bottom-right-radius: 3rem;
+		border-bottom-left-radius: 3rem;
 	}
 </style>

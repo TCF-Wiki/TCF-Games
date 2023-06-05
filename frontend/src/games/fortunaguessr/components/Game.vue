@@ -2,23 +2,25 @@
 	<section class="container">
 		<div class="header">
 			<div id="countdown" :style="{'--countdown-length': gameOptions.timeLimit.toString() + 's', '--color': countDownColor, '--color-pulse': pulseColor}">
-				<div id="countdown-number">{{ countdownNumber }}</div>
+				<div id="countdown-number"> {{ countdownNumber }}</div>
+				<br />
+				<div class="round-number-container">{{ currentRound + 1 }} / {{ gameOptions.length }}</div>
 				<svg>
 					<circle r="36" cx="40" cy="40"></circle>
 				</svg>
 			</div>
-			<div class="round-number-container">{{ currentRound + 1 }} / {{ gameOptions.length }}</div>
+		</div>
+		<div class="button-container">
+			<button type="button" @click="guess" :disabled="JSON.stringify(currentGuess) == '{}'"> Confirm Guess </button>
 		</div>
 		<section class="game-container">
 			<div>
 				<GameMap :gameOptions="gameOptions" :isTimeUp="isTimeUp" :currentRound="currentRound" />
 			</div>
-			<div>
-				<h2>Image</h2>
+			<div> 
 				<div v-if="!isTimeUp">
-					<img v-if="!isTimeUp" :src="'/fortunaguessr/' + location.src" alt="Image" />
-					<p class="subtitle">ID: {{ location.src.replace(".webp", "") }}</p>
-					<button type="button" @click="guess">Confirm Guess</button>
+					<img class="game-image" v-if="!isTimeUp" :src="'/fortunaguessr/' + location.src" alt="Image" />
+					<p class="subtitle"> ID: {{  location.src.replace('.webp', '') }}</p>
 				</div>
 				<div v-else><p>Time is up!</p></div>
 			</div>
@@ -147,39 +149,49 @@
 </script>
 
 <style scoped lang="less">
-	.container {
-		max-width: calc(100vw - 2.8 * var(--padding-page));
-	}
-	.header {
-		justify-content: center;
-		font-size: 2.5rem;
-		height: 80px;
+.container {
+	max-width: calc(100vw - 2.8 * var(--padding-page));
+}
+.header {
+	justify-content: center;
+	font-size: 2rem;
+	height: 80px;
 
 		display: flex;
 		flex-direction: row;
 		gap: var(--space-md);
 	}
 
-	.round-number-container {
-		color: var(--color-base--subtle);
-		display: inline-block;
-		line-height: 80px;
-		font-size: 1.3rem;
-	}
+.round-number-container {
+	color: var(--color-base--subtle);
+  	display: inline-block;
+	font-size: 1rem;
+	translate: 0 -1.2rem;
+}
 
-	#countdown {
-		position: relative;
-		height: 80px;
-		width: 80px;
-		text-align: center;
-	}
+.button-container {
+	display: flex;
+	justify-content: center;
+}
 
-	#countdown-number {
-		color: var(--color);
-		display: inline-block;
-		line-height: 80px;
-		animation: pulse 0.25s linear alternate infinite;
-	}
+button:disabled {
+	cursor: not-allowed;
+	background-color: var(--color-base);
+	color: var(--color-surface-0);
+}
+#countdown {
+  position: relative;
+  height: 80px;
+  width: 80px;
+  text-align: center;
+}
+
+#countdown-number {
+  color: var(--color);
+  display: inline-block;
+  translate: 0 .5rem;
+  animation:  pulse .25s linear alternate infinite
+}
 
 	svg {
 		position: absolute;
@@ -232,4 +244,9 @@
 			text-align: center;
 		}
 	}
+}
+
+.game-image {
+	border-radius: 3rem;
+}
 </style>

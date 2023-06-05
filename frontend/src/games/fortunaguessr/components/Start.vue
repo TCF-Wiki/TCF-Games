@@ -6,7 +6,7 @@
 		</div>
 		<section class="content-container">
 			<div class="selector-container" v-if="showControls">
-				<DifficultyCard difficulty="Easy" description="A set of locations of easy difficulty, fit for new players. This set only includes Bright Sand locations." image="EasyDifficultyImage.png" mapIcon="false" />
+				<DifficultyCard difficulty="Easy" description="A set of locations of easy difficulty, fit for new players. This set only includes Bright Sands locations." image="EasyDifficultyImage.png" mapIcon="false" />
 				<DifficultyCard difficulty="Medium" description="A tricky set of locations for people familiar with the game. A decent challenge to test your knowledge." image="MediumDifficultyImage.png" />
 				<DifficultyCard difficulty="Hard" description="A set of locations of hard difficulty, good for a difficult challenge for experienced players." image="HardDifficultyImage.png" />
 				<DifficultyCard difficulty="Insane" description="An unfair set of locations. Good luck." image="InsaneDifficultyImage.png" />
