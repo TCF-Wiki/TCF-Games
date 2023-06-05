@@ -16,6 +16,7 @@ export var IO = {
 		IO.socket.on("playerLeftRoom", App.PlayerLeftRoom);
 		IO.socket.on("playerList", App.RecievedUpdatedPlayerList);
 		IO.socket.on("hostLeft", App.HostLeft);
+		IO.socket.on("kickedFromRoom", App.KickedFromRoom);
 		IO.socket.on("nameChanged", App.NameChanged);
 	},
 	onConnected: function () {
@@ -75,6 +76,16 @@ export var App = {
 		App.playerList = [];
 		emitter.emit("PlayerListUpdated", [] as PlayerDataType[]);
 		toast.info("Left room!");
+		App.CreateRoom();
+	},
+	KickPlayer(socketId: string) {
+		IO.socket.emit("kickPlayer", socketId, App.roomId);
+	},
+	KickedFromRoom() {
+		App.roomId = null;
+		App.playerList = [];
+		emitter.emit("PlayerListUpdated", [] as PlayerDataType[]);
+		toast.error("You were kicked from the room!");
 		App.CreateRoom();
 	},
 	NewPlayerJoinedRoom(data: PlayerDataType) {

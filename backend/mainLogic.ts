@@ -61,6 +61,27 @@ io.on("connection", (socket: Socket) => {
 		console.log("Leaving rooms");
 		LeaveAllRooms(socket);
 	});
+	socket.on("kickPlayer", (socketId: string, roomId: string) => {
+		//Find and check room
+		const room = GetRoom(roomId, socket);
+		if (!room) return;
+		//Check if player is host
+		if (GetHost(room.roomId) != socket.id) return;
+		//Check if player is in room
+		if (!room.playerList.find((a) => a.socketId == socketId)) {
+			socket.emit("error", "Player not found in room.");
+			console.log("Player not found in room.");
+			return;
+		}
+		//Kick player from io room
+		io.in(socketId).socketsLeave(roomId);
+		//Remove player data from room
+		room.playerList = room.playerList.filter((a) => a.socketId != socketId);
+		//Send player list to all players in room
+		io.to(roomId).emit("playerList", room.playerList);
+		//Tell player that he was kicked
+		io.to(socketId).emit("kickedFromRoom");
+	});
 	socket.on("playerList", (data: {roomId: string; playerList: PlayerDataType[]}) => {
 		//Find and check room
 		const room = GetRoom(data.roomId, socket);

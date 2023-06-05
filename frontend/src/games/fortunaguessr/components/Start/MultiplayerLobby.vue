@@ -85,7 +85,7 @@
 				return App.myPlayerData.socketId;
 			},
 			kickPlayer(player: PlayerDataType) {
-				return;
+				App.KickPlayer(player.socketId);
 			},
 			copyRoomId() {
 				navigator.clipboard.writeText(this.currentRoomId);
