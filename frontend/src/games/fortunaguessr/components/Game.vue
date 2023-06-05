@@ -129,7 +129,6 @@
 							} as guessInfoType)
 						}
 					}
-					
 				}
 			}, 1000);
 
