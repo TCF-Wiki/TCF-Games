@@ -106,7 +106,9 @@ export var App = {
 	},
 	RecievedUpdatedPlayerList(data: PlayerDataType[]) {
 		App.playerList = data;
+		App.myPlayerData = App.playerList.find((player) => player.socketId === IO.socket.id) as PlayerDataType;
 		console.log("New player list: ", App.playerList);
+		console.log("My player data: ", App.myPlayerData);
 		toast.info("Player list updated!", {duration: 1000});
 		emitter.emit("PlayerListUpdated", App.playerList);
 	},
