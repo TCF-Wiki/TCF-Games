@@ -23,3 +23,13 @@ export const tileLayerOptions: TileLayerOptions = {
 export const tilelayerURL = (map: number) => {
 	return `/map-images/${map}/{z}/{x}/{y}.png`;
 };
+
+//Set marker icon
+export const createIcon = (currentRound: number, type: string = "guess") => {
+	return L.icon({
+		iconUrl: `/fortunaguessr/marker-icon-${type}-${currentRound + 1}.png`,
+		iconSize: [26, 37],
+		iconAnchor: [13, 37],
+		popupAnchor: [1, -34]
+	}) as L.Icon;
+};

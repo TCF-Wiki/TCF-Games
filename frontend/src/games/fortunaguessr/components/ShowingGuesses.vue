@@ -1,9 +1,8 @@
 <template>
 	<section class="container">
 		<h1>Showing Guesses</h1>
-		<!--This is a temporary test button-->
 		<button v-if="showControls" @click="nextRound()">Next Round</button>
-		<ShowingGuessesMap :gameOptions="gameOptions" />
+		<ShowingGuessesMap :gameOptions="gameOptions" :currentRound="currentRound" :location="location" />
 	</section>
 </template>
 <script lang="ts">
@@ -25,6 +24,14 @@
 		props: {
 			gameOptions: {
 				type: Object as PropType<gameInfoType>,
+				required: true
+			},
+			currentRound: {
+				type: Number,
+				required: true
+			},
+			location: {
+				type: Object as PropType<locationType>,
 				required: true
 			}
 		},
@@ -52,11 +59,14 @@
 		},
 		mounted() {
 			this.playerList = App.playerList;
+			console.log(this.playerList);
+			this.checkControl();
 			emitter.on("Guess", (guessData: guessInfoType) => {
 				this.guessData = guessData;
 			});
 			emitter.on("PlayerListUpdated", (players: PlayerDataType[]) => {
 				this.playerList = players;
+				console.log(this.playerList);
 				this.checkControl();
 			});
 			emitter.on("HostChanged", () => {

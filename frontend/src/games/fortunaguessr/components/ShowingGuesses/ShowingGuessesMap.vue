@@ -1,32 +1,48 @@
 <template>
 	<section class="map-container">
 		<div class="map-selector-container">
-			<MapSelector :gameOptions="gameOptions"/>
+			<MapSelector :gameOptions="gameOptions" />
 		</div>
 		<div id="GuessMap"></div>
 	</section>
 </template>
 
 <script lang="ts">
-	import L, {TileLayer} from "leaflet";
-	import {bounds, tileLayerOptions, tilelayerURL} from "../../mapConstants";
+	import L, {TileLayer, Marker} from "leaflet";
+	import {bounds, tileLayerOptions, tilelayerURL, createIcon} from "../../mapConstants";
+
 	import MapSelector from "../common/MapSelector.vue";
 	import {defineComponent, type PropType} from "vue";
+	import type {PlayerDataType} from "@/multiplayer";
+	import {App} from "@/multiplayer";
 
 	import {emitter, toast} from "@/main";
-import type { gameInfoType } from "@/views/FortunaGuessrView.vue";
+	import type {locationType, gameInfoType, guessInfoType} from "@/views/FortunaGuessrView.vue";
 	export default defineComponent({
 		components: {
 			MapSelector
 		},
+		data: () => ({
+			currentMarkers: [] as L.Marker[],
+			correctMarker: null as L.Marker | null,
+			mapNumber: 1
+		}),
 		props: {
 			gameOptions: {
 				type: Object as PropType<gameInfoType>,
 				required: true
 			},
+			currentRound: {
+				type: Number,
+				required: true
+			},
+			location: {
+				type: Object as PropType<locationType>,
+				required: true
+			}
 		},
-		async mounted() {
-			console.log("Created showguess map");
+		mounted() {
+			console.log("Created showguess map for round " + this.currentRound);
 			let map = L.map("GuessMap", {
 				crs: L.CRS.Simple,
 				zoom: 1,
@@ -42,9 +58,14 @@ import type { gameInfoType } from "@/views/FortunaGuessrView.vue";
 			}).setView([-128, 128], 1);
 			map.zoomControl.setPosition("topright");
 			map.fitBounds(bounds);
-			map.addLayer(L.tileLayer(tilelayerURL(1), tileLayerOptions));
+			this.mapNumber = this.gameOptions.maps[0];
+			map.addLayer(L.tileLayer(tilelayerURL(this.mapNumber), tileLayerOptions));
+			this.DisplayGuesses(map);
+			this.AddCorrectMarker(map);
+
 			emitter.off("changeMap");
 			emitter.on("changeMap", (mapNumber: number) => {
+				this.mapNumber = mapNumber;
 				let amountOfLayers = 0;
 				map.eachLayer((layer) => {
 					if (layer instanceof TileLayer == true) {
@@ -53,7 +74,60 @@ import type { gameInfoType } from "@/views/FortunaGuessrView.vue";
 					amountOfLayers++;
 				});
 				map.addLayer(L.tileLayer(tilelayerURL(mapNumber), tileLayerOptions));
+				this.DisplayGuesses(map);
+				this.AddCorrectMarker(map);
 			});
+			emitter.on("PlayerListUpdated", (playerList: PlayerDataType[]) => {
+				console.log("Updated playerlist in showguesses map");
+				this.DisplayGuesses(map);
+			});
+		},
+		methods: {
+			DisplayGuesses(map: L.Map) {
+				console.log("Displaying guesses");
+				//Remove old markers
+				for (let i = 0; i < this.currentMarkers.length; i++) {
+					map.removeLayer(this.currentMarkers[i] as L.Marker);
+				}
+				this.currentMarkers = [] as L.Marker[];
+				//Add new markers
+				console.log("Playerlist: ", App.playerList);
+				console.log("Current round: ", this.currentRound);
+				App.playerList.forEach((player) => {
+					console.log(player.gameData.guesses);
+					let guess = player.gameData.guesses[this.currentRound] as guessInfoType | null;
+					console.log("Guess: ", guess);
+					if (guess && guess.map == this.mapNumber) {
+						let marker = L.marker(L.latLng(guess.location[0], guess.location[1]), {
+							icon: createIcon(this.currentRound),
+							title: player.name + "'s guess"
+						});
+						marker.setPopupContent(player.name);
+						marker.on("click", () => {
+							marker.openPopup();
+						});
+						this.currentMarkers.push(marker);
+						marker.addTo(map);
+					}
+				});
+			},
+			AddCorrectMarker(map: L.Map) {
+				console.log("Adding correct marker");
+				if (this.correctMarker) map.removeLayer(this.correctMarker as L.Marker);
+				if (this.location.map == this.mapNumber) {
+					console.log("Adding correct marker");
+					this.correctMarker = L.marker(L.latLng(this.location.x, this.location.y), {
+						icon: createIcon(this.currentRound, "correct"),
+						title: "Correct location",
+						riseOnHover: true
+					});
+					this.correctMarker.setPopupContent("Correct location");
+					this.correctMarker.on("click", () => {
+						this.correctMarker?.openPopup();
+					});
+					this.correctMarker.addTo(map);
+				}
+			}
 		}
 	});
 </script>
