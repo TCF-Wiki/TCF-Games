@@ -146,7 +146,7 @@
 									color: "var(--color-link)",
 									weight: 4,
 									opacity: 1,
-									dashArray: "3"
+									dashArray: "7"
 								}
 							);
 							line.addTo(map);
