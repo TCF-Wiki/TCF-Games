@@ -10,7 +10,7 @@
 <script lang="ts">
 	import L, {TileLayer, Marker} from "leaflet";
 	import {bounds, tileLayerOptions, tilelayerURL, createIcon} from "../../mapConstants";
-
+	import "leaflet-responsive-popup";
 	import MapSelector from "../common/MapSelector.vue";
 	import {defineComponent, type PropType} from "vue";
 	import type {PlayerDataType} from "@/multiplayer";
@@ -107,7 +107,7 @@
 							icon: createIcon(this.currentRound),
 							title: player.name + "'s guess"
 						});
-						marker.bindPopup(player.name + "'s guess");
+						marker.bindPopup(L.responsivePopup().setContent(player.name + "'s guess"));
 						marker.on("click", () => {
 							marker.openPopup();
 						});
@@ -125,7 +125,7 @@
 						title: "Correct location",
 						riseOnHover: true
 					});
-					correctMarker.bindPopup("Correct location");
+					correctMarker.bindPopup(L.responsivePopup().setContent("Correct location"));
 					correctMarker.on("click", () => {
 						correctMarker?.openPopup();
 					});
