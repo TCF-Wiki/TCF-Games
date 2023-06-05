@@ -2,16 +2,16 @@
 	<section class="container">
 		<div class="header">
 			<div id="countdown" :style="{'--countdown-length': gameOptions.timeLimit.toString() + 's', '--color': countDownColor, '--color-pulse': pulseColor}">
-				<div id="countdown-number"> {{ countdownNumber }}</div>
+				<div id="countdown-number">{{ countdownNumber }}</div>
 				<svg>
 					<circle r="36" cx="40" cy="40"></circle>
 				</svg>
 			</div>
-			<div class="round-number-container"> {{ currentRound + 1 }} / {{  gameOptions.length }} </div>
+			<div class="round-number-container">{{ currentRound + 1 }} / {{ gameOptions.length }}</div>
 		</div>
-		<button @click="guess"> Confirm guess</button>
+		<button @click="guess">Confirm guess</button>
 		<section>
-			<GameMap :gameOptions="gameOptions" :isTimeUp="isTimeUp" :currentRound="currentRound"/>
+			<GameMap :gameOptions="gameOptions" :isTimeUp="isTimeUp" :currentRound="currentRound" />
 		</section>
 		<section>
 			<h2>Image</h2>
@@ -34,8 +34,8 @@
 		data: () => ({
 			showControls: App.host,
 			countdownNumber: 0,
-			countDownColor: 'var(--color-base--emphasized)',
-			pulseColor: 'var(--color-base--emphasized)',
+			countDownColor: "var(--color-base--emphasized)",
+			pulseColor: "var(--color-base--emphasized)",
 			isTimeUp: false,
 			currentGuess: {} as any,
 			hasGuessed: false
@@ -59,155 +59,149 @@
 		},
 		methods: {
 			guess() {
-				if (this.hasGuessed) return;	
+				if (this.hasGuessed) return;
 				console.log("Making guess");
-				if (JSON.stringify(this.currentGuess) == '{}') {
-					toast.info('You have not placed a guess yet.')
-					return
+				if (JSON.stringify(this.currentGuess) == "{}") {
+					toast.info("You have not placed a guess yet.");
+					return;
 				}
 				emitter.emit("Guess", {
 					location: [this.currentGuess.lat, this.currentGuess.lng],
 					map: this.currentGuess.map,
 					round: this.currentRound,
-					time: this.countdownNumber,
-					imageData: this.location,
-					// add scoring here
-					distance: 0,
-					score: 0,
+					time: this.gameOptions.timeLimit - this.countdownNumber,
+					imageData: this.location
 				} as guessInfoType);
 
 				this.hasGuessed = true;
-
 			}
 		},
 		mounted() {
 			console.log(this.$props);
 			console.log(this.location);
-			this.countdownNumber = this.gameOptions.timeLimit
+			this.countdownNumber = this.gameOptions.timeLimit;
 			emitter.on("HostChanged", () => {
 				this.showControls = App.host;
 			});
 
 			const frame = this;
-			const timer = setInterval(function() {
-				frame.countdownNumber = Math.max(0, --frame.countdownNumber)
+			const timer = setInterval(function () {
+				frame.countdownNumber = Math.max(0, --frame.countdownNumber);
 				if (frame.countdownNumber <= 10) {
-					frame.countDownColor = 'var(--color-destructive)'
-					frame.pulseColor = 'var(--color-base--subtle)'
-				}	
+					frame.countDownColor = "var(--color-destructive)";
+					frame.pulseColor = "var(--color-base--subtle)";
+				}
 				if (frame.countdownNumber <= 0) {
-					clearInterval(timer)
-					frame.pulseColor = 'var(--color-destructive)'
-					frame.isTimeUp = true
-					toast.info('Cleared timer, game over!')
+					clearInterval(timer);
+					frame.pulseColor = "var(--color-destructive)";
+					frame.isTimeUp = true;
+					toast.info("Cleared timer, game over!");
 
 					// if we haven't confirmed our guess yet, default to making a guess
 					if (!frame.hasGuessed) {
-						if (JSON.stringify(frame.currentGuess) == '{}') {
-						// no marker has been placed, emit no proper guess made info
-						emitter.emit("Guess", {
-							location: [0, 0],
-							map: 0,
-							round: frame.currentRound,
-							time: -1,
-							imageData: frame.location,
-							distance: -1,
-							score: 0
-						}
-						)
+						if (JSON.stringify(frame.currentGuess) == "{}") {
+							// no marker has been placed, emit no proper guess made info
+							emitter.emit("Guess", {
+								location: [0, 0],
+								map: 0,
+								round: frame.currentRound,
+								time: -1,
+								imageData: frame.location,
+								distance: -1,
+								score: 0
+							});
 						} else {
 							// a marker has been placed, emit that as our guessed
 							emitter.emit("Guess", {
 								location: [frame.currentGuess.lat, frame.currentGuess.lng],
 								map: frame.currentGuess.map,
 								round: frame.currentRound,
-								time: frame.countdownNumber,
+								time: frame.gameOptions.timeLimit,
 								imageData: frame.location,
 								// add scoring here
 								distance: 0,
-								score: 0,
-							} as guessInfoType)
+								score: 0
+							} as guessInfoType);
 						}
 					}
 				}
 			}, 1000);
 
-			emitter.on('PlacedGuess', (data : Object) => {
+			emitter.on("PlacedGuess", (data: Object) => {
 				this.currentGuess = data;
-			})
-
+			});
 		}
 	});
 </script>
 
 <style scoped lang="less">
-.header {
-	max-width: calc(100vw - 2.8 * var(--padding-page));
-	justify-content: center;
-	font-size: 2.5rem;
-	height: 80px;
+	.header {
+		max-width: calc(100vw - 2.8 * var(--padding-page));
+		justify-content: center;
+		font-size: 2.5rem;
+		height: 80px;
 
-	display: flex;
-	flex-direction: row;
-	gap: var(--space-md);
-}
-
-.round-number-container {
-	color: var(--color-base--subtle);
-  	display: inline-block;
-  	line-height: 80px;
-	font-size: 1.3rem;
-}
-
-#countdown {
-  position: relative;
-  height: 80px;
-  width: 80px;
-  text-align: center;
-}
-
-#countdown-number {
-  color: var(--color);
-  display: inline-block;
-  line-height: 80px;
-  animation:  pulse .25s linear alternate infinite
-}
-
-svg {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 80px;
-  height: 80px;
-  transform: rotateY(-180deg) rotateZ(-90deg);
-}
-
-svg circle {
-  stroke-dasharray: 228px;
-  stroke-dashoffset: 0px;
-  stroke-linecap: round;
-  stroke-width: 4px;
-  stroke: var(--color);
-  fill: none;
-  transition: stroke .5s ease-out;
-  animation: countdown var(--countdown-length) linear forwards;
-}
-
-@keyframes countdown {
-  from {
-    stroke-dashoffset: 0px;
-  }
-  to {
-    stroke-dashoffset: 228px;
-  }
-}
-
-@keyframes pulse {
-	from {
-		color: var(--color-pulse)
+		display: flex;
+		flex-direction: row;
+		gap: var(--space-md);
 	}
-	to {
-		color: var(--color)
+
+	.round-number-container {
+		color: var(--color-base--subtle);
+		display: inline-block;
+		line-height: 80px;
+		font-size: 1.3rem;
 	}
-}
+
+	#countdown {
+		position: relative;
+		height: 80px;
+		width: 80px;
+		text-align: center;
+	}
+
+	#countdown-number {
+		color: var(--color);
+		display: inline-block;
+		line-height: 80px;
+		animation: pulse 0.25s linear alternate infinite;
+	}
+
+	svg {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 80px;
+		height: 80px;
+		transform: rotateY(-180deg) rotateZ(-90deg);
+	}
+
+	svg circle {
+		stroke-dasharray: 228px;
+		stroke-dashoffset: 0px;
+		stroke-linecap: round;
+		stroke-width: 4px;
+		stroke: var(--color);
+		fill: none;
+		transition: stroke 0.5s ease-out;
+		animation: countdown var(--countdown-length) linear forwards;
+	}
+
+	@keyframes countdown {
+		from {
+			stroke-dashoffset: 0px;
+		}
+		to {
+			stroke-dashoffset: 228px;
+		}
+	}
+
+	@keyframes pulse {
+		from {
+			color: var(--color-pulse);
+		}
+		to {
+			color: var(--color);
+		}
+	}
 </style>

@@ -35,9 +35,28 @@ io.on("connection", (socket: Socket) => {
 	});
 	socket.on("submitGuess", (data: {roomId: string; guess: any}) => {
 		//Find and check room
-		if (!GetRoom(data.roomId, socket)) return;
+		const room = GetRoom(data.roomId, socket);
+		if (!room) return;
+		//Calculate score
+		let score = 0;
+		let distance = -1;
+		if (data.guess.map == data.guess.imageData.map) {
+			//Distance between guess and actual location
+			let distanceX = Math.abs(data.guess.location[0] - data.guess.imageData.x);
+			let distanceY = Math.abs(data.guess.location[1] - data.guess.imageData.y);
+			distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+			//Precision variance
+			if (distance - 5 < 0) distance = 0;
+			else distance -= 5;
+			//Actual score
+			score = Math.round(0.0425 * Math.pow(distance, 2) - 30 * distance + 5000);
+			if (score <= 0) score = 0;
+			if (distance > 350) score = 0;
+		}
+		data.guess.distance = distance;
+		data.guess.score = score;
 		//Submit guess
-		console.log("Guess submitted");
+		console.log("Guess submitted", data.guess);
 		EmitToHost(data.roomId, "guessSubmitted", {guess: data.guess, socket: socket.id});
 	});
 	socket.on("backToLobby", (roomId: string) => {
