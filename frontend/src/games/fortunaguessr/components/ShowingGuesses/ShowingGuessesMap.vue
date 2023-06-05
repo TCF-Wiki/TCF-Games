@@ -23,8 +23,7 @@
 			MapSelector
 		},
 		data: () => ({
-			currentMarkers: [] as L.Marker[],
-			correctMarker: null as L.Marker | null,
+			currentLayers: [] as L.Layer[],
 			mapNumber: 1
 		}),
 		props: {
@@ -60,6 +59,7 @@
 			map.fitBounds(bounds);
 			this.mapNumber = this.gameOptions.maps[0];
 			map.addLayer(L.tileLayer(tilelayerURL(this.mapNumber), tileLayerOptions));
+			this.ClearLayers();
 			this.DisplayGuesses(map);
 			this.AddCorrectMarker(map);
 
@@ -74,22 +74,27 @@
 					amountOfLayers++;
 				});
 				map.addLayer(L.tileLayer(tilelayerURL(mapNumber), tileLayerOptions));
+				this.ClearLayers();
 				this.DisplayGuesses(map);
 				this.AddCorrectMarker(map);
 			});
 			emitter.on("PlayerListUpdated", (playerList: PlayerDataType[]) => {
 				console.log("Updated playerlist in showguesses map");
+				this.ClearLayers();
 				this.DisplayGuesses(map);
+				this.AddCorrectMarker(map);
 			});
 		},
 		methods: {
+			ClearLayers() {
+				console.log("Clearing layers");
+				for (let i = 0; i < this.currentLayers.length; i++) {
+					this.currentLayers[i].remove();
+				}
+				this.currentLayers = [] as L.Layer[];
+			},
 			DisplayGuesses(map: L.Map) {
 				console.log("Displaying guesses");
-				//Remove old markers
-				for (let i = 0; i < this.currentMarkers.length; i++) {
-					map.removeLayer(this.currentMarkers[i] as L.Marker);
-				}
-				this.currentMarkers = [] as L.Marker[];
 				//Add new markers
 				console.log("Playerlist: ", App.playerList);
 				console.log("Current round: ", this.currentRound);
@@ -102,30 +107,52 @@
 							icon: createIcon(this.currentRound),
 							title: player.name + "'s guess"
 						});
-						marker.setPopupContent(player.name);
+						marker.bindPopup(player.name + "'s guess");
 						marker.on("click", () => {
 							marker.openPopup();
 						});
-						this.currentMarkers.push(marker);
+						this.currentLayers.push(marker);
 						marker.addTo(map);
 					}
 				});
 			},
 			AddCorrectMarker(map: L.Map) {
 				console.log("Adding correct marker");
-				if (this.correctMarker) map.removeLayer(this.correctMarker as L.Marker);
 				if (this.location.map == this.mapNumber) {
 					console.log("Adding correct marker");
-					this.correctMarker = L.marker(L.latLng(this.location.x, this.location.y), {
+					let correctMarker = L.marker(L.latLng(this.location.x, this.location.y), {
 						icon: createIcon(this.currentRound, "correct"),
 						title: "Correct location",
 						riseOnHover: true
 					});
-					this.correctMarker.setPopupContent("Correct location");
-					this.correctMarker.on("click", () => {
-						this.correctMarker?.openPopup();
+					correctMarker.bindPopup("Correct location");
+					correctMarker.on("click", () => {
+						correctMarker?.openPopup();
 					});
-					this.correctMarker.addTo(map);
+					correctMarker.addTo(map);
+					this.currentLayers.push(correctMarker);
+					//Add line between guess and correct location
+					let guess = App.myPlayerData.gameData.guesses[this.currentRound] as guessInfoType | null;
+					console.log("Guess: ", guess);
+					if (guess) {
+						if (guess.map == this.mapNumber) {
+							console.log("Adding line between guess and correct location");
+							let line = L.polyline(
+								[
+									[guess.location[0], guess.location[1]],
+									[this.location.x, this.location.y]
+								],
+								{
+									color: "var(--color-link)",
+									weight: 4,
+									opacity: 1,
+									dashArray: "3"
+								}
+							);
+							line.addTo(map);
+							this.currentLayers.push(line);
+						}
+					}
 				}
 			}
 		}
