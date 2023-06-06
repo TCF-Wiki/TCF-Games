@@ -1,27 +1,30 @@
 <template>
+<Transition name="scale-in" appear>
 	<section class="container">
-		<div class="title-container">
-			<h2>Multiplayer</h2>
-			<p class="subtitle" @click="copyRoomId">
-				Room ID: <span class="roomID"> {{ currentRoomId }} </span>
-			</p>
-		</div>
-		<div class="content">
-			<div class="input-field">
-				<input placeholder="Enter room ID..." id="roomID" type="text" class="validate" v-model="roomId" />
-				<label for="roomID" class="active">Room ID</label>
+			<div class="title-container">
+				<h2>Multiplayer</h2>
+				<p class="subtitle" @click="copyRoomId">
+					Room ID: <span class="roomID"> {{ currentRoomId }} </span>
+				</p>
 			</div>
-			<div class="input-field">
-				<input placeholder="Enter new username..." id="changeName" type="text" class="validate" v-model="name" />
-				<label for="changeName" class="active">Username</label>
+			<div class="content">
+				<div class="input-field">
+					<input placeholder="Enter room ID..." id="roomID" type="text" class="validate" v-model="roomId" />
+					<label for="roomID" class="active">Room ID</label>
+				</div>
+				<div class="input-field">
+					<input placeholder="Enter new username..." id="changeName" type="text" class="validate" v-model="name" />
+					<label for="changeName" class="active">Username</label>
+				</div>
+				<div class="button-container">
+					<button class="small-button join" @click="joinRoom">Join room</button>
+					<button class="small-button leave" @click="leaveRoom" v-if="playerList.length !== 1">Leave room</button>
+					<button class="small-button" @click="changeName">Change name</button>
+				</div>
 			</div>
-			<div class="button-container">
-				<button class="small-button join" @click="joinRoom">Join room</button>
-				<button class="small-button leave" @click="leaveRoom" v-if="playerList.length !== 1">Leave room</button>
-				<button class="small-button" @click="changeName">Change name</button>
-			</div>
-		</div>
 	</section>
+</Transition>
+<Transition name="scale-in">
 	<section class="container">
 		<div class="title-container">
 			<h2>Players</h2>
@@ -36,6 +39,7 @@
 			</ul>
 		</div>
 	</section>
+</Transition>
 </template>
 
 <script lang="ts">

@@ -13,17 +13,21 @@
 		<div class="button-container">
 			<button type="button" @click="guess" :disabled="JSON.stringify(currentGuess) == '{}'">Confirm Guess</button>
 		</div>
-		<section class="game-container">
-			<div>
-				<GameMap :gameOptions="gameOptions" :isTimeUp="isTimeUp" :currentRound="currentRound" />
-			</div>
-			<div>
-				<div v-if="!isTimeUp">
-					<img class="game-image" v-if="!isTimeUp" :src="'/fortunaguessr/' + location.src" alt="Image" />
-					<p class="subtitle"> ID: {{  location.src.replace('.webp', '') }}</p>
+			<section class="game-container">
+				<Transition name="scale-in" appear>
+					<div>
+						<GameMap :gameOptions="gameOptions" :isTimeUp="isTimeUp" :currentRound="currentRound" />
+					</div>
+				</Transition>
+				<div>
+					<Transition name="scale-in" appear>
+						<div v-if="!isTimeUp">
+							<img class="game-image" v-if="!isTimeUp" :src="'/fortunaguessr/' + location.src" alt="Image" />
+							<p class="subtitle"> ID: {{  location.src.replace('.webp', '') }}</p>
+						</div>
+					</Transition>
 				</div>
-			</div>
-		</section>
+			</section>
 	</section>
 </template>
 
@@ -257,4 +261,6 @@ svg circle {
 .game-image {
 	border-radius: 3rem;
 }
+
+
 </style>
