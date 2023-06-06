@@ -153,7 +153,7 @@ export default defineComponent({
 
 <style scoped lang="less">
 .container {
-	max-width: calc(100vw - 2.8 * var(--padding-page));
+	max-width: calc(99vw - 2.8 * var(--padding-page));
 }
 .header {
 	justify-content: center;
@@ -245,7 +245,7 @@ svg circle {
 .game-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: var(--space-lg);
+	gap: calc(2* var(--space-xl) );
 	margin: 0 2rem;
 
 	@media screen and (max-width: 900px) {
@@ -259,7 +259,8 @@ svg circle {
 
 
 .game-image {
-	border-radius: 3rem;
+	border-radius: 2rem;
+	box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
 

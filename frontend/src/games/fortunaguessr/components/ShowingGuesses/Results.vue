@@ -1,29 +1,29 @@
 <template>
-	<section class="container">
+	<section class="results-container">
 		<div class="title-container">
 			<h2>Scoreboard</h2>
 		</div>
 		<div class="content">
 			<div class="title-container">
-				<table>
+				<table class="wikitable">
 					<tr>
 						<th>Player</th>
-						<th v-if="showGuessInfo">Total score</th>
+						<th>Status</th>
+						<th>Time</th>
 						<th v-if="showGuessInfo">Points</th>
 						<th v-if="showGuessInfo">Distance</th>
-						<th>Time</th>
-						<th>Status</th>
+						<th v-if="showGuessInfo">Total score</th>
 						<th v-if="showControls">Actions</th>
 					</tr>
-					<tr v-for="player in playerList">
+					<TransitionGroup name="list" v-for="player in playerList" tag="tr">
 						<td>{{ player.name }}</td>
-						<td v-if="showGuessInfo">{{ player.score }}</td>
+						<td>{{ player.status }}</td>
+						<td>{{ player.guess && player.guess.time != -1 ? player.guess.time + "s" : "" }}</td>
 						<td v-if="showGuessInfo">{{ player.guess ? player.guess.score : 0 }}</td>
 						<td v-if="showGuessInfo">{{ player.guess && player.guess.time != -1 ? (player.guess.distance == -1 ? "Wrong map" : player.guess.distance + "m") : "" }}</td>
-						<td>{{ player.guess && player.guess.time != -1 ? player.guess.time + "s" : "" }}</td>
-						<td>{{ player.status }}</td>
-						<td v-if="showControls"><button @click="kickPlayer(player)" class="small-button leave" v-if="player.socketId != getMySocketId()">Kick</button></td>
-					</tr>
+						<td v-if="showGuessInfo">{{ player.score }}</td>
+						<td v-if="showControls"><button @click="kickPlayer(player)" class="small-button kick" v-if="player.socketId != getMySocketId()">Kick</button></td>
+					</TransitionGroup>
 				</table>
 			</div>
 		</div>
@@ -127,7 +127,7 @@
 <style scoped lang="less">
 	@import url("@/assets/text-input.css");
 
-	.container {
+	.results-container {
 		border: 1px solid var(--border-color-base);
 		padding: var(--space-lg);
 		min-width: 25rem;
@@ -145,44 +145,11 @@
 		}
 	}
 
-	.subtitle {
-		text-align: center;
-		font-size: 0.8rem;
-		margin-bottom: var(--space-sm);
-	}
-
-	.roomID {
-		color: var(--color-base--subtle);
-		background-color: var(--color-surface-0);
-		border: 1px solid var(--border-color-base);
-		border-radius: 3px;
-		padding: var(--space-xs);
-		cursor: copy;
-	}
-
-	.current-player-amount {
-		color: var(--color-base--subtle);
-	}
-
-	.button-container {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: var(--space-sm);
-
-		button {
-			margin: 0;
-		}
-	}
-
 	.small-button {
 		padding: var(--space-xs);
 		margin: 0;
-
-		&.join {
-			background-color: var(--color-success);
-		}
-
-		&.leave {
+		width: 100%;
+		&.kick {
 			background-color: var(--color-destructive);
 		}
 	}
@@ -191,5 +158,15 @@
 		list-style: none;
 		padding: 0;
 		margin: 0;
+	}
+
+	.list-enter-active,
+	.list-leave-active {
+	transition: all 0.5s ease;
+	}
+	.list-enter-from,
+	.list-leave-to {
+	opacity: 0;
+	transform: translateX(30px);
 	}
 </style>

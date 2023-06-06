@@ -1,23 +1,25 @@
 <template>
-	<section class="container">
-		<h1>End</h1>
+<div class="end-container"> 
+	<div class="main-container">
 		<EndMap :gameOptions="gameOptions" />
-		<Results />
+		<Results :gameOptions="gameOptions"/>
+	</div>
+	<div class="button-container"> 
 		<button @click="restartGame()" v-if="showControls">Restart Game</button>
 		<button @click="backToLobby()" v-if="showControls">Back to Lobby</button>
-	</section>
-	<Teleport to="body" v-if="showPopup">
-		<Transition name="scale-in" appear>
-			<div class="modal__bg">
-				<div class="modal-content">
-					{{ getPopupText() }}
-					<p class="subtitle">
-						{{ flairMessage }}
-					</p>
-				</div>
-			</div>
-		</Transition>
-	</Teleport>
+	</div>
+</div>
+
+<Teleport to="body" v-if="showPopup">
+	<div class="modal__bg">
+		<div class="modal-content">
+			<p class="main-text"> {{ getPopupText() }} </p>
+			<p class="subtitle">
+				{{ flairMessage }}
+			</p>
+		</div>
+	</div>
+</Teleport>
 </template>
 <script lang="ts">
 	import {defineComponent, type PropType} from "vue";
@@ -127,15 +129,22 @@
 		components: {EndMap, Results}
 	});
 </script>
-<style scoped>
+<style scoped lang="less">
 	.modal__bg {
 		animation: vanish 6s forwards;
 		pointer-events: none;
+
+		@media screen and (min-width: 901px) {
+			translate: calc(2.8*var(--padding-page)) 0;
+		}
 	}
 
 	@keyframes vanish {
 		0% {
-			opacity: 1;
+			scale: 0;
+		}
+		10% {
+			scale: 1
 		}
 		75% {
 			opacity: 0.8;
@@ -145,12 +154,36 @@
 		}
 	}
 	.modal-content {
-		font-size: 10vw;
 		text-align: center;
+	}
+
+	.modal-content .main-text {
+		font-size: 10vw;
 	}
 
 	.modal-content .subtitle {
 		font-size: 2vw;
 		color: var(--color-base--subtle);
+	}
+
+	.end-container {
+		max-width: calc(96vw - 2.8 * var(--padding-page));
+		margin: 0 2rem;
+		
+		@media screen and (max-width: 900px) {
+			max-width: 100%;
+			margin: var(--space-sm) var(--space-xs)
+		}
+	}
+
+	.main-container {
+		max-width: 100%;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: calc(2 * var(--space-xl));
+
+		@media screen and (max-width: 900px) {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

@@ -22,13 +22,30 @@ export var IO = {
 	onConnected: function () {
 		console.log("Connected to server");
 		App.CreateRoom();
+		const baseNames = [
+			"Prospector",
+			"Leafman",
+			"Crusher",
+			"Bertha",
+			"Jeff",
+			"KoroSlave",
+			"Strider",
+			"Tick",
+			"Badum",
+			"Rattler",
+			"Howler",
+			"Blueman"
+		]
 		let localStorageName = localStorage.getItem("username");
+		// if their username is one of the default usernames we give them a new one. We check if its default 
+		// by removing the default 5 numbers and then checking if its in our list of base names.
+		if (localStorageName && baseNames.includes(localStorageName?.slice(0, -5))) localStorageName = null;
 		let name =
 			localStorageName ??
 			(() => {
 				let number = Math.floor(Math.random() * 100000).toString();
 				while (number.length < 5) number = "0" + number;
-				return "Player" + number;
+				return baseNames[Math.floor(baseNames.length * Math.random())] + number;
 			})();
 		App.myPlayerData = {
 			name: name,

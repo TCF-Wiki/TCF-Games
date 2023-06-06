@@ -3,7 +3,7 @@
 		<div class="map-selector-container">
 			<MapSelector :gameOptions="gameOptions" />
 		</div>
-		<div id="GameMap"></div>
+		<div id="GameMap" :class="{topRoundedCorners: gameOptions.maps.length == 1}"></div>
 	</section>
 </template>
 
@@ -89,8 +89,8 @@
 
 <style scoped lang="less">
 	.map-container {
-		width: 48rem;
-		height: 48rem;
+		width: 100%;
+		aspect-ratio: 1 / 1;
 	}
 
 	#GameMap {
@@ -98,7 +98,13 @@
 		height: 100%;
 		z-index: 0;
 		background-color: #081021;
-		border-bottom-right-radius: 3rem;
-		border-bottom-left-radius: 3rem;
+		border-bottom-right-radius: 2rem;
+		border-bottom-left-radius: 2rem;
+		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+		&.topRoundedCorners {
+			border-top-right-radius: 2rem;
+			border-top-left-radius: 2rem;
+		}
 	}
 </style>

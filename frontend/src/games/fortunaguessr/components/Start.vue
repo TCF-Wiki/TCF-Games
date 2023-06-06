@@ -116,6 +116,7 @@
 		background-color: var(--color-surface-3);
 		padding: var(--space-md);
 		min-width: 25rem;
+		height: 25rem;
 
 		background-color: var(--color-surface-3);
 		border-radius: 2rem;
@@ -130,20 +131,15 @@
 		}
 	}
 
-	@keyframes hourglass {
-		0% {
-			transform: rotate(0deg);
-			box-shadow: inset var(--tertairy) 0 -0em 0 0, inset #181818 0 -2em 0 0, inset var(--tertairy) 0 -4em 0 0;
-		}
+	.btn-container {
+		margin-top: var(--space-sm);
+		display: flex;
+		justify-content: center;
 
-		80% {
-			transform: rotate(0deg);
-			box-shadow: inset var(--tertairy) 0 -2em 0 0, inset #181818 0 -2em 0 0, inset var(--tertairy) 0 -2em 0 0;
-		}
-
-		100% {
-			transform: rotate(180deg);
-			box-shadow: inset var(--tertairy) 0 -2em 0 0, inset #181818 0 -2em 0 0, inset var(--tertairy) 0 -2em 0 0;
+		& .button {
+			background-color: var(--color-success);
+			width: 50%;
+			margin: 0;
 		}
 	}
 </style>
