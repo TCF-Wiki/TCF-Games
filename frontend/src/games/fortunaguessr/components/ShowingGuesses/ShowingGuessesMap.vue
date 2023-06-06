@@ -19,6 +19,7 @@
 	import {emitter, toast} from "@/main";
 	import type {locationType, gameInfoType, guessInfoType} from "@/views/FortunaGuessrView.vue";
 	export default defineComponent({
+		name: "ShowingGuessesMap",
 		components: {
 			MapSelector
 		},
@@ -167,31 +168,10 @@
 		height: 48rem;
 		position: relative;
 	}
-
-	.map-overlay {
-		width: 100%;
-		height: 100%;
-		z-index: 1;
-		top: 0;
-		left: 0;
-		position: absolute;
-		background-color: var(--color-surface-0);
-
-		& p {
-			font-size: 1.5rem;
-			display: flex;
-			justify-content: center;
-		}
-	}
 	#GuessMap {
 		width: 100%;
 		height: 95%;
 		z-index: 0;
 		background-color: #081021;
-	}
-
-	.hideMap {
-		visibility: hidden;
-		pointer-events: none;
 	}
 </style>

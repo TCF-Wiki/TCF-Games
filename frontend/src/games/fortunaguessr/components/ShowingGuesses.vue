@@ -4,12 +4,12 @@
 			<h1>Results for round {{ currentRound + 1 }}</h1>
 			<button v-if="showControls" @click="nextRound()">Next Round</button>
 		</div>
-		<div class="guess-container" v-if="showGuesses">
-			<ShowingGuessesMap :gameOptions="gameOptions" :currentRound="currentRound" :location="location" />
-			<Results :currentRound="currentRound" />
-		</div>
-		<div v-else>
-			<h2>Waiting for everyone to guess...</h2>
+		<div class="guess-container">
+			<ShowingGuessesMap v-if="showGuesses" :gameOptions="gameOptions" :currentRound="currentRound" :location="location" />
+			<div v-else>
+				<h2>Waiting for everyone to guess...</h2>
+			</div>
+			<Results :currentRound="currentRound" :show-guess-info="showGuesses" />
 		</div>
 	</section>
 </template>
