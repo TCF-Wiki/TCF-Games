@@ -10,7 +10,7 @@
 				gameLength: 5,
 				oneChecked: true,
 				twoChecked: true,
-				threeChecked: this.difficulty == 'Hard' || this.difficulty == 'Insane' ? true : false
+				threeChecked: this.difficulty == "Hard" || this.difficulty == "Insane" ? true : false
 			};
 		},
 		props: ["difficulty", "description", "image", "mapIcon"],
@@ -43,89 +43,89 @@
 </script>
 
 <template>
-<Transition name="scale-in" appear>
-	<section class="card">
-		<div class="card-bg">
-			<img :src="'/' + image" :alt="difficulty + ' represented by creature'" />
-		</div>
-		<div class="card-context">
-			<div class="dark-bg"></div>
-			<h2>{{ difficulty }}</h2>
-			<p>
-				{{ description }}
-			</p>
-			<button type="button" @click.prevent="startGame()">Start Game</button>
-		</div>
-		<div class="card-icons">
-			<ul>
-				<li>
-					<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-						<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-						<path
-							d="M176 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h16V98.4C92.3 113.8 16 200 16 304c0 114.9 93.1 208 208 208s208-93.1 208-208c0-41.8-12.3-80.7-33.5-113.2l24.1-24.1c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L355.7 143c-28.1-23-62.2-38.8-99.7-44.6V64h16c17.7 0 32-14.3 32-32s-14.3-32-32-32H224 176zm72 192V320c0 13.3-10.7 24-24 24s-24-10.7-24-24V192c0-13.3 10.7-24 24-24s24 10.7 24 24z"
-						/>
-					</svg>
-					<div class="icon-context">
-						<div class="container">
-							<h3>Time Limit</h3>
-							<input id="timeSlider" type="range" min="5" max="120" v-model="timeLength" step="5" @input="sliderRatio" />
-							<br />
-							<label for="timeSlider"> {{ timeLength }}s </label>
-						</div>
-					</div>
-				</li>
-				<li v-if="!mapIcon">
-					<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
-						<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-						<path d="M384 476.1L192 421.2V35.9L384 90.8V476.1zm32-1.2V88.4L543.1 37.5c15.8-6.3 32.9 5.3 32.9 22.3V394.6c0 9.8-6 18.6-15.1 22.3L416 474.8zM15.1 95.1L160 37.2V423.6L32.9 474.5C17.1 480.8 0 469.2 0 452.2V117.4c0-9.8 6-18.6 15.1-22.3z" />
-					</svg>
-					<div class="icon-context">
-						<div class="container">
-							<h3>Maps</h3>
-							<div class="checkbox-container">
-								<span> BS </span>
-								<div class="toggle-pill-color">
-									<input :id="'map1checkbox' + difficulty" type="checkbox" value="1" checked @change="oneChecked = !oneChecked" :disabled="!threeChecked && !twoChecked && oneChecked ? true : false" />
-									<label :for="'map1checkbox' + difficulty"> </label>
-								</div>
-							</div>
-							<div class="checkbox-container">
-								<span> CF </span>
-								<div class="toggle-pill-color">
-									<input :id="'map2checkbox' + difficulty" type="checkbox" value="2" checked @change="twoChecked = !twoChecked" :disabled="!threeChecked && twoChecked && !oneChecked ? true : false" />
-									<label :for="'map2checkbox' + difficulty"> </label>
-								</div>
-							</div>
-							<div class="checkbox-container">
-								<span> TI </span>
-								<div class="toggle-pill-color">
-									<input :id="'map3checkbox' + difficulty" type="checkbox" value="3" :checked="difficulty == 'Hard' || difficulty == 'Insane' ? true : false " @change="threeChecked = !threeChecked" :disabled="threeChecked && !twoChecked && !oneChecked ? true : false" />
-									<label :for="'map3checkbox' + difficulty"> </label>
-								</div>
+	<Transition name="scale-in" appear>
+		<section class="card">
+			<div class="card-bg">
+				<img :src="'/' + image" :alt="difficulty + ' represented by creature'" />
+			</div>
+			<div class="card-context">
+				<div class="dark-bg"></div>
+				<h2>{{ difficulty }}</h2>
+				<p>
+					{{ description }}
+				</p>
+				<button type="button" @click.prevent="startGame()">Start Game</button>
+			</div>
+			<div class="card-icons">
+				<ul>
+					<li>
+						<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+							<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+							<path
+								d="M176 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h16V98.4C92.3 113.8 16 200 16 304c0 114.9 93.1 208 208 208s208-93.1 208-208c0-41.8-12.3-80.7-33.5-113.2l24.1-24.1c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L355.7 143c-28.1-23-62.2-38.8-99.7-44.6V64h16c17.7 0 32-14.3 32-32s-14.3-32-32-32H224 176zm72 192V320c0 13.3-10.7 24-24 24s-24-10.7-24-24V192c0-13.3 10.7-24 24-24s24 10.7 24 24z"
+							/>
+						</svg>
+						<div class="icon-context">
+							<div class="container">
+								<h3>Time Limit</h3>
+								<input id="timeSlider" type="range" min="5" max="120" v-model="timeLength" step="5" @input="sliderRatio" />
+								<br />
+								<label for="timeSlider"> {{ timeLength }}s </label>
 							</div>
 						</div>
-					</div>
-				</li>
-				<li>
-					<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-						<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-						<path
-							d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"
-						/>
-					</svg>
-					<div class="icon-context">
-						<div class="container">
-							<h3>Rounds</h3>
-							<input id="gameLengthSlider" type="range" min="1" max="20" v-model="gameLength" @input="sliderRatio" />
-							<br />
-							<label for="gameLengthSlider"> {{ gameLength }} round{{ gameLength > 1 ? "s" : "" }} </label>
+					</li>
+					<li v-if="!mapIcon">
+						<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
+							<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+							<path d="M384 476.1L192 421.2V35.9L384 90.8V476.1zm32-1.2V88.4L543.1 37.5c15.8-6.3 32.9 5.3 32.9 22.3V394.6c0 9.8-6 18.6-15.1 22.3L416 474.8zM15.1 95.1L160 37.2V423.6L32.9 474.5C17.1 480.8 0 469.2 0 452.2V117.4c0-9.8 6-18.6 15.1-22.3z" />
+						</svg>
+						<div class="icon-context">
+							<div class="container">
+								<h3>Maps</h3>
+								<div class="checkbox-container">
+									<span> BS </span>
+									<div class="toggle-pill-color">
+										<input :id="'map1checkbox' + difficulty" type="checkbox" value="1" checked @change="oneChecked = !oneChecked" :disabled="!threeChecked && !twoChecked && oneChecked ? true : false" />
+										<label :for="'map1checkbox' + difficulty"> </label>
+									</div>
+								</div>
+								<div class="checkbox-container">
+									<span> CF </span>
+									<div class="toggle-pill-color">
+										<input :id="'map2checkbox' + difficulty" type="checkbox" value="2" checked @change="twoChecked = !twoChecked" :disabled="!threeChecked && twoChecked && !oneChecked ? true : false" />
+										<label :for="'map2checkbox' + difficulty"> </label>
+									</div>
+								</div>
+								<div class="checkbox-container">
+									<span> TI </span>
+									<div class="toggle-pill-color">
+										<input :id="'map3checkbox' + difficulty" type="checkbox" value="3" :checked="difficulty == 'Hard' || difficulty == 'Insane' ? true : false" @change="threeChecked = !threeChecked" :disabled="threeChecked && !twoChecked && !oneChecked ? true : false" />
+										<label :for="'map3checkbox' + difficulty"> </label>
+									</div>
+								</div>
+							</div>
 						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-	</section>
-</Transition>
+					</li>
+					<li>
+						<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+							<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+							<path
+								d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"
+							/>
+						</svg>
+						<div class="icon-context">
+							<div class="container">
+								<h3>Rounds</h3>
+								<input id="gameLengthSlider" type="range" min="1" max="20" v-model="gameLength" @input="sliderRatio" />
+								<br />
+								<label for="gameLengthSlider"> {{ gameLength }} round{{ gameLength > 1 ? "s" : "" }} </label>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</section>
+	</Transition>
 </template>
 
 <style scoped lang="less">
@@ -355,7 +355,7 @@
 		text-align: center;
 		transition: 0.2s ease-out;
 		overflow: hidden;
-		border-radius: .8rem;
+		border-radius: 0.8rem;
 
 		@media screen and (max-width: 900px) {
 			width: 2rem;
@@ -398,53 +398,6 @@
 
 	.card .card-icons li:hover .icon-context input[type="checkbox"] {
 		transform: scale(1);
-	}
-
-	.toggle-pill-color input[type="checkbox"] {
-		display: none;
-	}
-	.toggle-pill-color input[type="checkbox"] + label {
-		display: block;
-		position: relative;
-		width: 3em;
-		height: 1.6em;
-		margin-bottom: 20px;
-		border-radius: 1em;
-		background: var(--color-destructive);
-		box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.3);
-		cursor: pointer;
-		user-select: none;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		-webkit-transition: background 0.1s ease-in-out;
-		transition: background 0.1s ease-in-out;
-	}
-	.toggle-pill-color input[type="checkbox"] + label:before {
-		content: "";
-		display: block;
-		width: 1.2em;
-		height: 1.2em;
-		border-radius: 1em;
-		background: var(--color-base--emphasized);
-		box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
-		position: absolute;
-		left: 0.2em;
-		top: 0.2em;
-		-webkit-transition: all 0.2s ease-in-out;
-		transition: all 0.2s ease-in-out;
-	}
-	.toggle-pill-color input[type="checkbox"]:checked + label {
-		background: var(--color-success);
-	}
-	.toggle-pill-color input[type="checkbox"]:checked + label:before {
-		box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
-		left: 1.6em;
-	}
-
-	.toggle-pill-color input[type="checkbox"][disabled] + label {
-		filter: grayscale(1);
-		cursor: not-allowed;
 	}
 
 	svg {

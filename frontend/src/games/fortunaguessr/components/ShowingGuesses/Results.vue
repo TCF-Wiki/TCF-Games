@@ -42,7 +42,6 @@
 	export default defineComponent({
 		name: "TestView",
 		data: () => ({
-			currentRoomId: App.roomId ?? "",
 			playerList: [] as {name: string; socketId: string; score: number; status: string; guess: guessInfoType}[],
 			showControls: false
 		}),
@@ -58,14 +57,9 @@
 		},
 		mounted() {
 			this.updateShowControls();
-			emitter.on("RoomJoined", (roomId: string) => {
-				this.currentRoomId = roomId;
-			});
 			emitter.on("PlayerListUpdated", (players: PlayerDataType[]) => {
-				this.currentRoomId = App.roomId ?? "";
 				this.playerList = this.convertPlayerList();
 			});
-			this.currentRoomId = App.roomId ?? "";
 			this.playerList = this.convertPlayerList();
 
 			emitter.on("HostChanged", () => {
@@ -86,10 +80,6 @@
 			},
 			kickPlayer(player: PlayerDataType) {
 				App.KickPlayer(player.socketId);
-			},
-			copyRoomId() {
-				navigator.clipboard.writeText(this.currentRoomId);
-				toast.success("Copied Room ID to clipboard!");
 			},
 			convertPlayerList() {
 				let playerList: {name: string; socketId: string; score: number; status: string; guess: guessInfoType}[] = [];

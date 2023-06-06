@@ -2,9 +2,16 @@
 	<section class="container">
 		<div class="title-container">
 			<h2>Scoreboard</h2>
-			<p class="subtitle" @click="copyRoomId">
-				Room ID: <span class="roomID"> {{ currentRoomId }} </span>
-			</p>
+			<div class="subtitle">
+				<span>Room ID:</span>
+				<span class="roomID" @click="copyRoomId">
+					{{ showCurrentRoomId ? currentRoomId : "*********" }}
+				</span>
+				<span class="toggle-pill-color">
+					<input id="streamerMode" type="checkbox" :checked="showCurrentRoomId" @change="changeStreamerMode()" />
+					<label for="streamerMode"></label>
+				</span>
+			</div>
 		</div>
 		<div class="content">
 			<div class="title-container">
@@ -66,6 +73,14 @@
 			currentRoomId: App.roomId ?? "",
 			playerList: [] as {name: string; socketId: string; score: number; guesses: guessInfoType[]}[],
 			showControls: false,
+			showCurrentRoomId: (() => {
+				let storage = localStorage.getItem("showCurrentRoomId");
+				if (storage != null) {
+					return storage === "true";
+				} else {
+					return true;
+				}
+			})(),
 			selectedRound: 1,
 			rounds: App.myPlayerData.gameData.guesses.length
 		}),
@@ -118,6 +133,10 @@
 					return b.score - a.score;
 				});
 				return playerList;
+			},
+			changeStreamerMode() {
+				this.showCurrentRoomId = !this.showCurrentRoomId;
+				localStorage.setItem("showCurrentRoomId", this.showCurrentRoomId.toString());
 			}
 		},
 		watch: {

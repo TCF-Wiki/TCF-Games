@@ -3,9 +3,16 @@
 		<section class="container">
 			<div class="title-container">
 				<h2>Multiplayer</h2>
-				<p class="subtitle" @click="copyRoomId">
-					Room ID: <span class="roomID"> {{ currentRoomId }} </span>
-				</p>
+				<div class="subtitle">
+					<span>Room ID:</span>
+					<span class="roomID" @click="copyRoomId">
+						{{ showCurrentRoomId ? currentRoomId : "*********" }}
+					</span>
+					<span class="toggle-pill-color">
+						<input id="streamerMode" type="checkbox" :checked="showCurrentRoomId" @change="changeStreamerMode()" />
+						<label for="streamerMode"></label>
+					</span>
+				</div>
 			</div>
 			<div class="content">
 				<div class="input-field">
@@ -33,7 +40,7 @@
 				</p>
 				<ul>
 					<li v-for="player in playerList">
-						<p> {{ player.name }}</p>
+						<p>{{ player.name }}</p>
 						<button @click="kickPlayer(player)" class="small-button leave" v-if="showControls && playerList.length > 1 && player.socketId != getMySocketId()">Kick</button>
 					</li>
 				</ul>
@@ -56,6 +63,14 @@
 			name: App.myPlayerData.name,
 			roomId: "",
 			currentRoomId: "",
+			showCurrentRoomId: (() => {
+				let storage = localStorage.getItem("showCurrentRoomId");
+				if (storage != null) {
+					return storage === "true";
+				} else {
+					return true;
+				}
+			})(),
 			playerList: [] as PlayerDataType[],
 			showControls: App.host
 		}),
@@ -85,7 +100,7 @@
 			},
 			changeName() {
 				if (this.name.length >= 16) {
-					toast.error("Names cannot be longer than 15 characters.")
+					toast.error("Names cannot be longer than 15 characters.");
 					return;
 				}
 				App.ChangeName(this.name);
@@ -99,6 +114,10 @@
 			copyRoomId() {
 				navigator.clipboard.writeText(this.currentRoomId);
 				toast.success("Copied Room ID to clipboard!");
+			},
+			changeStreamerMode() {
+				this.showCurrentRoomId = !this.showCurrentRoomId;
+				localStorage.setItem("showCurrentRoomId", this.showCurrentRoomId.toString());
 			}
 		}
 	});

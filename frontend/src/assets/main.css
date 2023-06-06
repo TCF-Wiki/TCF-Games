@@ -118,6 +118,53 @@ input[type="checkbox"]:checked::before {
 	opacity: 1;
 }
 
+/* Toggle pill */
+.toggle-pill-color input[type="checkbox"] {
+	display: none;
+}
+.toggle-pill-color input[type="checkbox"] + label {
+	display: inline-block;
+	position: relative;
+	width: 3em;
+	height: 1.6em;
+	border-radius: 1em;
+	background: var(--color-destructive);
+	box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.3);
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-transition: background 0.1s ease-in-out;
+	transition: background 0.1s ease-in-out;
+}
+.toggle-pill-color input[type="checkbox"] + label:before {
+	content: "";
+	display: inline-block;
+	width: 1.2em;
+	height: 1.2em;
+	border-radius: 1em;
+	background: var(--color-base--emphasized);
+	box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+	position: absolute;
+	left: 0.2em;
+	top: 0.2em;
+	-webkit-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+}
+.toggle-pill-color input[type="checkbox"]:checked + label {
+	background: var(--color-success);
+}
+.toggle-pill-color input[type="checkbox"]:checked + label:before {
+	box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+	left: 1.6em;
+}
+
+.toggle-pill-color input[type="checkbox"][disabled] + label {
+	filter: grayscale(1);
+	cursor: not-allowed;
+}
+
 /* LOADING */
 
 #loading {
@@ -251,21 +298,21 @@ warning,
 }
 
 .scale-in-enter-active {
-	animation: bounce-in .5s;
-  }
-  .scale-in-leave-active {
-	animation: bounce-in .5s reverse;
-  }
-  @keyframes bounce-in {
+	animation: bounce-in 0.5s;
+}
+.scale-in-leave-active {
+	animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
 	0% {
-	  transform: scale(0);
-	  opacity: 0;
+		transform: scale(0);
+		opacity: 0;
 	}
 	50% {
-	  transform: scale(1.1);
+		transform: scale(1.1);
 	}
 	100% {
-	  transform: scale(1);
-	  opacity: 1;
+		transform: scale(1);
+		opacity: 1;
 	}
-  }
+}
