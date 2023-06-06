@@ -104,6 +104,10 @@
 				console.log("Received back to lobby event");
 				this.state = "Start";
 			});
+			emitter.on("RoomJoined", () => {
+				console.log("Received room joined event");
+				this.state = "Start";
+			});
 			this.state = "Start";
 		},
 		watch: {

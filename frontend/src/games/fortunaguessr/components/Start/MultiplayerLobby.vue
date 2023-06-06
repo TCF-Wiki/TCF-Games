@@ -73,6 +73,7 @@
 		},
 		methods: {
 			joinRoom() {
+				this.changeName();
 				App.JoinRoom(this.roomId);
 			},
 			leaveRoom() {
