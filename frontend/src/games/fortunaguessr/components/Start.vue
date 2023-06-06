@@ -12,19 +12,21 @@
 				<DifficultyCard difficulty="Insane" description="An unfair set of locations. Good luck." image="InsaneDifficultyImage.png" />
 			</div>
 			<section class="options-container">
-				<div class="seed-container" v-if="showControls">
-					<div class="title-container">
-						<h2>Seed</h2>
-						<p class="subtitle no-color">This will start a game with the provided seed</p>
+				<Transition name="scale-in" appear>
+					<div class="seed-container" v-if="showControls">
+						<div class="title-container">
+							<h2>Seed</h2>
+							<p class="subtitle no-color">This will start a game with the provided seed</p>
+						</div>
+						<div class="input-field">
+							<input type="text" v-model="enteredSeed" placeholder="Enter game seed..." id="gameSeedInput" />
+							<label for="gameSeedInput" class="active"> Game seed </label>
+						</div>
+						<div class="btn-container">
+							<button class="button" type="submit" @click.prevent="startWithSeed()" value="submit">Start Game</button>
+						</div>
 					</div>
-					<div class="input-field">
-						<input type="text" v-model="enteredSeed" placeholder="Enter game seed..." id="gameSeedInput" />
-						<label for="gameSeedInput" class="active"> Game seed </label>
-					</div>
-					<div class="btn-container">
-						<button class="button" type="submit" @click.prevent="startWithSeed()" value="submit">Start Game</button>
-					</div>
-				</div>
+				</Transition>
 				<MultiplayerLobby />
 			</section>
 		</section>

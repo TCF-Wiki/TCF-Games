@@ -43,6 +43,7 @@
 </script>
 
 <template>
+<Transition name="scale-in" appear>
 	<section class="card">
 		<div class="card-bg">
 			<img :src="'/' + image" :alt="difficulty + ' represented by creature'" />
@@ -124,6 +125,7 @@
 			</ul>
 		</div>
 	</section>
+</Transition>
 </template>
 
 <style scoped lang="less">
