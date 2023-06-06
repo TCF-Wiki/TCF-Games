@@ -208,8 +208,4 @@
 		background-color: #081021;
 	}
 
-	.hideMap {
-		visibility: hidden;
-		pointer-events: none;
-	}
 </style>
