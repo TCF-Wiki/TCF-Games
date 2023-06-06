@@ -2,16 +2,9 @@
 	<section class="container">
 		<div class="title-container">
 			<h2>Scoreboard</h2>
-			<p class="subtitle" @click="copyRoomId">
-				Room ID: <span class="roomID"> {{ currentRoomId }} </span>
-			</p>
 		</div>
 		<div class="content">
 			<div class="title-container">
-				<h2>Players</h2>
-				<p class="subtitle">
-					<span class="current-player-amount"> {{ playerList.length }} / 10 </span> players
-				</p>
 				<table>
 					<tr>
 						<th>Player</th>

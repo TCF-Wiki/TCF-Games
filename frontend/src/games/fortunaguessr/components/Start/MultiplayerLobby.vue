@@ -22,24 +22,24 @@
 					<button class="small-button" @click="changeName">Change name</button>
 				</div>
 			</div>
-	</section>
-</Transition>
-<Transition name="scale-in">
-	<section class="container">
-		<div class="title-container">
-			<h2>Players</h2>
-			<p class="subtitle">
-				<span class="current-player-amount"> {{ playerList.length }} / 10 </span> players
-			</p>
-			<ul>
-				<li v-for="player in playerList">
-					<p> {{ player.name }}</p>
-					<button @click="kickPlayer(player)" class="small-button leave" v-if="showControls && playerList.length > 1 && player.socketId != getMySocketId()">Kick</button>
-				</li>
-			</ul>
-		</div>
-	</section>
-</Transition>
+		</section>
+	</Transition>
+	<Transition name="scale-in" appear>
+		<section class="container">
+			<div class="title-container">
+				<h2>Players</h2>
+				<p class="subtitle">
+					<span class="current-player-amount"> {{ playerList.length }} / 10 </span> players
+				</p>
+				<ul>
+					<li v-for="player in playerList">
+						<p> {{ player.name }}</p>
+						<button @click="kickPlayer(player)" class="small-button leave" v-if="showControls && playerList.length > 1 && player.socketId != getMySocketId()">Kick</button>
+					</li>
+				</ul>
+			</div>
+		</section>
+	</Transition>
 </template>
 
 <script lang="ts">
