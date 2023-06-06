@@ -4,11 +4,6 @@
 			<MapSelector :gameOptions="gameOptions" />
 		</div>
 		<div id="GuessMap"></div>
-		<div class="map-overlay" v-if="!shouldDisplayMap">
-			<p>
-				Waiting for everyone to confirm their guess.
-			</p>
-		</div>
 	</section>
 </template>
 
@@ -29,8 +24,7 @@
 		},
 		data: () => ({
 			currentLayers: [] as L.Layer[],
-			mapNumber: 1,
-			shouldDisplayMap: false
+			mapNumber: 1
 		}),
 		props: {
 			gameOptions: {
@@ -89,10 +83,9 @@
 				this.ClearLayers();
 				this.DisplayGuesses(map);
 				this.AddCorrectMarker(map);
-				this.checkIfShouldDisplayMap();
 			});
 
-			emitter.on()
+			emitter.on();
 		},
 		methods: {
 			ClearLayers() {
@@ -163,18 +156,7 @@
 						}
 					}
 				}
-			},
-			checkIfShouldDisplayMap() {
-				for (let player in App.playerList) {
-					console.log('This guesses data:' , App.playerList[player].gameData?.guesses[this.currentRound])
-					if (!App.playerList[player].gameData?.guesses[this.currentRound]) {
-						this.shouldDisplayMap = false;
-						return;
-					} 
-				}
-				this.shouldDisplayMap = true;
 			}
-
 		}
 	});
 </script>

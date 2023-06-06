@@ -1,12 +1,15 @@
 <template>
 	<section class="container">
 		<div class="title-container">
-			<h1>Results for round {{ currentRound +1 }}</h1>
+			<h1>Results for round {{ currentRound + 1 }}</h1>
 			<button v-if="showControls" @click="nextRound()">Next Round</button>
 		</div>
-		<div class="guess-container"> 
+		<div class="guess-container" v-if="showGuesses">
 			<ShowingGuessesMap :gameOptions="gameOptions" :currentRound="currentRound" :location="location" />
 			<Results :currentRound="currentRound" />
+		</div>
+		<div v-else>
+			<h2>Waiting for everyone to guess...</h2>
 		</div>
 	</section>
 </template>
@@ -39,6 +42,18 @@
 			location: {
 				type: Object as PropType<locationType>,
 				required: true
+			}
+		},
+		computed: {
+			showGuesses(): boolean {
+				for (let player in this.playerList) {
+					if (!this.playerList[player].gameData?.guesses[this.currentRound]) {
+						console.log("Player " + this.playerList[player].name + " has not guessed yet");
+						return false;
+					}
+				}
+				console.log("Everyone has guessed");
+				return true;
 			}
 		},
 		methods: {
@@ -83,34 +98,33 @@
 	});
 </script>
 <style scoped lang="less">
-.container {
-	max-width: calc(97vw - 2.8 * var(--padding-page));
-	margin: 0 2rem;
-}
-
-.guess-container {
-	max-width: 100%;
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: var(--space-lg);
-
-	@media screen and (max-width: 900px) {
-		grid-template-columns: 1fr;
+	.container {
+		max-width: calc(97vw - 2.8 * var(--padding-page));
+		margin: 0 2rem;
 	}
-}
 
+	.guess-container {
+		max-width: 100%;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-lg);
 
-h1 {
-	text-align: center;
-	width: 100%;
-	font-size: 2.5rem;
-}
+		@media screen and (max-width: 900px) {
+			grid-template-columns: 1fr;
+		}
+	}
 
-.title-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	margin-bottom: 2rem;
-}
+	h1 {
+		text-align: center;
+		width: 100%;
+		font-size: 2.5rem;
+	}
+
+	.title-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		margin-bottom: 2rem;
+	}
 </style>
