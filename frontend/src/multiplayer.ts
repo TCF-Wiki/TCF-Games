@@ -22,8 +22,16 @@ export var IO = {
 	onConnected: function () {
 		console.log("Connected to server");
 		App.CreateRoom();
+		let localStorageName = localStorage.getItem("username");
+		let name =
+			localStorageName ??
+			(() => {
+				let number = Math.floor(Math.random() * 100000).toString();
+				while (number.length < 5) number = "0" + number;
+				return "Player" + number;
+			})();
 		App.myPlayerData = {
-			name: "Player" + Math.floor(Math.random() * 100000).toString(),
+			name: name,
 			socketId: IO.socket.id
 		};
 	},
@@ -125,6 +133,7 @@ export var App = {
 	},
 	ChangeName(newName: string) {
 		App.myPlayerData.name = newName;
+		localStorage.setItem("username", newName);
 		IO.socket.emit("changeName", newName);
 	},
 	NameChanged(data: PlayerDataType) {
