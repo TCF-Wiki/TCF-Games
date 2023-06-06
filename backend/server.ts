@@ -18,7 +18,7 @@ app.use(cors());
 
 //Content Security Policy
 app.use(function (req, res, next) {
-	res.setHeader("Content-Security-Policy", "default-src *; img-src * data:; script-src * 'sha256-reBsRZd5I88opZSwT59Ir+QlBhrEhdRJ1aQUr4GXhyw=';style-src * 'unsafe-inline';");
+	res.setHeader("Content-Security-Policy", "default-src 'self';" + "img-src 'self' data: thecyclefrontier.wiki;" + "script-src 'self' 'sha256-reBsRZd5I88opZSwT59Ir+QlBhrEhdRJ1aQUr4GXhyw=';" + "style-src 'self' 'unsafe-inline' fonts.googleapis.com;" + "font-src 'self' fonts.gstatic.com;" + "connect-src 'self' raw.githubusercontent.com/TCF-Wiki/TCF-Information/;");
 	next();
 });
 //Redirect http to https
