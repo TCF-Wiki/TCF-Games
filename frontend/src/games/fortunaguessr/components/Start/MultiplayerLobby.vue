@@ -33,7 +33,7 @@
 			</p>
 			<ul>
 				<li v-for="player in playerList">
-					{{ player.name }}
+					<p> {{ player.name }}</p>
 					<button @click="kickPlayer(player)" class="small-button leave" v-if="showControls && playerList.length > 1 && player.socketId != getMySocketId()">Kick</button>
 				</li>
 			</ul>
@@ -78,12 +78,16 @@
 		methods: {
 			joinRoom() {
 				this.changeName();
-				App.JoinRoom(this.roomId);
+				if (this.name.length < 16) App.JoinRoom(this.roomId);
 			},
 			leaveRoom() {
 				App.LeaveRoom();
 			},
 			changeName() {
+				if (this.name.length >= 16) {
+					toast.error("Names cannot be longer than 15 characters.")
+					return;
+				}
 				App.ChangeName(this.name);
 			},
 			getMySocketId() {
@@ -167,5 +171,17 @@
 		list-style: none;
 		padding: 0;
 		margin: 0;
+		width: 100%;
+	}
+
+	li {
+		display: grid;
+		grid-template-columns: 3fr 1fr;
+		gap: var(--space-md);
+	}
+
+	li p {
+		display: flex;
+		align-items: center;
 	}
 </style>

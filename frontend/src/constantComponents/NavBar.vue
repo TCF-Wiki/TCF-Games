@@ -206,10 +206,8 @@
 			justify-content: start;
 		}
 
-		.header-outer:first-of-type {
-			.header-item:first-of-type {
-				border-bottom: 1px solid var(--border-color-base);
-			}
+		.header-outer:first-of-type > div.header-item:first-of-type {
+			border-bottom: 1px solid var(--border-color-base);
 		}
 	}
 

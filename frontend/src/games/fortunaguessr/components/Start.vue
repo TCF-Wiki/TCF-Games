@@ -78,6 +78,7 @@
 	}
 	h1 {
 		font-size: 3rem;
+		font-weight: bold;
 		line-height: 1;
 		text-align: center;
 
