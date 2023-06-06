@@ -4,6 +4,11 @@
 			<MapSelector :gameOptions="gameOptions" />
 		</div>
 		<div id="GuessMap"></div>
+		<div class="map-overlay" v-if="!shouldDisplayMap">
+			<p>
+				Waiting for everyone to confirm their guess.
+			</p>
+		</div>
 	</section>
 </template>
 
@@ -24,7 +29,8 @@
 		},
 		data: () => ({
 			currentLayers: [] as L.Layer[],
-			mapNumber: 1
+			mapNumber: 1,
+			shouldDisplayMap: false
 		}),
 		props: {
 			gameOptions: {
@@ -83,7 +89,10 @@
 				this.ClearLayers();
 				this.DisplayGuesses(map);
 				this.AddCorrectMarker(map);
+				this.checkIfShouldDisplayMap();
 			});
+
+			emitter.on()
 		},
 		methods: {
 			ClearLayers() {
@@ -154,7 +163,18 @@
 						}
 					}
 				}
+			},
+			checkIfShouldDisplayMap() {
+				for (let player in App.playerList) {
+					console.log('This guesses data:' , App.playerList[player].gameData?.guesses[this.currentRound])
+					if (!App.playerList[player].gameData?.guesses[this.currentRound]) {
+						this.shouldDisplayMap = false;
+						return;
+					} 
+				}
+				this.shouldDisplayMap = true;
 			}
+
 		}
 	});
 </script>
@@ -163,12 +183,33 @@
 	.map-container {
 		width: 48rem;
 		height: 48rem;
+		position: relative;
 	}
 
-	#GuessMap {
+	.map-overlay {
 		width: 100%;
 		height: 100%;
+		z-index: 1;
+		top: 0;
+		left: 0;
+		position: absolute;
+		background-color: var(--color-surface-0);
+
+		& p {
+			font-size: 1.5rem;
+			display: flex;
+			justify-content: center;
+		}
+	}
+	#GuessMap {
+		width: 100%;
+		height: 95%;
 		z-index: 0;
 		background-color: #081021;
+	}
+
+	.hideMap {
+		visibility: hidden;
+		pointer-events: none;
 	}
 </style>
