@@ -3,28 +3,28 @@ import bodyParser from "body-parser";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
+import compression from "compression";
 
 //Setup server settings
 export const app = express();
 const limiter = rateLimit({
-	windowMs: 1 * 60 * 1000, // 1 minutes
-	max: 1000 // limit each IP to 100 requests per windowMs
+	windowMs: 1000, // 1 second
+	max: 100 // limit each IP to 100 requests per windowMs
 });
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(helmet());
 app.use(limiter);
 app.use(express.json());
 app.use(cors());
+app.use(compression());
 
-//Content Security Policy
+//Function to run on all requests
 app.use(function (req, res, next) {
+	//Content Security Policy
 	res.setHeader("Content-Security-Policy", "default-src 'self';" + "img-src 'self' data: thecyclefrontier.wiki;" + "script-src 'self' 'sha256-reBsRZd5I88opZSwT59Ir+QlBhrEhdRJ1aQUr4GXhyw=';" + "style-src 'self' 'unsafe-inline' fonts.googleapis.com;" + "font-src 'self' fonts.gstatic.com;" + "connect-src 'self' raw.githubusercontent.com/TCF-Wiki/TCF-Information/;");
-	next();
-});
-//Redirect http to https
-app.use(function (request, response, next) {
-	if (request.hostname != "localhost" && request.hostname != "127.0.0.1" && !request.secure) {
-		return response.redirect("https://" + request.headers.host + request.url);
+	//Redirect http to https
+	if (req.hostname != "localhost" && req.hostname != "127.0.0.1" && !req.secure) {
+		return res.redirect("https://" + req.headers.host + req.url);
 	}
 	next();
 });
@@ -62,10 +62,10 @@ httpServer.listen(5000, () => {
 import {Server as IOServer} from "socket.io";
 export const io = new IOServer(httpServer);
 
-setInterval(function () {
-	//console.log("Connected sockets", io.engine.clientsCount);
-	//console.log("Rooms", io.sockets.adapter.rooms);
-}, 5000);
+/*setInterval(function () {
+	console.log("Connected sockets", io.engine.clientsCount);
+	console.log("Rooms", io.sockets.adapter.rooms);
+}, 5000);*/
 
 //Load main logic
 import "./mainLogic";
