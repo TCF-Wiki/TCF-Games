@@ -1,9 +1,13 @@
 <template>
 	<section class="container">
-		<h1>Showing Guesses</h1>
-		<button v-if="showControls" @click="nextRound()">Next Round</button>
-		<ShowingGuessesMap :gameOptions="gameOptions" :currentRound="currentRound" :location="location" />
-		<Results :currentRound="currentRound" />
+		<div class="title-container">
+			<h1>Results for round {{ currentRound +1 }}</h1>
+			<button v-if="showControls" @click="nextRound()">Next Round</button>
+		</div>
+		<div class="guess-container"> 
+			<ShowingGuessesMap :gameOptions="gameOptions" :currentRound="currentRound" :location="location" />
+			<Results :currentRound="currentRound" />
+		</div>
 	</section>
 </template>
 <script lang="ts">
@@ -78,4 +82,35 @@
 		components: {ShowingGuessesMap, Results}
 	});
 </script>
-<style scoped></style>
+<style scoped lang="less">
+.container {
+	max-width: calc(97vw - 2.8 * var(--padding-page));
+	margin: 0 2rem;
+}
+
+.guess-container {
+	max-width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--space-lg);
+
+	@media screen and (max-width: 900px) {
+		grid-template-columns: 1fr;
+	}
+}
+
+
+h1 {
+	text-align: center;
+	width: 100%;
+	font-size: 2.5rem;
+}
+
+.title-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin-bottom: 2rem;
+}
+</style>
