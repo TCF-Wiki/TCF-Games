@@ -16,7 +16,7 @@
 			</div>
 			<div class="content">
 				<div class="input-field">
-					<input placeholder="Enter room ID..." id="roomID" type="text" class="validate" v-model="roomId" />
+					<input placeholder="Enter room ID..." id="roomID" type="text" :style="showCurrentRoomId ? '' : '-webkit-text-security:disc;'" class="validate" v-model="roomId" />
 					<label for="roomID" class="active">Room ID</label>
 				</div>
 				<div class="input-field">

@@ -19,19 +19,18 @@
 		</div>
 	</section>
 
-<Teleport to="body">
-	<Transition name="scale-in" appear>
-		<div class="modal__bg" v-if="showGuesses">
-			<div class="modal-content">
-				{{ getOwnScore() }} pts
-				<p class="subtitle">
-					{{ feedbackMessage }}
-				</p>
+	<Teleport to="body">
+		<Transition name="scale-in" appear>
+			<div class="modal__bg" v-if="showGuesses">
+				<div class="modal-content">
+					{{ getOwnScore() }} pts
+					<p class="subtitle">
+						{{ feedbackMessage }}
+					</p>
+				</div>
 			</div>
-		</div>	
-	</Transition>
-</Teleport>
-
+		</Transition>
+	</Teleport>
 </template>
 <script lang="ts">
 	import {defineComponent, type PropType} from "vue";
@@ -49,7 +48,7 @@
 			guessData: {} as guessInfoType,
 			showControls: false,
 			playerList: [] as PlayerDataType[],
-			feedbackMessage: ''
+			feedbackMessage: ""
 		}),
 		props: {
 			gameOptions: {
@@ -99,11 +98,11 @@
 				}
 			},
 			getOwnScore() {
-				const score =  App.myPlayerData.gameData?.guesses[this.currentRound].score
+				const score = App.myPlayerData.gameData?.guesses[this.currentRound].score;
 
 				const gameScores = {
 					perfect: [
-						"Perfect score! Are you a Co-Bpt?",
+						"Perfect score! Are you a Co-Bot?",
 						"Flawless victory! Are you even human?",
 						"You crushed it! Are you cheating?",
 						"Unstoppable! Can I borrow some of your gaming skills?",
@@ -145,13 +144,13 @@
 				};
 
 				let list;
-				if (score == 5000) list = gameScores.perfect
-				else if (score >= 3500) list = gameScores.good
-				else if (score >= 1000) list = gameScores.medium
-				else list = gameScores.bad
+				if (score == 5000) list = gameScores.perfect;
+				else if (score >= 3500) list = gameScores.good;
+				else if (score >= 1000) list = gameScores.medium;
+				else list = gameScores.bad;
 
-				this.feedbackMessage = list[Math.floor(Math.random()*list.length)]
-				return score
+				this.feedbackMessage = list[Math.floor(Math.random() * list.length)];
+				return score;
 			}
 		},
 		mounted() {
@@ -204,29 +203,29 @@
 		margin-bottom: 2rem;
 	}
 
-.modal__bg {
-	animation: vanish 4s forwards;
-	pointer-events: none;
-}
+	.modal__bg {
+		animation: vanish 6s forwards;
+		pointer-events: none;
+	}
 
-@keyframes vanish {
-	0% {
-		opacity: 1;
+	@keyframes vanish {
+		0% {
+			opacity: 1;
+		}
+		75% {
+			opacity: 0.8;
+		}
+		100% {
+			opacity: 0;
+		}
 	}
-	75% {
-		opacity: .8;
+	.modal-content {
+		font-size: 10vw;
+		text-align: center;
 	}
-	100% {
-		opacity: 0;
-	}
-}
-.modal-content {
-	font-size: 10vw;
-	text-align: center;
-}
 
-.modal-content .subtitle {
-	font-size: 2vw;
-	color: var(--color-base--subtle);
-}
+	.modal-content .subtitle {
+		font-size: 2vw;
+		color: var(--color-base--subtle);
+	}
 </style>
