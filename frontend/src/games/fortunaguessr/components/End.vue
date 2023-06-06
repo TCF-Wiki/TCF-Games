@@ -1,7 +1,8 @@
 <template>
 	<section class="container">
 		<h1>End</h1>
-		<EndMap :gameOptions="gameOptions"/>
+		<EndMap :gameOptions="gameOptions" />
+		<Results />
 		<button @click="restartGame()" v-if="showControls">Restart Game</button>
 		<button @click="backToLobby()" v-if="showControls">Back to Lobby</button>
 	</section>
@@ -12,6 +13,7 @@
 	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
 	import EndMap from "./End/EndMap.vue";
+	import Results from "./End/Results.vue";
 	import {App} from "@/multiplayer";
 	import {GameApp} from "../multiplayer";
 
@@ -21,7 +23,7 @@
 			gameOptions: {
 				type: Object as PropType<gameInfoType>,
 				required: true
-			},
+			}
 		},
 		data: () => ({
 			showControls: App.host
@@ -41,7 +43,7 @@
 				this.showControls = App.host;
 			});
 		},
-		components: {EndMap}
+		components: {EndMap, Results}
 	});
 </script>
 <style scoped></style>

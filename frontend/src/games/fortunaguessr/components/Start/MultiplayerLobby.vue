@@ -1,6 +1,6 @@
 <template>
-<Transition name="scale-in" appear>
-	<section class="container">
+	<Transition name="scale-in" appear>
+		<section class="container">
 			<div class="title-container">
 				<h2>Multiplayer</h2>
 				<p class="subtitle" @click="copyRoomId">

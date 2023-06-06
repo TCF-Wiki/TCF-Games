@@ -12,26 +12,40 @@
 				<p class="subtitle">
 					<span class="current-player-amount"> {{ playerList.length }} / 10 </span> players
 				</p>
-				<table>
-					<tr>
-						<th>Player</th>
-						<th v-if="showGuessInfo">Total score</th>
-						<th v-if="showGuessInfo">Points</th>
-						<th v-if="showGuessInfo">Distance</th>
-						<th>Time</th>
-						<th>Status</th>
-						<th v-if="showControls">Actions</th>
-					</tr>
-					<tr v-for="player in playerList">
-						<td>{{ player.name }}</td>
-						<td v-if="showGuessInfo">{{ player.score }}</td>
-						<td v-if="showGuessInfo">{{ player.guess ? player.guess.score : 0 }}</td>
-						<td v-if="showGuessInfo">{{ player.guess && player.guess.time != -1 ? (player.guess.distance == -1 ? "Wrong map" : player.guess.distance + "m") : "" }}</td>
-						<td>{{ player.guess && player.guess.time != -1 ? player.guess.time + "s" : "" }}</td>
-						<td>{{ player.status }}</td>
-						<td v-if="showControls"><button @click="kickPlayer(player)" class="small-button leave" v-if="player.socketId != getMySocketId()">Kick</button></td>
-					</tr>
-				</table>
+				<div>
+					<h3>Final results</h3>
+					<table>
+						<tr>
+							<th>Player</th>
+							<th>Total score</th>
+							<th v-if="showControls">Actions</th>
+						</tr>
+						<tr v-for="player in playerList">
+							<td>{{ player.name }}</td>
+							<td>{{ player.score }}</td>
+							<td v-if="showControls"><button @click="kickPlayer(player)" class="small-button leave" v-if="player.socketId != getMySocketId()">Kick</button></td>
+						</tr>
+					</table>
+				</div>
+				<div>
+					<h3>Round <input type="number" :max="rounds" :min="1" v-model="selectedRound" /></h3>
+					<table>
+						<tr>
+							<th>Player</th>
+							<th>Points</th>
+							<th>Distance</th>
+							<th>Time</th>
+							<th v-if="showControls">Actions</th>
+						</tr>
+						<tr v-for="player in playerList">
+							<td>{{ player.name }}</td>
+							<td>{{ player.guesses[selectedRound - 1].score }}</td>
+							<td>{{ player.guesses[selectedRound - 1].time != -1 ? (player.guesses[selectedRound - 1].distance == -1 ? "Wrong map" : player.guesses[selectedRound - 1].distance + "m") : "" }}</td>
+							<td>{{ player.guesses[selectedRound - 1].time != -1 ? player.guesses[selectedRound - 1].time + "s" : "" }}</td>
+							<td v-if="showControls"><button @click="kickPlayer(player)" class="small-button leave" v-if="player.socketId != getMySocketId()">Kick</button></td>
+						</tr>
+					</table>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -50,19 +64,11 @@
 		name: "TestView",
 		data: () => ({
 			currentRoomId: App.roomId ?? "",
-			playerList: [] as {name: string; socketId: string; score: number; status: string; guess: guessInfoType}[],
-			showControls: false
+			playerList: [] as {name: string; socketId: string; score: number; guesses: guessInfoType[]}[],
+			showControls: false,
+			selectedRound: 1,
+			rounds: App.myPlayerData.gameData.guesses.length
 		}),
-		props: {
-			currentRound: {
-				type: Number,
-				required: true
-			},
-			showGuessInfo: {
-				type: Boolean,
-				required: true
-			}
-		},
 		mounted() {
 			this.updateShowControls();
 			emitter.on("RoomJoined", (roomId: string) => {
@@ -99,43 +105,25 @@
 				toast.success("Copied Room ID to clipboard!");
 			},
 			convertPlayerList() {
-				let playerList: {name: string; socketId: string; score: number; status: string; guess: guessInfoType}[] = [];
+				let playerList: {name: string; socketId: string; score: number; guesses: guessInfoType[]}[] = [];
 				for (let player of App.playerList) {
-					let status = "";
-					let guess = player.gameData.guesses[this.currentRound];
-					if (guess) {
-						if (guess.time == -1) {
-							status = "Didn't guess";
-						} else {
-							status = "Guessed";
-						}
-					} else {
-						status = "Guessing...";
-					}
 					playerList.push({
 						name: player.name,
 						socketId: player.socketId,
 						score: player.gameData.score,
-						status: status,
-						guess: guess
+						guesses: player.gameData.guesses
 					});
 				}
 				playerList.sort((a, b) => {
-					if (a.guess) {
-						if (b.guess) {
-							return b.guess.score - a.guess.score;
-						} else {
-							return -1;
-						}
-					} else {
-						if (b.guess) {
-							return 1;
-						} else {
-							return 0;
-						}
-					}
+					return b.score - a.score;
 				});
 				return playerList;
+			}
+		},
+		watch: {
+			selectedRound() {
+				if (this.selectedRound > this.rounds) this.selectedRound = this.rounds;
+				if (this.selectedRound < 1) this.selectedRound = 1;
 			}
 		}
 	});

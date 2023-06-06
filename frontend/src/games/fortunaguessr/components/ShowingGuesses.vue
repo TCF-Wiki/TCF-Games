@@ -1,23 +1,23 @@
 <template>
-		<section class="container">
-			<div class="title-container">
-				<h1>Results for round {{ currentRound + 1 }}</h1>
-				<button v-if="showControls" @click="nextRound()">Next Round</button>
-			</div>
-			<div class="guess-container" v-if="showGuesses">
-					<Transition name="scale-in" appear>
-						<ShowingGuessesMap :gameOptions="gameOptions" :currentRound="currentRound" :location="location" />
-					</Transition>
-					<Transition name="scale-in" appear>
-						<Results :currentRound="currentRound" />
-					</Transition>
-			</div>
+	<section class="container">
+		<div class="title-container">
+			<h1>Results for round {{ currentRound + 1 }}</h1>
+			<button v-if="showControls" @click="nextRound()">Next Round</button>
+		</div>
+		<div class="guess-container">
+			<Transition name="scale-in" appear v-if="showGuesses">
+				<ShowingGuessesMap :gameOptions="gameOptions" :currentRound="currentRound" :location="location" />
+			</Transition>
 			<div v-else>
 				<Transition name="scale-in" appear>
 					<h2>Waiting for everyone to guess...</h2>
 				</Transition>
 			</div>
-		</section>
+			<Transition name="scale-in" appear>
+				<Results :currentRound="currentRound" :show-guess-info="showGuesses" />
+			</Transition>
+		</div>
+	</section>
 </template>
 <script lang="ts">
 	import {defineComponent, type PropType} from "vue";
