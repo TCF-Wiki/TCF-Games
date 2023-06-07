@@ -2,7 +2,7 @@
 	<Transition name="scale-in" appear>
 		<section class="container">
 			<div class="title-container">
-				<h2>Players</h2>
+				<h2>Lobby</h2>
 				<p class="subtitle">
 					<span class="current-player-amount"> {{ playerList.length }} / 10 </span> players
 				</p>
@@ -66,9 +66,15 @@ export default defineComponent({
 	border-radius: 2rem;
 	box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 
+    transition: border-color .2s ease;
+	&:hover {
+		border-color: var(--border-color-input--hover);
+	}
 	& h2 {
 		text-align: center;
 	}
+
+
 }
 
 .subtitle {

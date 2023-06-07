@@ -1,58 +1,38 @@
 <template>
-	<section class="container">
+	<section class="results-container">
 		<div class="title-container">
-			<h2>Scoreboard</h2>
-			<div class="subtitle">
-				<span>Room ID:</span>
-				<span class="roomID" @click="copyRoomId">
-					{{ showCurrentRoomId ? currentRoomId : "*********" }}
-				</span>
-				<div @click="changeStreamerMode" class="show-streamer-mode">
-					<div v-if="showCurrentRoomId">
-						<svg xmlns="http://www.w3.org/2000/svg" height="1em"
-							viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-							<path
-								d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z" />
-						</svg>
-					</div>
-					<div v-else>
-						<svg xmlns="http://www.w3.org/2000/svg" height="1em"
-							viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-							<path
-								d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c8.4-19.3 10.6-41.4 4.8-63.3c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zM373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5L373 389.9z" />
-						</svg>
-					</div>
-				</div>
-			</div>
+			<h2 class="first">Scoreboard</h2>
 		</div>
 		<div class="content">
-			<div class="title-container">
-				<h2>Players</h2>
-				<p class="subtitle">
-					<span class="current-player-amount"> {{ playerList.length }} / 10 </span> players
-				</p>
-			</div>
 			<div>
-				<h3>Final results</h3>
 				<table class="wikitable">
 					<tr>
 						<th>Player</th>
 						<th>Points</th>
-						<th>Time</th>
 						<th>Distance</th>
+						<th>Time</th>
 						<th v-if="showControls">Actions</th>
 					</tr>
 					<tr v-for="player in playerList">
 						<td>{{ player.name }}</td>
 						<td>{{ player.score }}</td>
-						<td>{{ totalTime(player) }}s</td>
 						<td>{{ totalDistance(player) }}m</td>
-						<td v-if="showControls"><button @click="kickPlayer(player)" class="small-button leave" v-if="player.socketId != getMySocketId()">Kick</button></td>
+						<td>{{ totalTime(player) }}s</td>
+						<td v-if="showControls"><button @click="kickPlayer(player)" class="small-button kick" v-if="player.socketId != getMySocketId()">Kick</button></td>
 					</tr>
 				</table>
 			</div>
+			<hr />
 			<div>
-				<h3>Round <input type="number" :max="rounds" :min="1" v-model="selectedRound" /></h3>
+				<h2>View results for a specific round </h2>
+				<div class="input-container"> 
+					<label for="roundInput"> Round </label>
+					<input type="number" id="roundInput" :max="rounds" :min="1" v-model="selectedRound" />
+					<div class="input-buttons">
+						<span @click="selectedRound = Math.min(rounds, selectedRound +1)" role="button"> + </span>
+						<span @click="selectedRound = Math.max(0, selectedRound - 1)" role="button"> - </span>
+					</div>
+				</div>
 				<table class="wikitable">
 					<tr>
 						<th>Player</th>
@@ -66,9 +46,21 @@
 						<td>{{ player.guesses[selectedRound - 1].score }}</td>
 						<td>{{ player.guesses[selectedRound - 1].time != -1 ? (player.guesses[selectedRound - 1].distance == -1 ? "Wrong map" : player.guesses[selectedRound - 1].distance + "m") : "" }}</td>
 						<td>{{ player.guesses[selectedRound - 1].time != -1 ? player.guesses[selectedRound - 1].time + "s" : "" }}</td>
-						<td v-if="showControls"><button @click="kickPlayer(player)" class="small-button leave" v-if="player.socketId != getMySocketId()">Kick</button></td>
+						<td v-if="showControls"><button @click="kickPlayer(player)" class="small-button kick" v-if="player.socketId != getMySocketId()">Kick</button></td>
 					</tr>
 				</table>
+			</div>
+			<hr />
+			<div>
+				<h2> Continue </h2> 
+				<div class="button-container">
+					<button @click="restartGame()" class="restart" v-if="showButtons">Restart Game</button>
+					<button @click="backToLobby()" v-if="showButtons">Back to Start</button>
+					<button @click="leaveRoom" class="leave"  v-if="playerList.length !== 1">Leave room</button>
+				</div>
+				<p class="seed">
+					Seed: {{ gameOptions.seed }}
+				</p>
 			</div>
 		</div>
 	</section>
@@ -81,6 +73,7 @@
 	import "@/games/fortunaguessr/multiplayer";
 	import {App} from "@/multiplayer";
 	import type {PlayerDataType} from "@/multiplayer";
+	import { GameApp } from "@/games/fortunaguessr/multiplayer";
 	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
 	export default defineComponent({
@@ -95,6 +88,7 @@
 			currentRoomId: App.roomId ?? "",
 			playerList: [] as {name: string; socketId: string; score: number; guesses: guessInfoType[]}[],
 			showControls: false,
+			showButtons: App.host,
 			showCurrentRoomId: (() => {
 				let storage = localStorage.getItem("showCurrentRoomId");
 				if (storage != null) {
@@ -120,6 +114,7 @@
 
 			emitter.on("HostChanged", () => {
 				this.updateShowControls();
+				this.showButtons = App.host
 			});
 		},
 		methods: {
@@ -136,6 +131,17 @@
 			},
 			kickPlayer(player: PlayerDataType) {
 				App.KickPlayer(player.socketId);
+			},
+			restartGame() {
+				console.log("Restarting game");
+				emitter.emit("StartGameWithOptions", null);
+			},
+			backToLobby() {
+				console.log("Back to lobby");
+				GameApp.SendBackToLobby();
+			},
+			leaveRoom() {
+				App.LeaveRoom();
 			},
 			copyRoomId() {
 				navigator.clipboard.writeText(this.currentRoomId);
@@ -189,21 +195,34 @@
 <style scoped lang="less">
 	@import url("@/assets/text-input.css");
 
-	.container {
+	.results-container {
 		border: 1px solid var(--border-color-base);
 		padding: var(--space-lg);
-		min-width: 25rem;
+		width: 100%;
+		aspect-ratio: 1 / 1;
 
 		background-color: var(--color-surface-3);
 		border-radius: 2rem;
 		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-		& h2 {
-			text-align: center;
+		transition: border-color .2s ease;
+		&:hover {
+			border-color: var(--border-color-input--hover);
 		}
 
-		@media screen and (max-width: 900px) {
-			max-width: 90vw;
-			min-width: unset;
+		& h1 {
+			text-align: center;
+			font-size: 2.5rem;
+		}
+
+		& h2 {
+			text-align: center;
+			font-size: 2rem;
+			margin-top: 1rem;
+			margin-bottom: .5rem;
+		}
+
+		h2.first {
+			margin-top: 0rem;
 		}
 	}
 
@@ -213,38 +232,11 @@
 		margin-bottom: var(--space-sm);
 	}
 
-	.roomID {
-		color: var(--color-base--subtle);
-		background-color: var(--color-surface-0);
-		border: 1px solid var(--border-color-base);
-		border-radius: 3px;
-		padding: var(--space-xs);
-		cursor: copy;
-	}
-
-	.current-player-amount {
-		color: var(--color-base--subtle);
-	}
-
-	.button-container {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: var(--space-sm);
-
-		button {
-			margin: 0;
-		}
-	}
-
 	.small-button {
 		padding: var(--space-xs);
 		margin: 0;
 
-		&.join {
-			background-color: var(--color-success);
-		}
-
-		&.leave {
+		&.kick {
 			background-color: var(--color-destructive);
 		}
 	}
@@ -253,5 +245,92 @@
 		list-style: none;
 		padding: 0;
 		margin: 0;
+	}
+
+	hr {
+		margin-top: 2rem;
+	}
+	.input-container {
+		height: 2rem;
+		text-align: center;
+		margin-bottom: var(--space-md);
+	
+		label {
+			display: inline-block;
+			translate: 0 -3px;
+			margin-right: .25rem;
+		}
+		input[type="number"] {
+  			-moz-appearance: textfield;
+			appearance: textfield;
+			background-color: var(--color-surface-2);
+			border: 1px solid var(--border-color-base);
+			border-top-left-radius: 1rem;
+			border-bottom-left-radius: 1rem;
+			color: var(--color-base);
+			width: 2rem;
+			font-size: 1.5rem;
+			padding: var(--space-sm);
+			height: 100%;
+			translate: 0 -2px;
+		}
+		
+		input[type="number"]::-webkit-inner-spin-button, 
+		input[type="number"]::-webkit-outer-spin-button { 
+			-webkit-appearance: none; 
+			margin: 0; 
+		}
+
+		.input-buttons {
+			display: inline-flex;
+			height: 100%;
+			cursor: pointer;
+			user-select: none;
+			-webkit-user-select: none;
+			span {
+				background-color: var(--color-surface-2);
+				width: 2rem;
+				color: var(--color-base--subtle);
+				padding: var(--space-sm);
+				font-size: 2rem;
+				
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				border: 1px solid var(--border-color-base)
+			}
+
+			span:first-of-type {
+				border-right: 1px solid var(--border-color-base);
+			}
+
+			span:last-of-type {
+				border-top-right-radius: 1rem;
+				border-bottom-right-radius: 1rem;
+			}
+		}
+	}
+	.button-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+		gap: var(--space-lg);
+
+		button {
+			margin: 0;
+			width: 100%;
+
+			.restart {
+				background-color: var(--color-success);
+			}
+			.join {
+				background-color: var(--color-destructive);
+			}
+		}
+	}
+	.seed {
+		margin: var(--space-md) 0;
+		text-align: center;
+		font-size: .8rem;
 	}
 </style>

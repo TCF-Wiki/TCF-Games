@@ -44,11 +44,11 @@
 				</div>
 				<nav id="footer-icons">
 					<ul>
-						<li>
+						<!-- <li>
 							<a href="https://github.com/sponsors/TCF-Wiki" target="_blank">
 								<img src="/shared-images/DonateGithub.png" alt="Donate on GitHub Sponsors" width="88" height="31" loading="lazy" />
 							</a>
-						</li>
+						</li> -->
 						<li>
 							<a href="https://ko-fi.com/tcfwiki" target="_blank">
 								<img src="/shared-images/DonateKofi.png" alt="Donate on Ko-fi" width="88" height="31" loading="lazy" />

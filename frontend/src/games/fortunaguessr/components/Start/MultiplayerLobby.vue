@@ -6,7 +6,7 @@
 				<div class="subtitle">
 					<span>Room ID: </span>
 					<span class="roomID" @click="copyRoomId">
-						{{ showCurrentRoomId ? currentRoomId : "*********" }}
+						{{ showCurrentRoomId ? currentRoomId : '&bull;'.repeat(currentRoomId.length) }}
 					</span>
 					<div @click="changeStreamerMode" class="show-streamer-mode">
 						<div v-if="showCurrentRoomId">
@@ -24,10 +24,6 @@
 							</svg>
 						</div>
 					</div>
-					<!-- <span class="toggle-pill-color">
-						<input id="streamerMode" type="checkbox" :checked="showCurrentRoomId" @change="changeStreamerMode()" />
-						<label for="streamerMode"></label>
-					</span> -->
 				</div>
 			</div>
 			<div class="content">
@@ -134,7 +130,10 @@ export default defineComponent({
 	background-color: var(--color-surface-3);
 	border-radius: 2rem;
 	box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-
+    transition: border-color .2s ease;
+	&:hover {
+		border-color: var(--border-color-input--hover);
+	}
 	& h2 {
 		text-align: center;
 	}
@@ -202,7 +201,8 @@ li p {
 }
 
 svg {
-	fill: var(--color-base)
+	fill: var(--color-base);
+	width: 20px;
 }
 
 .show-streamer-mode {

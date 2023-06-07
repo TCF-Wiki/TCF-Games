@@ -1,15 +1,11 @@
 <template>
+<h1> End Results </h1>
 <div class="end-container"> 
 	<div class="main-container">
-		<EndMap :gameOptions="gameOptions" />
 		<Results :gameOptions="gameOptions"/>
-	</div>
-	<div class="button-container"> 
-		<button @click="restartGame()" v-if="showControls">Restart Game</button>
-		<button @click="backToLobby()" v-if="showControls">Back to Lobby</button>
+		<EndMap :gameOptions="gameOptions" />
 	</div>
 </div>
-
 <Teleport to="body" v-if="showPopup">
 	<div class="modal__bg">
 		<div class="modal-content">
@@ -45,14 +41,6 @@
 			showPopup: false
 		}),
 		methods: {
-			restartGame() {
-				console.log("Restarting game");
-				emitter.emit("StartGameWithOptions", null);
-			},
-			backToLobby() {
-				console.log("Back to lobby");
-				GameApp.SendBackToLobby();
-			},
 			getPopupText() {
 				const sortedPlayerList = App.playerList.map((a) => a).sort((a, b) => b.gameData.score - a.gameData.score);
 				const winner = sortedPlayerList[0];
@@ -184,5 +172,12 @@
 		@media screen and (max-width: 900px) {
 			grid-template-columns: 1fr;
 		}
+	}
+
+	h1 {
+		text-align: center;
+		width: 100%;
+		margin-bottom: 2rem;
+		font-size: 2.5rem;
 	}
 </style>

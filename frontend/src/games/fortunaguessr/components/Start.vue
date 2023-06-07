@@ -19,7 +19,7 @@
 			</div>
 			<div class="container" v-if="showControls">
 				<Transition name="scale-in" appear>
-					<div class="seed-container">
+					<div class="card-container">
 						<div class="title-container">
 							<h2>Seed</h2>
 							<p class="subtitle no-color">This will start a game with the provided seed</p>
@@ -34,14 +34,50 @@
 					</div>
 				</Transition>
 			</div>
-			<!-- <section class="options-containerd"> -->
 			<div class="container">
 				<MultiplayerLobby />
 			</div>
 			<div class="container">
 				<PlayerList />
 			</div>
-			<!-- </section> -->
+			<div class="container">
+				<Transition name="scale-in" appear>
+					<div class="card-container">
+						<div class="title-container">
+							<h2> How to play </h2>
+							<p class="subtitle no-color"> A simple overview</p>
+						</div>
+						<div class="card-content">
+							<ol>
+								<li>
+									Start a game in your preferred difficulty.  
+								</li>
+								<li>
+									There will be a screenshot of the guess location, as well as a map.
+								</li>
+								<li>
+									Click on the map to place a guess, and then <b>press Confirm Guess</b> to lock your guess in.
+								</li>
+								<li v-if="playerList.length > 1">
+									Once everyone has guessed, the game will progress to the results screen.
+								</li>
+								<li v-else>
+									The game will progress to the results screen.
+								</li>
+								<li v-if="playerList.length > 1">
+									The game will go to the next round once the host presses next round.
+								</li>
+								<li v-else>
+									Press next round to progress to the next round.
+								</li>
+								<li> 
+									Once all rounds have been finished there will be a final scoreboard.
+								</li>
+							</ol>
+						</div>
+					</div>
+				</Transition>
+			</div>
 		</section>
 	</section>
 </template>
@@ -54,13 +90,14 @@
 	import DifficultyCard from "./Start/DifficultyCard.vue";
 	import MultiplayerLobby from "./Start/MultiplayerLobby.vue";
 	import PlayerList from './Start/PlayerList.vue'
-	import {App} from "@/multiplayer";
+	import {App, type PlayerDataType} from "@/multiplayer";
 
 	export default defineComponent({
 		name: "Start",
 		data: () => ({
 			enteredSeed: "" as string,
-			showControls: App.host
+			showControls: App.host,
+			playerList: [] as PlayerDataType[]
 		}),
 		components: {
 			DifficultyCard,
@@ -73,6 +110,7 @@
 			}
 		},
 		mounted() {
+			this.playerList = App.playerList;
 			console.log(App.host);
 			emitter.on("HostChanged", () => {
 				this.showControls = App.host;
@@ -111,7 +149,7 @@
 		}
 	}
 
-	.seed-container {
+	.card-container {
 		border: 1px solid var(--border-color-base);
 		padding: var(--space-lg);
 		width: 100%;
@@ -120,6 +158,11 @@
 		background-color: var(--color-surface-3);
 		border-radius: 2rem;
 		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+		transition: border-color .2s ease;
+		&:hover {
+			border-color: var(--border-color-input--hover);
+		}
 
 		& h2 {
 			text-align: center;
@@ -161,5 +204,10 @@
 			width: 50%;
 			margin: 0;
 		}
+	}
+
+	ol {
+		margin-top: 0;
+		margin-bottom: 0
 	}
 </style>

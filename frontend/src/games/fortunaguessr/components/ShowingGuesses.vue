@@ -5,6 +5,9 @@
 			<button v-if="showControls" @click="nextRound()">{{ currentRound+1 >= gameOptions.length ? 'Final results' : 'Next Round' }} </button>
 		</div>
 		<div class="guess-container">
+			<Transition name="scale-in" appear>
+				<Results :currentRound="currentRound" :show-guess-info="showGuesses" />
+			</Transition>
 			<Transition name="scale-in" appear v-if="showGuesses">
 				<ShowingGuessesMap :gameOptions="gameOptions" :currentRound="currentRound" :location="location" />
 			</Transition>
@@ -13,9 +16,7 @@
 					<h2>Waiting for everyone to confirm their guess.</h2>
 				</Transition>
 			</div>
-			<Transition name="scale-in" appear>
-				<Results :currentRound="currentRound" :show-guess-info="showGuesses" />
-			</Transition>
+			
 		</div>
 	</section>
 
@@ -178,6 +179,7 @@
 		margin: 0 2rem;
 		
 		@media screen and (max-width: 900px) {
+			max-width: 100%;
 			margin: 0 .5rem
 		}
 	}
