@@ -2,7 +2,7 @@
 	<section class="container">
 		<div class="title-container">
 			<h1>Results for round {{ currentRound + 1 }}</h1>
-			<button v-if="showControls" @click="nextRound()">Next Round</button>
+			<button v-if="showControls" @click="nextRound()">{{ currentRound+1 >= gameOptions.length ? 'Final results' : 'Next Round' }} </button>
 		</div>
 		<div class="guess-container">
 			<Transition name="scale-in" appear v-if="showGuesses">
@@ -10,7 +10,7 @@
 			</Transition>
 			<div v-else>
 				<Transition name="scale-in" appear>
-					<h2>Waiting for everyone to guess...</h2>
+					<h2>Waiting for everyone to confirm their guess.</h2>
 				</Transition>
 			</div>
 			<Transition name="scale-in" appear>
@@ -20,16 +20,13 @@
 	</section>
 
 	<Teleport to="body">
-		<Transition name="scale-in" appear>
-			<div class="modal__bg" v-if="showGuesses">
-				<div class="modal-content">
-					{{ getOwnScore() }} pts
-					<p class="subtitle">
-						{{ feedbackMessage }}
-					</p>
-				</div>
+		<div class="modal__bg" v-if="showGuesses && feedbackMessage">
+			<div class="modal-content">
+				<p class="main-text"> {{ score }} pts </p>
+				<p class="small-text">out of 5000</p>
+				<p class="subtitle"> {{ feedbackMessage }} </p>
 			</div>
-		</Transition>
+		</div>
 	</Teleport>
 </template>
 <script lang="ts">
@@ -48,7 +45,8 @@
 			guessData: {} as guessInfoType,
 			showControls: false,
 			playerList: [] as PlayerDataType[],
-			feedbackMessage: ""
+			feedbackMessage: "",
+			score: 0
 		}),
 		props: {
 			gameOptions: {
@@ -98,6 +96,7 @@
 				}
 			},
 			getOwnScore() {
+				console.log('Here is my player data!!', App.myPlayerData.gameData)
 				const score = App.myPlayerData.gameData?.guesses[this.currentRound].score;
 
 				const gameScores = {
@@ -105,21 +104,21 @@
 						"Perfect score! Are you a Co-Bot?",
 						"Flawless victory! Are you even human?",
 						"You crushed it! Are you cheating?",
-						"Unstoppable! Can I borrow some of your gaming skills?",
-						"Congratulations, you aced it! Did you sell your soul to the Badum?",
-						"You're a gaming prodigy! Can I have your autograph?",
+						"Unstoppable! Can I borrow some of your prospecting skills?",
+						"Congratulations, you aced it! Did you sell your soul to Badum?",
+						"You're a prospecting prodigy! Can I have your autograph?",
 						"Masterful performance! Did you secretly train with ninjas?",
 						"You're on fire! Did you hire an Osiris Scientist?"
 					],
 					good: [
 						"Great job! You might be ready for the minor leagues.",
-						"Well done! You've earned the right to call yourself a gamer.",
+						"Well done! You've earned the right to call yourself a prospector.",
 						"Impressive! Keep this up, and you might go pro.",
 						"You're getting the hang of it! Your opponents should be afraid.",
-						"Solid performance! Are you sure you're not a secret gaming celebrity?",
+						"Solid performance! Are you sure you're not a secret prospector celebrity?",
 						"Keep it up! The gaming world bows to your skills.",
 						"You're making progress! One day, you might even win a participation trophy.",
-						"Nice work! You're officially a gaming virtuoso."
+						"Nice work! You're officially a prospecting virtuoso."
 					],
 					medium: [
 						"Not bad, but you can do better! Or maybe not...",
@@ -150,7 +149,7 @@
 				else list = gameScores.bad;
 
 				this.feedbackMessage = list[Math.floor(Math.random() * list.length)];
-				return score;
+				this.score = score;
 			}
 		},
 		mounted() {
@@ -164,6 +163,7 @@
 				this.playerList = players;
 				console.log(this.playerList);
 				this.checkControl();
+				this.getOwnScore()
 			});
 			emitter.on("HostChanged", () => {
 				this.checkControl();
@@ -174,15 +174,20 @@
 </script>
 <style scoped lang="less">
 	.container {
-		max-width: calc(97vw - 2.8 * var(--padding-page));
+		max-width: calc(96vw - 2.8 * var(--padding-page));
 		margin: 0 2rem;
+		
+		@media screen and (max-width: 900px) {
+			max-width: 100%;
+			margin: var(--space-sm) var(--space-xs)
+		}
 	}
 
 	.guess-container {
 		max-width: 100%;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: var(--space-lg);
+		gap: calc(2 * var(--space-xl));
 
 		@media screen and (max-width: 900px) {
 			grid-template-columns: 1fr;
@@ -195,6 +200,10 @@
 		font-size: 2.5rem;
 	}
 
+	h2 {
+		text-align: center;
+	}
+
 	.title-container {
 		display: flex;
 		justify-content: center;
@@ -204,13 +213,20 @@
 	}
 
 	.modal__bg {
-		animation: vanish 6s forwards;
+		animation: vanish 4s forwards;
 		pointer-events: none;
+
+		@media screen and (min-width: 901px) {
+			translate: calc(2.8*var(--padding-page)) 0;
+		}
 	}
 
 	@keyframes vanish {
 		0% {
-			opacity: 1;
+			scale: 0;
+		}
+		10% {
+			scale: 1
 		}
 		75% {
 			opacity: 0.8;
@@ -220,8 +236,16 @@
 		}
 	}
 	.modal-content {
-		font-size: 10vw;
 		text-align: center;
+	}
+
+	.modal-content .main-text {
+		font-size: 10vw;
+		line-height: 10vw;
+	}
+
+	.modal-content .small-text {
+		font-size: 1.5vw;
 	}
 
 	.modal-content .subtitle {

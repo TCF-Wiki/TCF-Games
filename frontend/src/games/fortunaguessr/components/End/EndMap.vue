@@ -3,7 +3,7 @@
 		<div class="map-selector-container">
 			<MapSelector :gameOptions="gameOptions" />
 		</div>
-		<div id="EndMap"></div>
+		<div id="EndMap" :class="{topRoundedCorners: gameOptions.maps.length == 1}"></div>
 	</section>
 </template>
 
@@ -160,15 +160,21 @@
 
 <style scoped lang="less">
 	.map-container {
-		width: 48rem;
-		height: 48rem;
-		position: relative;
+		width: 100%;
+		aspect-ratio: 1 / 1;
 	}
 
 	#EndMap {
 		width: 100%;
-		height: 95%;
+		height: 100%;
 		z-index: 0;
 		background-color: #081021;
+		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+
+		&.topRoundedCorners {
+			border-top-right-radius: 2rem;
+			border-top-left-radius: 2rem;
+		}
 	}
 </style>

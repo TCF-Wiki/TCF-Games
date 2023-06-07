@@ -47,11 +47,11 @@
 		}
 
 		&:first-of-type {
-			border-top-left-radius: 3rem;
+			border-top-left-radius: 2rem;
 		}
 
 		&:last-of-type {
-			border-top-right-radius: 3rem;
+			border-top-right-radius: 2rem;
 		}
 
 		&:not(:last-of-type) {

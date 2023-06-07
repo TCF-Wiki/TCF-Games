@@ -3,7 +3,7 @@
 		<div class="map-selector-container">
 			<MapSelector :gameOptions="gameOptions" />
 		</div>
-		<div id="GuessMap"></div>
+		<div id="GuessMap" :class="{topRoundedCorners: gameOptions.maps.length == 1}"></div>
 	</section>
 </template>
 
@@ -58,7 +58,8 @@
 			}).setView([-128, 128], 1);
 			map.zoomControl.setPosition("topright");
 			map.fitBounds(bounds);
-			this.mapNumber = this.gameOptions.maps[0];
+			console.log(this.gameOptions.maps, this.location.map)
+			this.mapNumber = this.location.map;
 			map.addLayer(L.tileLayer(tilelayerURL(this.mapNumber), tileLayerOptions));
 			this.ClearLayers();
 			this.DisplayGuesses(map);
@@ -164,15 +165,23 @@
 
 <style scoped lang="less">
 	.map-container {
-		width: 48rem;
-		height: 48rem;
-		position: relative;
+		width: 100%;
+		aspect-ratio: 1 / 1;
 	}
+	
 	#GuessMap {
 		width: 100%;
-		height: 95%;
+		height: 100%;
 		z-index: 0;
+		border-bottom-right-radius: 2rem;
+		border-bottom-left-radius: 2rem;
 		background-color: #081021;
+		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+		&.topRoundedCorners {
+			border-top-right-radius: 2rem;
+			border-top-left-radius: 2rem;
+		}
 	}
 
 </style>
