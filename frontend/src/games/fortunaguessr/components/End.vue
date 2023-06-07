@@ -167,12 +167,11 @@
 	}
 
 	.end-container {
-		max-width: calc(96vw - 2.8 * var(--padding-page));
+		max-width: 100%;
 		margin: 0 2rem;
 		
 		@media screen and (max-width: 900px) {
-			max-width: 100%;
-			margin: var(--space-sm) var(--space-xs)
+			margin: 0 .5rem;
 		}
 	}
 

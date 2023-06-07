@@ -1,9 +1,18 @@
 <template>
-	<section class="container">
+	<section class="upper-container">
 		<div id="component"></div>
 	</section>
 </template>
+<style scoped lang="less">
+.upper-container {
+	max-width: calc(99vw - 2.8 * var(--padding-page));
 
+	@media screen and (max-width: 900px) {
+		max-width: 100vw;
+		margin: var(--space-xs)
+	}
+}
+</style>
 <script lang="ts">
 	//Import dependencies
 	import "leaflet/dist/leaflet.css";

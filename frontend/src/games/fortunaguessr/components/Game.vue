@@ -153,7 +153,7 @@ export default defineComponent({
 
 <style scoped lang="less">
 .container {
-	max-width: calc(99vw - 2.8 * var(--padding-page));
+	max-width: 100%
 }
 .header {
 	justify-content: center;
@@ -250,6 +250,7 @@ svg circle {
 
 	@media screen and (max-width: 900px) {
 		grid-template-columns: 1fr;
+		margin: 0 .5rem;
 	}
 
 	& h2 {

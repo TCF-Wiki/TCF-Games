@@ -49,23 +49,6 @@
 			</div>
 		</section>
 	</Transition>
-	<Transition name="scale-in" appear>
-		<section class="container">
-			<div class="title-container">
-				<h2>Players</h2>
-				<p class="subtitle">
-					<span class="current-player-amount"> {{ playerList.length }} / 10 </span> players
-				</p>
-				<ul>
-					<li v-for="player in playerList">
-						<p>{{ player.name }}</p>
-						<button @click="kickPlayer(player)" class="small-button leave"
-							v-if="showControls && playerList.length > 1 && player.socketId != getMySocketId()">Kick</button>
-					</li>
-				</ul>
-			</div>
-		</section>
-	</Transition>
 </template>
 
 <script lang="ts">
@@ -144,11 +127,9 @@ export default defineComponent({
 
 <style scoped lang="less">
 @import url("@/assets/text-input.css");
-
 .container {
 	border: 1px solid var(--border-color-base);
 	padding: var(--space-lg);
-	min-width: 25rem;
 
 	background-color: var(--color-surface-3);
 	border-radius: 2rem;
@@ -156,11 +137,6 @@ export default defineComponent({
 
 	& h2 {
 		text-align: center;
-	}
-
-	@media screen and (max-width: 900px) {
-		max-width: 90vw;
-		min-width: unset;
 	}
 }
 

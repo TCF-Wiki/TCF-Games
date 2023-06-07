@@ -37,9 +37,9 @@
 				<table class="wikitable">
 					<tr>
 						<th>Player</th>
-						<th>Total points</th>
-						<th>Total time</th>
-						<th>Total distance</th>
+						<th>Points</th>
+						<th>Time</th>
+						<th>Distance</th>
 						<th v-if="showControls">Actions</th>
 					</tr>
 					<tr v-for="player in playerList">

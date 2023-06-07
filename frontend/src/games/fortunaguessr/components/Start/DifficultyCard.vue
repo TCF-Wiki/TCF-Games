@@ -229,7 +229,7 @@
 
 	.card {
 		position: relative;
-		width: 24rem;
+		width: 100%;
 		max-width: 80vw;
 		aspect-ratio: 1 / 1;
 
