@@ -49,7 +49,7 @@ io.on("connection", (socket: Socket) => {
 			if (distance - 7 < 0) distance = 0;
 			else distance -= 7;
 			//Actual score
-			score = Math.round(Math.pow(Math.E, -0.01 * distance) * 5000);
+			score = Math.round(Math.pow(1.11, -0.03 * distance) * 5000);
 			if (score <= 0) score = 0;
 		}
 		data.guess.distance = distance;
