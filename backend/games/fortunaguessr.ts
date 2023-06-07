@@ -44,7 +44,7 @@ io.on("connection", (socket: Socket) => {
 			//Distance between guess and actual location
 			let distanceX = Math.abs(data.guess.location[0] - data.guess.imageData.x);
 			let distanceY = Math.abs(data.guess.location[1] - data.guess.imageData.y);
-			distance = Math.round(Math.sqrt(distanceX * distanceX + distanceY * distanceY) * 8 * 100) / 100;
+			distance = Math.round(Math.round(Math.sqrt(distanceX * distanceX + distanceY * distanceY) * 8 * 100) / 100);
 			//Precision variance
 			if (distance - 7 < 0) distance = 0;
 			else distance -= 7;

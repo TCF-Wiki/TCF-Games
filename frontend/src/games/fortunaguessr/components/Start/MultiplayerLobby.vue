@@ -6,7 +6,7 @@
 				<div class="subtitle">
 					<span>Room ID: </span>
 					<span class="roomID" @click="copyRoomId">
-						{{ showCurrentRoomId ? currentRoomId : "*********" }}
+						{{ showCurrentRoomId ? currentRoomId : '&bull;'.repeat(currentRoomId.length) }}
 					</span>
 					<div @click="changeStreamerMode" class="show-streamer-mode">
 						<div v-if="showCurrentRoomId">
@@ -24,10 +24,6 @@
 							</svg>
 						</div>
 					</div>
-					<!-- <span class="toggle-pill-color">
-						<input id="streamerMode" type="checkbox" :checked="showCurrentRoomId" @change="changeStreamerMode()" />
-						<label for="streamerMode"></label>
-					</span> -->
 				</div>
 			</div>
 			<div class="content">
@@ -46,23 +42,6 @@
 					<button class="leave" @click="leaveRoom" v-if="playerList.length !== 1">Leave room</button>
 					<button class="" @click="changeName">Change name</button>
 				</div>
-			</div>
-		</section>
-	</Transition>
-	<Transition name="scale-in" appear>
-		<section class="container">
-			<div class="title-container">
-				<h2>Players</h2>
-				<p class="subtitle">
-					<span class="current-player-amount"> {{ playerList.length }} / 10 </span> players
-				</p>
-				<ul>
-					<li v-for="player in playerList">
-						<p>{{ player.name }}</p>
-						<button @click="kickPlayer(player)" class="small-button leave"
-							v-if="showControls && playerList.length > 1 && player.socketId != getMySocketId()">Kick</button>
-					</li>
-				</ul>
 			</div>
 		</section>
 	</Transition>
@@ -144,23 +123,19 @@ export default defineComponent({
 
 <style scoped lang="less">
 @import url("@/assets/text-input.css");
-
 .container {
 	border: 1px solid var(--border-color-base);
 	padding: var(--space-lg);
-	min-width: 25rem;
 
 	background-color: var(--color-surface-3);
 	border-radius: 2rem;
 	box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-
+    transition: border-color .2s ease;
+	&:hover {
+		border-color: var(--border-color-input--hover);
+	}
 	& h2 {
 		text-align: center;
-	}
-
-	@media screen and (max-width: 900px) {
-		max-width: 90vw;
-		min-width: unset;
 	}
 }
 
@@ -226,7 +201,8 @@ li p {
 }
 
 svg {
-	fill: var(--color-base)
+	fill: var(--color-base);
+	width: 20px;
 }
 
 .show-streamer-mode {

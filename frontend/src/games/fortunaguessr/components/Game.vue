@@ -14,16 +14,18 @@
 			<button type="button" @click="guess" :disabled="JSON.stringify(currentGuess) == '{}'">Confirm Guess</button>
 		</div>
 			<section class="game-container">
-				<Transition name="scale-in" appear>
-					<div>
-						<GameMap :gameOptions="gameOptions" :isTimeUp="isTimeUp" :currentRound="currentRound" />
-					</div>
-				</Transition>
 				<div>
 					<Transition name="scale-in" appear>
 						<div v-if="!isTimeUp">
 							<img class="game-image" v-if="!isTimeUp" :src="'/fortunaguessr/' + location.src" alt="Image" />
 							<p class="subtitle"> ID: {{  location.src.replace('.webp', '') }}</p>
+						</div>
+					</Transition>
+				</div>
+				<div> 
+					<Transition name="scale-in" appear>
+						<div>
+							<GameMap :gameOptions="gameOptions" :isTimeUp="isTimeUp" :currentRound="currentRound" />
 						</div>
 					</Transition>
 				</div>
@@ -153,7 +155,7 @@ export default defineComponent({
 
 <style scoped lang="less">
 .container {
-	max-width: calc(99vw - 2.8 * var(--padding-page));
+	max-width: 100%
 }
 .header {
 	justify-content: center;
@@ -250,6 +252,7 @@ svg circle {
 
 	@media screen and (max-width: 900px) {
 		grid-template-columns: 1fr;
+		margin: 0 .5rem;
 	}
 
 	& h2 {

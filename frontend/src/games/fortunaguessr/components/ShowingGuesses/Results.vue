@@ -88,7 +88,7 @@
 					let guess = player.gameData.guesses[this.currentRound];
 					if (guess) {
 						if (guess.time == -1) {
-							status = "Didn't guess";
+							status = "Did not guess";
 						} else {
 							status = "Guessed";
 						}
@@ -130,18 +130,19 @@
 	.results-container {
 		border: 1px solid var(--border-color-base);
 		padding: var(--space-lg);
-		min-width: 25rem;
+		width: 100%;
+		aspect-ratio: 1 / 1;
 
 		background-color: var(--color-surface-3);
 		border-radius: 2rem;
 		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-		& h2 {
-			text-align: center;
+		transition: border-color .2s ease;
+		&:hover {
+			border-color: var(--border-color-input--hover);
 		}
 
-		@media screen and (max-width: 900px) {
-			max-width: 90vw;
-			min-width: unset;
+		& h2 {
+			text-align: center;
 		}
 	}
 

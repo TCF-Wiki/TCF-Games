@@ -171,7 +171,8 @@
 		background-color: #081021;
 		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 
-
+		border-bottom-left-radius: 2rem;
+		border-bottom-right-radius: 2rem;
 		&.topRoundedCorners {
 			border-top-right-radius: 2rem;
 			border-top-left-radius: 2rem;
