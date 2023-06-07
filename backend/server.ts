@@ -34,28 +34,29 @@ app.use(express.static("../frontend/dist"));
 
 //Setup http & https server
 import http from "http";
-///const https = require('https');
+import https from "https";
 
 // Certificate
-/**const privateKey = fs.readFileSync('/etc/letsencrypt/live/fortunaguessr.com/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/fortunaguessr.com/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/fortunaguessr.com/chain.pem', 'utf8');
+import fs from "fs";
+/**const privateKey = fs.readFileSync("/etc/letsencrypt/live/games.thecyclefrontier.wiki/privkey.pem", "utf8");
+const certificate = fs.readFileSync("/etc/letsencrypt/live/games.thecyclefrontier.wiki/cert.pem", "utf8");
+const ca = fs.readFileSync("/etc/letsencrypt/live/games.thecyclefrontier.wiki/chain.pem", "utf8");
 const credentials = {
-    key: privateKey,
-    cert: certificate,
-    ca: ca,
+	key: privateKey,
+	cert: certificate,
+	ca: ca
 };*/
 
 //Start server
 ///const httpsServer = https.createServer(credentials, app);
 const httpServer = http.createServer(app);
 
-/**httpsServer.listen(443, () => {
-    console.log('listening on *:443');
+/*httpsServer.listen(443, () => {
+	console.log("listening on *:443");
 });*/
 
-httpServer.listen(5000, () => {
-	console.log("listening on *:5000");
+httpServer.listen(80, () => {
+	console.log("listening on *:80");
 });
 
 //Setup socket.io
@@ -71,7 +72,6 @@ export const io = new IOServer(httpServer);
 import "./mainLogic";
 
 //Load logic
-import fs from "fs";
 import path from "path";
 const logicPath = path.join(__dirname, "games");
 const logicFiles = fs.readdirSync(logicPath);
