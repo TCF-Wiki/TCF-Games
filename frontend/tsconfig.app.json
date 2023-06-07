@@ -4,7 +4,9 @@
 	"exclude": ["src/**/__tests__/*"],
 	"compilerOptions": {
 		"composite": true,
+		"target": "es2021",
 		"module": "esnext",
+		"allowSyntheticDefaultImports": true,
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]
