@@ -74,7 +74,6 @@ export default defineComponent({
 		});
 		emitter.on("PlayerListUpdated", (playerList: PlayerDataType[]) => {
 			if (GameApp.state != "End") return;
-
 			console.log("Updated playerlist in showguesses map");
 			this.ClearLayers();
 			this.DisplayGuesses(map);
@@ -102,9 +101,9 @@ export default defineComponent({
 					if (guess && guess.map == this.mapNumber) {
 						let marker = L.marker(L.latLng(guess.location[0], guess.location[1]), {
 							icon: createIcon(guess.round),
-							title: player.name + "'s guess for round " + guess.round
+							title: player.name + "'s guess for round " + (guess.round + 1)
 						});
-						marker.bindPopup(L.responsivePopup().setContent(player.name + "'s guess for round " + guess.round));
+						marker.bindPopup(L.responsivePopup().setContent(player.name + "'s guess for round " + (guess.round + 1)));
 						marker.on("click", () => {
 							marker.openPopup();
 						});

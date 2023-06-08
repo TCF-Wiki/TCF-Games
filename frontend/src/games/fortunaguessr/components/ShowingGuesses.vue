@@ -20,7 +20,7 @@
 	</section>
 
 	<Teleport to="body">
-		<div class="modal__bg" @click="shouldHaveHiddenClass=true" :class="{'hidden': shouldHaveHiddenClass}">
+		<div class="modal__bg" @click="shouldHaveHiddenClass = true" :class="{hidden: shouldHaveHiddenClass}">
 			<div class="modal-content">
 				<p class="main-text">{{ score }} pts</p>
 				<p class="small-text">out of 5000</p>
@@ -156,6 +156,7 @@ export default defineComponent({
 	},
 	mounted() {
 		this.playerList = App.playerList;
+		this.guessData = App.myPlayerData.gameData.guesses[this.currentRound];
 		console.log(this.playerList);
 		this.checkControl();
 		emitter.on("Guess", (guessData: guessInfoType) => {
@@ -219,7 +220,7 @@ h2 {
 
 .modal__bg {
 	animation: vanish 6s forwards;
-	
+
 	@media screen and (min-width: 901px) {
 		translate: calc(2.8 * var(--padding-page)) 0;
 	}
