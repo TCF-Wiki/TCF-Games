@@ -6,8 +6,8 @@
 			<EndMap :gameOptions="gameOptions" />
 		</div>
 	</div>
-	<Teleport to="body" v-if="showPopup">
-		<div class="modal__bg">
+	<Teleport to="body">
+		<div class="modal__bg" v-if="showPopup" @click.once="closePopup">
 			<div class="modal-content">
 				<p class="main-text">{{ getPopupText() }}</p>
 				<p class="subtitle">
@@ -106,6 +106,14 @@
 
 				this.flairMessage = list[Math.floor(Math.random() * list.length)];
 				return isSelfWinner ? "You won the game!" : winner.name + " won the game!";
+			},
+			closePopup(element: MouseEvent) {
+				console.log("Closing popup");
+				let target = element.target as HTMLElement;
+				while (!target.classList.contains("modal__bg")) {
+					target = target.parentElement as HTMLElement;
+				}
+				target.style.display = "none";
 			}
 		},
 		mounted() {
@@ -121,7 +129,6 @@
 <style scoped lang="less">
 	.modal__bg {
 		animation: vanish 6s forwards;
-		pointer-events: none;
 
 		@media screen and (min-width: 901px) {
 			translate: calc(2.8 * var(--padding-page)) 0;

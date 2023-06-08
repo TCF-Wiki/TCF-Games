@@ -20,7 +20,7 @@
 	</section>
 
 	<Teleport to="body">
-		<div class="modal__bg" v-if="showGuesses && feedbackMessage">
+		<div class="modal__bg" v-if="showGuesses && feedbackMessage" @click.once="closePopup">
 			<div class="modal-content">
 				<p class="main-text">{{ score }} pts</p>
 				<p class="small-text">out of 5000</p>
@@ -151,6 +151,14 @@
 
 				this.feedbackMessage = list[Math.floor(Math.random() * list.length)];
 				this.score = score;
+			},
+			closePopup(element: MouseEvent) {
+				console.log("Closing popup");
+				let target = element.target as HTMLElement;
+				while (!target.classList.contains("modal__bg")) {
+					target = target.parentElement as HTMLElement;
+				}
+				target.style.display = "none";
 			}
 		},
 		mounted() {
@@ -218,7 +226,6 @@
 
 	.modal__bg {
 		animation: vanish 4s forwards;
-		pointer-events: none;
 
 		@media screen and (min-width: 901px) {
 			translate: calc(2.8 * var(--padding-page)) 0;
