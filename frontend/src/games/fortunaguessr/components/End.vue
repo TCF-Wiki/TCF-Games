@@ -169,7 +169,7 @@
 		grid-template-columns: 1fr 1fr;
 		gap: calc(2 * var(--space-xl));
 
-		@media screen and (max-width: 900px) {
+		@media screen and (max-width: 1100px) {
 			grid-template-columns: 1fr;
 		}
 	}

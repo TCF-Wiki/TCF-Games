@@ -44,7 +44,7 @@
                     </ul>
                 </div>
                 <div class="contrib-item">
-                    <img src="home-images/contributor_avatar.png" />
+                    <img src="/home-images/contributor_avatar.png" />
                     <h4>Wiki Contributors</h4>
                     <ul>
                         <li>Wiki Contributions</li>
@@ -54,7 +54,7 @@
                     </ul>
                 </div>
                 <div class="contrib-item">
-                    <img src="home-images/stevn_avatar.png" />
+                    <img src="/home-images/stevn_avatar.png" />
                     <h4>Stevnbak</h4>
                     <ul>
                         <li>Wiki Lead</li>
@@ -75,7 +75,7 @@
 	import {RouterLink, RouterView} from "vue-router";
 </script>
 
-<style scoped>
+<style scoped lang="less">
 /* Main */
 .home {
     display: flex;
