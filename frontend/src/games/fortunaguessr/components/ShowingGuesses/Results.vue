@@ -34,7 +34,7 @@
 	import {defineComponent} from "vue";
 	import {app, emitter, toast} from "@/main";
 
-	import "@/games/fortunaguessr/multiplayer";
+	import {GameApp} from "../../multiplayer";
 	import {App} from "@/multiplayer";
 	import type {PlayerDataType} from "@/multiplayer";
 	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
@@ -58,11 +58,13 @@
 		mounted() {
 			this.updateShowControls();
 			emitter.on("PlayerListUpdated", (players: PlayerDataType[]) => {
+				if (GameApp.state != "ShowingGuesses") return;
 				this.playerList = this.convertPlayerList();
 			});
 			this.playerList = this.convertPlayerList();
 
 			emitter.on("HostChanged", () => {
+				if (GameApp.state != "ShowingGuesses") return;
 				this.updateShowControls();
 			});
 		},
@@ -136,7 +138,7 @@
 		background-color: var(--color-surface-3);
 		border-radius: 2rem;
 		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-		transition: border-color .2s ease;
+		transition: border-color 0.2s ease;
 		&:hover {
 			border-color: var(--border-color-input--hover);
 		}
@@ -163,11 +165,11 @@
 
 	.list-enter-active,
 	.list-leave-active {
-	transition: all 0.5s ease;
+		transition: all 0.5s ease;
 	}
 	.list-enter-from,
 	.list-leave-to {
-	opacity: 0;
-	transform: translateX(30px);
+		opacity: 0;
+		transform: translateX(30px);
 	}
 </style>

@@ -2,7 +2,7 @@
 	<section class="container">
 		<div class="title-container">
 			<h1>Results for round {{ currentRound + 1 }}</h1>
-			<button v-if="showControls" @click="nextRound()">{{ currentRound+1 >= gameOptions.length ? 'Final results' : 'Next Round' }} </button>
+			<button v-if="showControls" @click="nextRound()">{{ currentRound + 1 >= gameOptions.length ? "Final results" : "Next Round" }}</button>
 		</div>
 		<div class="guess-container">
 			<Transition name="scale-in" appear>
@@ -16,16 +16,15 @@
 					<h2>Waiting for everyone to confirm their guess.</h2>
 				</Transition>
 			</div>
-			
 		</div>
 	</section>
 
 	<Teleport to="body">
 		<div class="modal__bg" v-if="showGuesses && feedbackMessage">
 			<div class="modal-content">
-				<p class="main-text"> {{ score }} pts </p>
+				<p class="main-text">{{ score }} pts</p>
 				<p class="small-text">out of 5000</p>
-				<p class="subtitle"> {{ feedbackMessage }} </p>
+				<p class="subtitle">{{ feedbackMessage }}</p>
 			</div>
 		</div>
 	</Teleport>
@@ -37,6 +36,7 @@
 
 	import ShowingGuessesMap from "./ShowingGuesses/ShowingGuessesMap.vue";
 	import Results from "./ShowingGuesses/Results.vue";
+	import {GameApp} from "../multiplayer";
 	import {App} from "@/multiplayer";
 	import type {PlayerDataType} from "@/multiplayer";
 
@@ -97,7 +97,7 @@
 				}
 			},
 			getOwnScore() {
-				console.log('Here is my player data!!', App.myPlayerData.gameData)
+				console.log("Here is my player data!!", App.myPlayerData.gameData);
 				const score = App.myPlayerData.gameData?.guesses[this.currentRound].score;
 
 				const gameScores = {
@@ -158,15 +158,18 @@
 			console.log(this.playerList);
 			this.checkControl();
 			emitter.on("Guess", (guessData: guessInfoType) => {
+				if (GameApp.state != "ShowingGuesses") return;
 				this.guessData = guessData;
 			});
 			emitter.on("PlayerListUpdated", (players: PlayerDataType[]) => {
+				if (GameApp.state != "ShowingGuesses") return;
 				this.playerList = players;
 				console.log(this.playerList);
 				this.checkControl();
-				this.getOwnScore()
+				this.getOwnScore();
 			});
 			emitter.on("HostChanged", () => {
+				if (GameApp.state != "ShowingGuesses") return;
 				this.checkControl();
 			});
 		},
@@ -177,10 +180,10 @@
 	.container {
 		max-width: 100%;
 		margin: 0 2rem;
-		
+
 		@media screen and (max-width: 900px) {
 			max-width: 100%;
-			margin: 0 .5rem
+			margin: 0 0.5rem;
 		}
 	}
 
@@ -218,7 +221,7 @@
 		pointer-events: none;
 
 		@media screen and (min-width: 901px) {
-			translate: calc(2.8*var(--padding-page)) 0;
+			translate: calc(2.8 * var(--padding-page)) 0;
 		}
 	}
 
@@ -227,7 +230,7 @@
 			scale: 0;
 		}
 		10% {
-			scale: 1
+			scale: 1;
 		}
 		75% {
 			opacity: 0.8;

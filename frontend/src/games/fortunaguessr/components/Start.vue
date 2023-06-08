@@ -44,35 +44,19 @@
 				<Transition name="scale-in" appear>
 					<div class="card-container">
 						<div class="title-container">
-							<h2> How to play </h2>
-							<p class="subtitle no-color"> A simple overview</p>
+							<h2>How to play</h2>
+							<p class="subtitle no-color">A simple overview</p>
 						</div>
 						<div class="card-content">
 							<ol>
-								<li>
-									Start a game in your preferred difficulty.  
-								</li>
-								<li>
-									There will be a screenshot of the guess location, as well as a map.
-								</li>
-								<li>
-									Click on the map to place a guess, and then <b>press Confirm Guess</b> to lock your guess in.
-								</li>
-								<li v-if="playerList.length > 1">
-									Once everyone has guessed, the game will progress to the results screen.
-								</li>
-								<li v-else>
-									The game will progress to the results screen.
-								</li>
-								<li v-if="playerList.length > 1">
-									The game will go to the next round once the host presses next round.
-								</li>
-								<li v-else>
-									Press next round to progress to the next round.
-								</li>
-								<li> 
-									Once all rounds have been finished there will be a final scoreboard.
-								</li>
+								<li>Start a game in your preferred difficulty.</li>
+								<li>There will be a screenshot of the guess location, as well as a map.</li>
+								<li>Click on the map to place a guess, and then <b>press Confirm Guess</b> to lock your guess in.</li>
+								<li v-if="playerList.length > 1">Once everyone has guessed, the game will progress to the results screen.</li>
+								<li v-else>The game will progress to the results screen.</li>
+								<li v-if="playerList.length > 1">The game will go to the next round once the host presses next round.</li>
+								<li v-else>Press next round to progress to the next round.</li>
+								<li>Once all rounds have been finished there will be a final scoreboard.</li>
 							</ol>
 						</div>
 					</div>
@@ -89,7 +73,8 @@
 
 	import DifficultyCard from "./Start/DifficultyCard.vue";
 	import MultiplayerLobby from "./Start/MultiplayerLobby.vue";
-	import PlayerList from './Start/PlayerList.vue'
+	import PlayerList from "./Start/PlayerList.vue";
+	import {GameApp} from "../multiplayer";
 	import {App, type PlayerDataType} from "@/multiplayer";
 
 	export default defineComponent({
@@ -113,6 +98,7 @@
 			this.playerList = App.playerList;
 			console.log(App.host);
 			emitter.on("HostChanged", () => {
+				if (GameApp.state != "Start") return;
 				this.showControls = App.host;
 				console.log(App.host);
 			});
@@ -128,7 +114,7 @@
 		grid-template-columns: 1fr 1fr 1fr 1fr;
 		gap: var(--space-lg);
 		max-width: 100%;
-		margin: 0 2rem; 
+		margin: 0 2rem;
 
 		@media screen and (max-width: 1500px) {
 			grid-template-columns: 1fr 1fr 1fr;
@@ -140,7 +126,7 @@
 
 		@media screen and (max-width: 900px) {
 			grid-template-columns: 1fr;
-			margin: 0 .5rem
+			margin: 0 0.5rem;
 		}
 
 		& .container {
@@ -153,13 +139,13 @@
 		border: 1px solid var(--border-color-base);
 		padding: var(--space-lg);
 		width: 100%;
-		aspect-ratio:  1 /1;
+		aspect-ratio: 1 /1;
 
 		background-color: var(--color-surface-3);
 		border-radius: 2rem;
 		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 
-		transition: border-color .2s ease;
+		transition: border-color 0.2s ease;
 		&:hover {
 			border-color: var(--border-color-input--hover);
 		}
@@ -180,18 +166,17 @@
 		font-weight: bold;
 		line-height: 1;
 		text-align: center;
-
 	}
 
 	.subtitle {
 		text-align: center;
 		font-size: 0.8rem;
 		margin-bottom: var(--space-sm);
-		color: var(--color-base--subtle)
+		color: var(--color-base--subtle);
 	}
 
 	.subtitle.no-color {
-		color: var(--color-base)
+		color: var(--color-base);
 	}
 
 	.btn-container {
@@ -208,6 +193,6 @@
 
 	ol {
 		margin-top: 0;
-		margin-bottom: 0
+		margin-bottom: 0;
 	}
 </style>

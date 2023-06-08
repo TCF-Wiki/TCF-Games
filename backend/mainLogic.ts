@@ -122,7 +122,7 @@ export function GetRoom(roomId: string, socket: Socket): RoomDataType | null {
 	///const room = io.sockets.adapter.rooms.get(roomId);
 	const room = roomData.find((a) => a.roomId == roomId);
 	if (!room) {
-		socket.emit("error", "Room with id: '" + roomId + "' not found.");
+		///socket.emit("error", "Room with id: '" + roomId + "' not found.");
 		console.log("Room with id: '" + roomId + "' not found.");
 		return null;
 	}

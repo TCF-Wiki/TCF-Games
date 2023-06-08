@@ -4,14 +4,14 @@
 	</section>
 </template>
 <style scoped lang="less">
-.upper-container {
-	max-width: calc(99vw - 2.8 * var(--padding-page));
+	.upper-container {
+		max-width: calc(99vw - 2.8 * var(--padding-page));
 
-	@media screen and (max-width: 900px) {
-		max-width: 100vw;
-		margin: var(--space-xs)
+		@media screen and (max-width: 900px) {
+			max-width: 100vw;
+			margin: var(--space-xs);
+		}
 	}
-}
 </style>
 <script lang="ts">
 	//Import dependencies
@@ -68,6 +68,7 @@
 			currentComponent: createApp(Start) as any //Currently mounted vue component
 		}),
 		mounted() {
+			GameApp.state = "Start";
 			this.currentComponent.mount("#component");
 			GameIO.init();
 			emitter.on("StartGameWithSeed", (seed: string) => {
@@ -134,6 +135,7 @@
 							return End;
 					}
 				})();
+				GameApp.state = this.state;
 				let VueApp = createApp(VueFile, {
 					location: this.locations[this.currentRound],
 					currentRound: this.currentRound,

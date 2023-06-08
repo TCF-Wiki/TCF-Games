@@ -19,6 +19,7 @@ export var GameIO = {
 };
 
 export var GameApp = {
+	state: "Start" as "Start" | "Guessing" | "ShowingGuesses" | "End",
 	StartGame(seed: string) {
 		IO.socket.emit("startGame", {seed: seed, roomId: App.roomId});
 		//Reset player game data

@@ -1,21 +1,21 @@
 <template>
-<h1> End Results </h1>
-<div class="end-container"> 
-	<div class="main-container">
-		<Results :gameOptions="gameOptions"/>
-		<EndMap :gameOptions="gameOptions" />
-	</div>
-</div>
-<Teleport to="body" v-if="showPopup">
-	<div class="modal__bg">
-		<div class="modal-content">
-			<p class="main-text"> {{ getPopupText() }} </p>
-			<p class="subtitle">
-				{{ flairMessage }}
-			</p>
+	<h1>End Results</h1>
+	<div class="end-container">
+		<div class="main-container">
+			<Results :gameOptions="gameOptions" />
+			<EndMap :gameOptions="gameOptions" />
 		</div>
 	</div>
-</Teleport>
+	<Teleport to="body" v-if="showPopup">
+		<div class="modal__bg">
+			<div class="modal-content">
+				<p class="main-text">{{ getPopupText() }}</p>
+				<p class="subtitle">
+					{{ flairMessage }}
+				</p>
+			</div>
+		</div>
+	</Teleport>
 </template>
 <script lang="ts">
 	import {defineComponent, type PropType} from "vue";
@@ -111,6 +111,7 @@
 		mounted() {
 			if (App.playerList.length != 1) this.showPopup = true;
 			emitter.on("HostChanged", () => {
+				if (GameApp.state != "End") return;
 				this.showControls = App.host;
 			});
 		},
@@ -123,7 +124,7 @@
 		pointer-events: none;
 
 		@media screen and (min-width: 901px) {
-			translate: calc(2.8*var(--padding-page)) 0;
+			translate: calc(2.8 * var(--padding-page)) 0;
 		}
 	}
 
@@ -132,7 +133,7 @@
 			scale: 0;
 		}
 		10% {
-			scale: 1
+			scale: 1;
 		}
 		75% {
 			opacity: 0.8;
@@ -157,9 +158,9 @@
 	.end-container {
 		max-width: 100%;
 		margin: 0 2rem;
-		
+
 		@media screen and (max-width: 900px) {
-			margin: 0 .5rem;
+			margin: 0 0.5rem;
 		}
 	}
 
