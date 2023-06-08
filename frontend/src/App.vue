@@ -1,17 +1,17 @@
 <script lang="ts">
-	import {RouterLink, RouterView} from "vue-router";
-	import NavBar from "./constantComponents/NavBar.vue";
-	import Footer from "./constantComponents/Footer.vue";
+import {RouterLink, RouterView} from "vue-router";
+import NavBar from "./constantComponents/NavBar.vue";
+import Footer from "./constantComponents/Footer.vue";
 
-	import {defineComponent} from "vue";
-	export default defineComponent({
-		name: "App",
-		components: {
-			NavBar,
-			Footer,
-			RouterView
-		}
-	});
+import {defineComponent} from "vue";
+export default defineComponent({
+	name: "App",
+	components: {
+		NavBar,
+		Footer,
+		RouterView
+	}
+});
 </script>
 
 <template>

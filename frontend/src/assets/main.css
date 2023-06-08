@@ -278,7 +278,6 @@ input[type="checkbox"]:checked::before {
 	translate: 0 100vh;
 }
 
-
 .header-item svg {
 	scale: 0.6;
 	aspect-ratio: 1 / 1;
@@ -321,14 +320,14 @@ input[type="checkbox"]:checked::before {
 		opacity: 0;
 	}
 	25% {
-		rotate: -10deg
+		rotate: -10deg;
 	}
 	50% {
 		transform: scale(1.1);
 		rotate: 10deg;
 	}
 	75% {
-		rotate: -5deg
+		rotate: -5deg;
 	}
 	100% {
 		transform: scale(1);
@@ -337,47 +336,45 @@ input[type="checkbox"]:checked::before {
 	}
 }
 
-
 .wikitable {
-    border-collapse: collapse;
-    margin: auto;
-    width: 100%;
+	border-collapse: collapse;
+	margin: auto;
+	width: 100%;
 }
 
 table.wikitable tr th,
 table.wikitable th td,
 table.wikitable tr td {
-    font-size: unset;
+	font-size: unset;
 }
 
-
 table.wikitable {
-    --color-base--subtle: #edeff0;
+	--color-base--subtle: #edeff0;
 }
 
 table.wikitable tr th,
 table.wikitable tr td,
 table.wikitable tbody tr th,
 table.wikitable tbody tr td {
-    padding: .2rem .4rem .2rem .4rem;
-    margin: auto;
-    vertical-align: middle;
-    border: 1px solid var(--border-color-base)
+	padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+	margin: auto;
+	vertical-align: middle;
+	border: 1px solid var(--border-color-base);
 }
 
 table.wikitable tr td,
 table.wikitable tbody tr td {
-    text-align: left;
+	text-align: left;
 }
 
 table.wikitable tr th,
 table.wikitable tbody tr th {
-    font-weight: bold;
-    text-align: center;
-    background-color: var(--color-surface-2);
+	font-weight: bold;
+	text-align: center;
+	background-color: var(--color-surface-2);
 }
 
 table.wikitable tr th,
 table.wikitable tbody tr th {
-    color: var(--color-base)
+	color: var(--color-base);
 }

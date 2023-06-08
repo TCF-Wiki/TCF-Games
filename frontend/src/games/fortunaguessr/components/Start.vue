@@ -67,145 +67,145 @@
 </template>
 
 <script lang="ts">
-	import {defineComponent} from "vue";
-	import {emitter, toast} from "@/main";
-	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
+import {defineComponent} from "vue";
+import {emitter, toast} from "@/main";
+import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
-	import DifficultyCard from "./Start/DifficultyCard.vue";
-	import MultiplayerLobby from "./Start/MultiplayerLobby.vue";
-	import PlayerList from "./Start/PlayerList.vue";
-	import {GameApp} from "../multiplayer";
-	import {App, type PlayerDataType} from "@/multiplayer";
+import DifficultyCard from "./Start/DifficultyCard.vue";
+import MultiplayerLobby from "./Start/MultiplayerLobby.vue";
+import PlayerList from "./Start/PlayerList.vue";
+import {GameApp} from "../multiplayer";
+import {App, type PlayerDataType} from "@/multiplayer";
 
-	export default defineComponent({
-		name: "Start",
-		data: () => ({
-			enteredSeed: "" as string,
-			showControls: App.host,
-			playerList: [] as PlayerDataType[],
-			canClickButton: true
-		}),
-		components: {
-			DifficultyCard,
-			MultiplayerLobby,
-			PlayerList
-		},
-		methods: {
-			startWithSeed() {
-				if (!this.canClickButton) return;
-				this.disableButtons();
-				if (this.enteredSeed == "") {
-					toast.error("Please enter a seed");
-					return;
-				}
-				emitter.emit("StartGameWithSeed", this.enteredSeed);
-			},
-			disableButtons() {
-				this.canClickButton = false;
-				setTimeout(() => {
-					this.canClickButton = true;
-				}, 250);
+export default defineComponent({
+	name: "Start",
+	data: () => ({
+		enteredSeed: "" as string,
+		showControls: App.host,
+		playerList: [] as PlayerDataType[],
+		canClickButton: true
+	}),
+	components: {
+		DifficultyCard,
+		MultiplayerLobby,
+		PlayerList
+	},
+	methods: {
+		startWithSeed() {
+			if (!this.canClickButton) return;
+			this.disableButtons();
+			if (this.enteredSeed == "") {
+				toast.error("Please enter a seed");
+				return;
 			}
+			emitter.emit("StartGameWithSeed", this.enteredSeed);
 		},
-		mounted() {
-			this.playerList = App.playerList;
-			console.log(App.host);
-			emitter.on("HostChanged", () => {
-				if (GameApp.state != "Start") return;
-				this.showControls = App.host;
-				console.log(App.host);
-			});
+		disableButtons() {
+			this.canClickButton = false;
+			setTimeout(() => {
+				this.canClickButton = true;
+			}, 250);
 		}
-	});
+	},
+	mounted() {
+		this.playerList = App.playerList;
+		console.log(App.host);
+		emitter.on("HostChanged", () => {
+			if (GameApp.state != "Start") return;
+			this.showControls = App.host;
+			console.log(App.host);
+		});
+	}
+});
 </script>
 
 <style scoped lang="less">
-	@import url("@/assets/text-input.css");
+@import url("@/assets/text-input.css");
 
-	.content-container {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr;
-		gap: var(--space-lg);
-		max-width: 100%;
-		margin: 0 2rem;
+.content-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap: var(--space-lg);
+	max-width: 100%;
+	margin: 0 2rem;
 
-		@media screen and (max-width: 1500px) {
-			grid-template-columns: 1fr 1fr 1fr;
-		}
-
-		@media screen and (max-width: 1150px) {
-			grid-template-columns: 1fr 1fr;
-		}
-
-		@media screen and (max-width: 900px) {
-			grid-template-columns: 1fr;
-			margin: 0 0.5rem;
-		}
-
-		& .container {
-			width: 100%;
-			aspect-ratio: 1 / 1;
-		}
+	@media screen and (max-width: 1500px) {
+		grid-template-columns: 1fr 1fr 1fr;
 	}
 
-	.card-container {
-		border: 1px solid var(--border-color-base);
-		padding: var(--space-lg);
+	@media screen and (max-width: 1150px) {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	@media screen and (max-width: 900px) {
+		grid-template-columns: 1fr;
+		margin: 0 0.5rem;
+	}
+
+	& .container {
 		width: 100%;
-		aspect-ratio: 1 /1;
+		aspect-ratio: 1 / 1;
+	}
+}
 
-		background-color: var(--color-surface-3);
-		border-radius: 2rem;
-		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+.card-container {
+	border: 1px solid var(--border-color-base);
+	padding: var(--space-lg);
+	width: 100%;
+	aspect-ratio: 1 /1;
 
-		transition: border-color 0.2s ease;
-		&:hover {
-			border-color: var(--border-color-input--hover);
-		}
+	background-color: var(--color-surface-3);
+	border-radius: 2rem;
+	box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 
-		& h2 {
-			text-align: center;
-		}
+	transition: border-color 0.2s ease;
+	&:hover {
+		border-color: var(--border-color-input--hover);
 	}
 
-	.title-container {
-		display: flex;
-		justify-content: center;
-		max-width: 100%;
-		flex-direction: column;
-	}
-	h1 {
-		font-size: 3rem;
-		font-weight: bold;
-		line-height: 1;
+	& h2 {
 		text-align: center;
 	}
+}
 
-	.subtitle {
-		text-align: center;
-		font-size: 0.8rem;
-		margin-bottom: var(--space-sm);
-		color: var(--color-base--subtle);
+.title-container {
+	display: flex;
+	justify-content: center;
+	max-width: 100%;
+	flex-direction: column;
+}
+h1 {
+	font-size: 3rem;
+	font-weight: bold;
+	line-height: 1;
+	text-align: center;
+}
+
+.subtitle {
+	text-align: center;
+	font-size: 0.8rem;
+	margin-bottom: var(--space-sm);
+	color: var(--color-base--subtle);
+}
+
+.subtitle.no-color {
+	color: var(--color-base);
+}
+
+.btn-container {
+	margin-top: var(--space-sm);
+	display: flex;
+	justify-content: center;
+
+	& .button {
+		background-color: var(--color-success);
+		width: 50%;
+		margin: 0;
 	}
+}
 
-	.subtitle.no-color {
-		color: var(--color-base);
-	}
-
-	.btn-container {
-		margin-top: var(--space-sm);
-		display: flex;
-		justify-content: center;
-
-		& .button {
-			background-color: var(--color-success);
-			width: 50%;
-			margin: 0;
-		}
-	}
-
-	ol {
-		margin-top: 0;
-		margin-bottom: 0;
-	}
+ol {
+	margin-top: 0;
+	margin-bottom: 0;
+}
 </style>

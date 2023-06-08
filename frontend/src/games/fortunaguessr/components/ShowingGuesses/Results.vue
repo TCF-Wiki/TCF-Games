@@ -31,145 +31,145 @@
 </template>
 
 <script lang="ts">
-	import {defineComponent} from "vue";
-	import {app, emitter, toast} from "@/main";
+import {defineComponent} from "vue";
+import {app, emitter, toast} from "@/main";
 
-	import {GameApp} from "../../multiplayer";
-	import {App} from "@/multiplayer";
-	import type {PlayerDataType} from "@/multiplayer";
-	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
+import {GameApp} from "../../multiplayer";
+import {App} from "@/multiplayer";
+import type {PlayerDataType} from "@/multiplayer";
+import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
-	export default defineComponent({
-		name: "TestView",
-		data: () => ({
-			playerList: [] as {name: string; socketId: string; score: number; status: string; guess: guessInfoType}[],
-			showControls: false
-		}),
-		props: {
-			currentRound: {
-				type: Number,
-				required: true
-			},
-			showGuessInfo: {
-				type: Boolean,
-				required: true
-			}
+export default defineComponent({
+	name: "TestView",
+	data: () => ({
+		playerList: [] as {name: string; socketId: string; score: number; status: string; guess: guessInfoType}[],
+		showControls: false
+	}),
+	props: {
+		currentRound: {
+			type: Number,
+			required: true
 		},
-		mounted() {
-			this.updateShowControls();
-			emitter.on("PlayerListUpdated", (players: PlayerDataType[]) => {
-				if (GameApp.state != "ShowingGuesses") return;
-				this.playerList = this.convertPlayerList();
-			});
-			this.playerList = this.convertPlayerList();
-
-			emitter.on("HostChanged", () => {
-				if (GameApp.state != "ShowingGuesses") return;
-				this.updateShowControls();
-			});
-		},
-		methods: {
-			updateShowControls() {
-				this.showControls = false;
-				if (App.host) {
-					if (App.playerList.length > 1) {
-						this.showControls = true;
-					}
-				}
-			},
-			getMySocketId() {
-				return App.myPlayerData.socketId;
-			},
-			kickPlayer(player: PlayerDataType) {
-				App.KickPlayer(player.socketId);
-			},
-			convertPlayerList() {
-				let playerList: {name: string; socketId: string; score: number; status: string; guess: guessInfoType}[] = [];
-				for (let player of App.playerList) {
-					let status = "";
-					let guess = player.gameData.guesses[this.currentRound];
-					if (guess) {
-						if (guess.time == -1) {
-							status = "Did not guess";
-						} else {
-							status = "Guessed";
-						}
-					} else {
-						status = "Guessing...";
-					}
-					playerList.push({
-						name: player.name,
-						socketId: player.socketId,
-						score: player.gameData.score,
-						status: status,
-						guess: guess
-					});
-				}
-				playerList.sort((a, b) => {
-					if (a.guess) {
-						if (b.guess) {
-							return b.guess.score - a.guess.score;
-						} else {
-							return -1;
-						}
-					} else {
-						if (b.guess) {
-							return 1;
-						} else {
-							return 0;
-						}
-					}
-				});
-				return playerList;
-			}
+		showGuessInfo: {
+			type: Boolean,
+			required: true
 		}
-	});
+	},
+	mounted() {
+		this.updateShowControls();
+		emitter.on("PlayerListUpdated", (players: PlayerDataType[]) => {
+			if (GameApp.state != "ShowingGuesses") return;
+			this.playerList = this.convertPlayerList();
+		});
+		this.playerList = this.convertPlayerList();
+
+		emitter.on("HostChanged", () => {
+			if (GameApp.state != "ShowingGuesses") return;
+			this.updateShowControls();
+		});
+	},
+	methods: {
+		updateShowControls() {
+			this.showControls = false;
+			if (App.host) {
+				if (App.playerList.length > 1) {
+					this.showControls = true;
+				}
+			}
+		},
+		getMySocketId() {
+			return App.myPlayerData.socketId;
+		},
+		kickPlayer(player: PlayerDataType) {
+			App.KickPlayer(player.socketId);
+		},
+		convertPlayerList() {
+			let playerList: {name: string; socketId: string; score: number; status: string; guess: guessInfoType}[] = [];
+			for (let player of App.playerList) {
+				let status = "";
+				let guess = player.gameData.guesses[this.currentRound];
+				if (guess) {
+					if (guess.time == -1) {
+						status = "Did not guess";
+					} else {
+						status = "Guessed";
+					}
+				} else {
+					status = "Guessing...";
+				}
+				playerList.push({
+					name: player.name,
+					socketId: player.socketId,
+					score: player.gameData.score,
+					status: status,
+					guess: guess
+				});
+			}
+			playerList.sort((a, b) => {
+				if (a.guess) {
+					if (b.guess) {
+						return b.guess.score - a.guess.score;
+					} else {
+						return -1;
+					}
+				} else {
+					if (b.guess) {
+						return 1;
+					} else {
+						return 0;
+					}
+				}
+			});
+			return playerList;
+		}
+	}
+});
 </script>
 
 <style scoped lang="less">
-	@import url("@/assets/text-input.css");
+@import url("@/assets/text-input.css");
 
-	.results-container {
-		border: 1px solid var(--border-color-base);
-		padding: var(--space-lg);
-		width: 100%;
-		aspect-ratio: 1 / 1;
+.results-container {
+	border: 1px solid var(--border-color-base);
+	padding: var(--space-lg);
+	width: 100%;
+	aspect-ratio: 1 / 1;
 
-		background-color: var(--color-surface-3);
-		border-radius: 2rem;
-		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-		transition: border-color 0.2s ease;
-		&:hover {
-			border-color: var(--border-color-input--hover);
-		}
-
-		& h2 {
-			text-align: center;
-		}
+	background-color: var(--color-surface-3);
+	border-radius: 2rem;
+	box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+	transition: border-color 0.2s ease;
+	&:hover {
+		border-color: var(--border-color-input--hover);
 	}
 
-	.small-button {
-		padding: var(--space-xs);
-		margin: 0;
-		width: 100%;
-		&.kick {
-			background-color: var(--color-destructive);
-		}
+	& h2 {
+		text-align: center;
 	}
+}
 
-	ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
+.small-button {
+	padding: var(--space-xs);
+	margin: 0;
+	width: 100%;
+	&.kick {
+		background-color: var(--color-destructive);
 	}
+}
 
-	.list-enter-active,
-	.list-leave-active {
-		transition: all 0.5s ease;
-	}
-	.list-enter-from,
-	.list-leave-to {
-		opacity: 0;
-		transform: translateX(30px);
-	}
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.list-enter-active,
+.list-leave-active {
+	transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+	opacity: 0;
+	transform: translateX(30px);
+}
 </style>

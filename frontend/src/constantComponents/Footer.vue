@@ -66,168 +66,168 @@
 	</footer>
 </template>
 <script lang="ts">
-	import {defineComponent} from "vue";
+import {defineComponent} from "vue";
 
-	export default defineComponent({
-		name: "Footer",
-		data() {
-			return {
-				META: {} as any
-			};
-		},
-		async mounted() {
-			async function get_meta_data() {
-				const response = await fetch("https://raw.githubusercontent.com/TCF-Wiki/TCF-Information/main/META.json", {});
-				const json = await response.json();
+export default defineComponent({
+	name: "Footer",
+	data() {
+		return {
+			META: {} as any
+		};
+	},
+	async mounted() {
+		async function get_meta_data() {
+			const response = await fetch("https://raw.githubusercontent.com/TCF-Wiki/TCF-Information/main/META.json", {});
+			const json = await response.json();
 
-				return json;
-			}
-
-			const META = await get_meta_data();
-			this.META = META;
+			return json;
 		}
-	});
+
+		const META = await get_meta_data();
+		this.META = META;
+	}
+});
 </script>
 <style scoped lang="less">
-	.citizen-footer {
-		padding: var(--space-xl) var(--padding-page);
-		margin-top: var(--space-xl);
-		// Reserve space for header
-		margin-bottom: var(--header-size);
-		background-color: var(--color-surface-2);
-		clear: both;
-		color: var(--color-base--subtle);
-		direction: ltr;
-		font-size: 0.875rem;
+.citizen-footer {
+	padding: var(--space-xl) var(--padding-page);
+	margin-top: var(--space-xl);
+	// Reserve space for header
+	margin-bottom: var(--header-size);
+	background-color: var(--color-surface-2);
+	clear: both;
+	color: var(--color-base--subtle);
+	direction: ltr;
+	font-size: 0.875rem;
 
-		width: 100vw;
+	width: 100vw;
 
-		&__container {
-			max-width: 92vw;
-			margin-right: var(--space-md);
-			margin-left: var(--space-md);
+	&__container {
+		max-width: 92vw;
+		margin-right: var(--space-md);
+		margin-left: var(--space-md);
+	}
+
+	&__content,
+	&__bottom {
+		display: flex;
+		flex-wrap: wrap;
+		width: 90vw;
+		padding: var(--space-md) 0;
+		gap: var(--space-md);
+	}
+
+	&__bottom {
+		align-items: center;
+		justify-content: space-between;
+		border-top: 1px solid var(--border-color-base);
+		margin-right: auto;
+		margin-left: auto;
+	}
+
+	&__siteinfo {
+		display: flex;
+		max-width: 80vw;
+		flex-direction: column;
+		gap: var(--space-xs);
+
+		p {
+			margin: 0;
+			line-height: var(--line-height);
 		}
+	}
 
-		&__content,
-		&__bottom {
-			display: flex;
-			flex-wrap: wrap;
-			width: 90vw;
-			padding: var(--space-md) 0;
-			gap: var(--space-md);
+	a {
+		color: var(--color-base--emphasized);
+		font-weight: var(--font-weight-medium);
+	}
+
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0;
+	}
+
+	li {
+		list-style: none;
+	}
+}
+
+#footer {
+	&-sitetitle {
+		color: var(--color-base--emphasized);
+		font-size: 1.25rem;
+		font-weight: 500;
+
+		img.mw-logo-wordmark {
+			max-height: 54px;
+			filter: invert(1) hue-rotate(180deg);
 		}
+	}
 
-		&__bottom {
-			align-items: center;
-			justify-content: space-between;
-			border-top: 1px solid var(--border-color-base);
-			margin-right: auto;
-			margin-left: auto;
-		}
-
-		&__siteinfo {
-			display: flex;
-			max-width: 80vw;
+	&-places {
+		ul {
 			flex-direction: column;
-			gap: var(--space-xs);
-
-			p {
-				margin: 0;
-				line-height: var(--line-height);
-			}
 		}
 
 		a {
-			color: var(--color-base--emphasized);
-			font-weight: var(--font-weight-medium);
+			display: block;
+			padding: var(--space-xs) var(--space-md);
+			border-radius: var(--border-radius--small);
+
+			&:hover {
+				background-color: var(--color-surface-3);
+			}
+
+			&:active {
+				background-color: var(--color-surface-3);
+			}
+
+			& svg {
+				color: var(--color-base--emphasized);
+				float: right;
+				margin-left: 1rem;
+			}
 		}
+	}
+
+	&-tagline {
+		padding: var(--space-xs) 0;
+	}
+
+	&-icons {
+		display: flex;
+		justify-content: flex-end;
 
 		ul {
-			display: flex;
-			flex-wrap: wrap;
-			margin: 0;
+			gap: var(--space-xs);
 		}
 
 		li {
-			list-style: none;
-		}
-	}
-
-	#footer {
-		&-sitetitle {
-			color: var(--color-base--emphasized);
-			font-size: 1.25rem;
-			font-weight: 500;
-
-			img.mw-logo-wordmark {
-				max-height: 54px;
-				filter: invert(1) hue-rotate(180deg);
-			}
+			display: flex; // Horizontally aligned with there are two icons in the same li
 		}
 
-		&-places {
-			ul {
-				flex-direction: column;
-			}
-
-			a {
-				display: block;
-				padding: var(--space-xs) var(--space-md);
-				border-radius: var(--border-radius--small);
-
-				&:hover {
-					background-color: var(--color-surface-3);
-				}
-
-				&:active {
-					background-color: var(--color-surface-3);
-				}
-
-				& svg {
-					color: var(--color-base--emphasized);
-					float: right;
-					margin-left: 1rem;
-				}
-			}
-		}
-
-		&-tagline {
-			padding: var(--space-xs) 0;
-		}
-
-		&-icons {
+		a {
 			display: flex;
-			justify-content: flex-end;
+			align-items: center;
+		}
+	}
+}
 
-			ul {
-				gap: var(--space-xs);
-			}
+@media (min-width: 1001px) {
+	.citizen-footer {
+		margin-bottom: 0;
+		margin-left: var(--header-size);
+		width: 100vw;
 
-			li {
-				display: flex; // Horizontally aligned with there are two icons in the same li
-			}
-
-			a {
-				display: flex;
-				align-items: center;
-			}
+		&__siteinfo {
+			max-width: 40vw;
 		}
 	}
 
-	@media (min-width: 1001px) {
-		.citizen-footer {
-			margin-bottom: 0;
-			margin-left: var(--header-size);
-			width: 100vw;
-
-			&__siteinfo {
-				max-width: 40vw;
-			}
-		}
-
-		#footer-sitetitle {
-			font-size: 2rem;
-			font-weight: 700;
-		}
+	#footer-sitetitle {
+		font-size: 2rem;
+		font-weight: 700;
 	}
+}
 </style>
