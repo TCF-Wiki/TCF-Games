@@ -90,6 +90,9 @@
 				this.showControls = App.host;
 				console.log(App.host);
 			});
+			emitter.on("RefreshName", (name: string) => {
+				this.name = name;
+			});
 		},
 		methods: {
 			joinRoom() {
@@ -101,6 +104,7 @@
 				App.LeaveRoom();
 			},
 			changeName() {
+				if (!this.name) this.name = App.myPlayerData.name;
 				if (this.name.length >= 16) {
 					toast.error("Names cannot be longer than 15 characters.");
 					return;
