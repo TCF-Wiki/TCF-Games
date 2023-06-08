@@ -7,7 +7,7 @@
 		</div>
 	</div>
 	<Teleport to="body">
-		<div class="modal__bg" v-if="showPopup" @click.once="closePopup">
+		<div class="modal__bg" v-if="showPopup" :class="{'hidden': shouldHaveHiddenClass}" @click="shouldHaveHiddenClass=true">
 			<div class="modal-content">
 				<p class="main-text">{{ getPopupText() }}</p>
 				<p class="subtitle">
@@ -38,7 +38,8 @@ export default defineComponent({
 	data: () => ({
 		showControls: App.host,
 		flairMessage: "",
-		showPopup: false
+		showPopup: false,
+		shouldHaveHiddenClass: false
 	}),
 	methods: {
 		getPopupText() {
@@ -129,9 +130,14 @@ export default defineComponent({
 <style scoped lang="less">
 .modal__bg {
 	animation: vanish 6s forwards;
-
+	
 	@media screen and (min-width: 901px) {
 		translate: calc(2.8 * var(--padding-page)) 0;
+	}
+
+	&.hidden {
+		scale: 0;
+		display: none;
 	}
 }
 
