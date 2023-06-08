@@ -1,13 +1,14 @@
 <template>
 	<h1>End Results</h1>
 	<div class="end-container">
+		<p class="difficulty">Difficulty: {{ gameOptions.difficulty == 1 ? "Easy" : gameOptions.difficulty == 2 ? "Medium" : gameOptions.difficulty == 3 ? "Hard" : gameOptions.difficulty == 4 ? "Insane" : "None" }}</p>
 		<div class="main-container">
 			<Results :gameOptions="gameOptions" />
 			<EndMap :gameOptions="gameOptions" />
 		</div>
 	</div>
 	<Teleport to="body">
-		<div class="modal__bg" v-if="showPopup" :class="{'hidden': shouldHaveHiddenClass}" @click="shouldHaveHiddenClass=true">
+		<div class="modal__bg" v-if="showPopup" :class="{hidden: shouldHaveHiddenClass}" @click="shouldHaveHiddenClass = true">
 			<div class="modal-content">
 				<p class="main-text">{{ getPopupText() }}</p>
 				<p class="subtitle">
@@ -130,7 +131,7 @@ export default defineComponent({
 <style scoped lang="less">
 .modal__bg {
 	animation: vanish 6s forwards;
-	
+
 	@media screen and (min-width: 901px) {
 		translate: calc(2.8 * var(--padding-page)) 0;
 	}
@@ -194,5 +195,11 @@ h1 {
 	width: 100%;
 	margin-bottom: 2rem;
 	font-size: 2.5rem;
+}
+
+.difficulty {
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
+	text-align: center;
 }
 </style>
