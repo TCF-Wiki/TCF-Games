@@ -70,7 +70,8 @@
 				}
 			})(),
 			playerList: [] as PlayerDataType[],
-			showControls: App.host
+			showControls: App.host,
+			canClickButton: true
 		}),
 		mounted() {
 			emitter.on("RoomJoined", (roomId: string) => {
@@ -96,14 +97,20 @@
 		},
 		methods: {
 			joinRoom() {
-				if (this.roomId == this.currentRoomId) return;
+				if (!this.canClickButton) return;
+				this.disableButtons();
+				if (this.roomId == this.currentRoomId || this.roomId == "") return;
 				this.changeName();
 				if (this.name.length < 16) App.JoinRoom(this.roomId);
 			},
 			leaveRoom() {
+				if (!this.canClickButton) return;
+				this.disableButtons();
 				App.LeaveRoom();
 			},
 			changeName() {
+				if (!this.canClickButton) return;
+				this.disableButtons();
 				if (!this.name) this.name = App.myPlayerData.name;
 				if (this.name.length >= 16) {
 					toast.error("Names cannot be longer than 15 characters.");
@@ -124,6 +131,12 @@
 			changeStreamerMode() {
 				this.showCurrentRoomId = !this.showCurrentRoomId;
 				localStorage.setItem("showCurrentRoomId", this.showCurrentRoomId.toString());
+			},
+			disableButtons() {
+				this.canClickButton = false;
+				setTimeout(() => {
+					this.canClickButton = true;
+				}, 250);
 			}
 		}
 	});

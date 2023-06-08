@@ -82,7 +82,8 @@
 		data: () => ({
 			enteredSeed: "" as string,
 			showControls: App.host,
-			playerList: [] as PlayerDataType[]
+			playerList: [] as PlayerDataType[],
+			canClickButton: true
 		}),
 		components: {
 			DifficultyCard,
@@ -91,7 +92,19 @@
 		},
 		methods: {
 			startWithSeed() {
+				if (!this.canClickButton) return;
+				this.disableButtons();
+				if (this.enteredSeed == "") {
+					toast.error("Please enter a seed");
+					return;
+				}
 				emitter.emit("StartGameWithSeed", this.enteredSeed);
+			},
+			disableButtons() {
+				this.canClickButton = false;
+				setTimeout(() => {
+					this.canClickButton = true;
+				}, 250);
 			}
 		},
 		mounted() {

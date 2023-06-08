@@ -99,7 +99,7 @@ io.on("connection", (socket: Socket) => {
 	socket.on("changeName", (name: string) => {
 		socket.rooms.forEach((roomId) => {
 			if (roomId == socket.id) return;
-			const room = GetRoom(roomId, socket);
+			const room = GetRoom(roomId, socket, false);
 			if (!room) return;
 			EmitToHost(roomId, "nameChanged", {name: name, socketId: socket.id} as PlayerDataType);
 		});
@@ -118,11 +118,11 @@ export function GetHost(roomId: string) {
 	return room.hostSocket;
 }
 
-export function GetRoom(roomId: string, socket: Socket): RoomDataType | null {
+export function GetRoom(roomId: string, socket: Socket, emitError: boolean = true): RoomDataType | null {
 	///const room = io.sockets.adapter.rooms.get(roomId);
 	const room = roomData.find((a) => a.roomId == roomId);
 	if (!room) {
-		///socket.emit("error", "Room with id: '" + roomId + "' not found.");
+		if (emitError) socket.emit("error", "Room with id: '" + roomId + "' not found.");
 		console.log("Room with id: '" + roomId + "' not found.");
 		return null;
 	}
@@ -150,7 +150,7 @@ function LeaveAllRooms(socket: Socket) {
 		if (roomId == socket.id) return;
 		//Leave rooms
 		socket.leave(roomId);
-		let room = roomData.find((a) => a.roomId == roomId);
+		let room = GetRoom(roomId, socket, false);
 		if (!room) return;
 		if (room?.hostSocket == socket.id) {
 			//Host left
