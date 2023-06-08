@@ -18,6 +18,15 @@ const router = createRouter({
 	routes: routes
 });
 
+//Reload page on route change
+router.beforeEach((to, from, next) => {
+	if (from.name && to.name != from.name) {
+		console.log("Reload!");
+		window.location.pathname = to.path;
+	}
+	next();
+});
+
 //Meta tags
 router.beforeEach((to, from, next) => {
 	// This goes through the matched routes from last to first, finding the closest route with a title.
