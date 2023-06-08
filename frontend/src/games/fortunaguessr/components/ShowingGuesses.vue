@@ -242,6 +242,7 @@ h2 {
 	}
 	100% {
 		opacity: 0;
+		pointer-events: none;
 	}
 }
 .modal-content {
