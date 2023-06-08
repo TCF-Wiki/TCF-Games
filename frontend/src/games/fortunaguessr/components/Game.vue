@@ -25,6 +25,9 @@
 			<div>
 				<Transition name="scale-in" appear>
 					<div>
+						<div class="mobile-only button-container">
+							<button type="button" @click="guess" :disabled="JSON.stringify(currentGuess) == '{}'">Confirm Guess</button>
+						</div>
 						<GameMap :gameOptions="gameOptions" :isTimeUp="isTimeUp" :currentRound="currentRound" />
 					</div>
 				</Transition>
