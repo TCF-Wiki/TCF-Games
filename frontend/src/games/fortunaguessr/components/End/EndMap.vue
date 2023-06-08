@@ -13,6 +13,7 @@
 	import "leaflet-responsive-popup";
 	import MapSelector from "../common/MapSelector.vue";
 	import {defineComponent, type PropType} from "vue";
+	import {GameApp} from "../../multiplayer";
 	import type {PlayerDataType} from "@/multiplayer";
 	import {App} from "@/multiplayer";
 
@@ -72,6 +73,8 @@
 				this.AddCorrectMarker(map);
 			});
 			emitter.on("PlayerListUpdated", (playerList: PlayerDataType[]) => {
+				if (GameApp.state != "End") return;
+
 				console.log("Updated playerlist in showguesses map");
 				this.ClearLayers();
 				this.DisplayGuesses(map);

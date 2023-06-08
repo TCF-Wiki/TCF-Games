@@ -4,14 +4,14 @@
 	</section>
 </template>
 <style scoped lang="less">
-.upper-container {
-	max-width: calc(99vw - 2.8 * var(--padding-page));
+	.upper-container {
+		max-width: calc(99vw - 2.8 * var(--padding-page));
 
-	@media screen and (max-width: 900px) {
-		max-width: 100vw;
-		margin: var(--space-xs)
+		@media screen and (max-width: 900px) {
+			max-width: 100vw;
+			margin: var(--space-xs);
+		}
 	}
-}
 </style>
 <script lang="ts">
 	//Import dependencies
@@ -65,9 +65,11 @@
 			currentRound: 0 as number, //Current round
 			gameOptions: {} as gameInfoType, //Game options
 			locations: [] as locationType[], //Game locations
-			currentComponent: createApp(Start) as any //Currently mounted vue component
+			currentComponent: createApp(Start) as any, //Currently mounted vue component
+			canStartGame: true
 		}),
 		mounted() {
+			GameApp.state = "Start";
 			this.currentComponent.mount("#component");
 			GameIO.init();
 			emitter.on("StartGameWithSeed", (seed: string) => {
@@ -83,7 +85,13 @@
 						maps: (1 | 2 | 3)[] | null;
 					} | null
 				) => {
-					this.StartGameFromOptions(options);
+					if (this.canStartGame) {
+						this.canStartGame = false;
+						setTimeout(() => {
+							this.canStartGame = true;
+						}, 250);
+						this.StartGameFromOptions(options);
+					}
 				}
 			);
 			emitter.on("Guess", (guessData: guessInfoType) => {
@@ -134,6 +142,7 @@
 							return End;
 					}
 				})();
+				GameApp.state = this.state;
 				let VueApp = createApp(VueFile, {
 					location: this.locations[this.currentRound],
 					currentRound: this.currentRound,
@@ -206,34 +215,38 @@
 			},
 			StartGameFromSeed(seed: string) {
 				console.log("Starting game from seed", seed);
-				//Set current round to 0
-				this.currentRound = 0;
-				//Set game options
-				let splitSeed = seed.split("-");
-				this.gameOptions = {
-					length: parseInt(splitSeed[0]),
-					difficulty: parseInt(splitSeed[1]),
-					timeLimit: parseInt(splitSeed[2]),
-					maps: (() => {
-						let maps = [] as (1 | 2 | 3)[];
-						if (splitSeed[3].charAt(0) == "1") maps.push(1);
-						if (splitSeed[3].charAt(1) == "1") maps.push(2);
-						if (splitSeed[3].charAt(2) == "1") maps.push(3);
-						return maps;
-					})(),
-					seed: seed
-				};
-				//Set game locations
-				this.locations = [];
-				for (let i = 0; i < this.gameOptions.length; i++) {
-					this.locations.push(locationData[parseInt(splitSeed[i + 4])]);
+				try {
+					//Set current round to 0
+					this.currentRound = 0;
+					//Set game options
+					let splitSeed = seed.split("-");
+					this.gameOptions = {
+						length: parseInt(splitSeed[0]),
+						difficulty: parseInt(splitSeed[1]),
+						timeLimit: parseInt(splitSeed[2]),
+						maps: (() => {
+							let maps = [] as (1 | 2 | 3)[];
+							if (splitSeed[3].charAt(0) == "1") maps.push(1);
+							if (splitSeed[3].charAt(1) == "1") maps.push(2);
+							if (splitSeed[3].charAt(2) == "1") maps.push(3);
+							return maps;
+						})(),
+						seed: seed
+					};
+					//Set game locations
+					this.locations = [];
+					for (let i = 0; i < this.gameOptions.length; i++) {
+						this.locations.push(locationData[parseInt(splitSeed[i + 4])]);
+					}
+					console.log("Game options", this.gameOptions);
+					console.log("Game locations", this.locations);
+					//Set state to guessing
+					this.state = "Guessing";
+					//Show toast
+					toast.success("Game started");
+				} catch {
+					toast.error("Invalid seed (" + seed + ")");
 				}
-				console.log("Game options", this.gameOptions);
-				console.log("Game locations", this.locations);
-				//Set state to guessing
-				this.state = "Guessing";
-				//Show toast
-				toast.success("Game started");
 			}
 		}
 	});

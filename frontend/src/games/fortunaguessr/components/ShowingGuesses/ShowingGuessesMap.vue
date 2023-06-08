@@ -18,6 +18,7 @@
 
 	import {emitter, toast} from "@/main";
 	import type {locationType, gameInfoType, guessInfoType} from "@/views/FortunaGuessrView.vue";
+	import {GameApp} from "../../multiplayer";
 	export default defineComponent({
 		name: "ShowingGuessesMap",
 		components: {
@@ -58,7 +59,7 @@
 			}).setView([-128, 128], 1);
 			map.zoomControl.setPosition("topright");
 			map.fitBounds(bounds);
-			console.log(this.gameOptions.maps, this.location.map)
+			console.log(this.gameOptions.maps, this.location.map);
 			this.mapNumber = this.location.map;
 			map.addLayer(L.tileLayer(tilelayerURL(this.mapNumber), tileLayerOptions));
 			this.ClearLayers();
@@ -81,13 +82,12 @@
 				this.AddCorrectMarker(map);
 			});
 			emitter.on("PlayerListUpdated", (playerList: PlayerDataType[]) => {
+				if (GameApp.state != "ShowingGuesses") return;
 				console.log("Updated playerlist in showguesses map");
 				this.ClearLayers();
 				this.DisplayGuesses(map);
 				this.AddCorrectMarker(map);
 			});
-
-			emitter.on();
 		},
 		methods: {
 			ClearLayers() {
@@ -168,7 +168,7 @@
 		width: 100%;
 		aspect-ratio: 1 / 1;
 	}
-	
+
 	#GuessMap {
 		width: 100%;
 		height: 100%;
@@ -183,5 +183,4 @@
 			border-top-left-radius: 2rem;
 		}
 	}
-
 </style>

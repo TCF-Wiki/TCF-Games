@@ -24,12 +24,12 @@
 			</div>
 			<hr />
 			<div>
-				<h2>View results for a specific round </h2>
-				<div class="input-container"> 
+				<h2>View results for a specific round</h2>
+				<div class="input-container">
 					<label for="roundInput"> Round </label>
 					<input type="number" id="roundInput" :max="rounds" :min="1" v-model="selectedRound" />
 					<div class="input-buttons">
-						<span @click="selectedRound = Math.min(rounds, selectedRound +1)" role="button"> + </span>
+						<span @click="selectedRound = Math.min(rounds, selectedRound + 1)" role="button"> + </span>
 						<span @click="selectedRound = Math.max(0, selectedRound - 1)" role="button"> - </span>
 					</div>
 				</div>
@@ -52,15 +52,13 @@
 			</div>
 			<hr />
 			<div>
-				<h2> Continue </h2> 
+				<h2>Continue</h2>
 				<div class="button-container">
 					<button @click="restartGame()" class="restart" v-if="showButtons">Restart Game</button>
 					<button @click="backToLobby()" v-if="showButtons">Back to Start</button>
-					<button @click="leaveRoom" class="leave"  v-if="playerList.length !== 1">Leave room</button>
+					<button @click="leaveRoom" class="leave" v-if="playerList.length !== 1">Leave room</button>
 				</div>
-				<p class="seed">
-					Seed: {{ gameOptions.seed }}
-				</p>
+				<p class="seed">Seed: {{ gameOptions.seed }}</p>
 			</div>
 		</div>
 	</section>
@@ -70,10 +68,9 @@
 	import {defineComponent, type PropType} from "vue";
 	import {app, emitter, toast} from "@/main";
 
-	import "@/games/fortunaguessr/multiplayer";
 	import {App} from "@/multiplayer";
 	import type {PlayerDataType} from "@/multiplayer";
-	import { GameApp } from "@/games/fortunaguessr/multiplayer";
+	import {GameApp} from "@/games/fortunaguessr/multiplayer";
 	import type {locationType, guessInfoType, gameInfoType} from "@/views/FortunaGuessrView.vue";
 
 	export default defineComponent({
@@ -82,7 +79,7 @@
 			gameOptions: {
 				type: Object as PropType<gameInfoType>,
 				required: true
-			},
+			}
 		},
 		data: () => ({
 			currentRoomId: App.roomId ?? "",
@@ -103,9 +100,11 @@
 		mounted() {
 			this.updateShowControls();
 			emitter.on("RoomJoined", (roomId: string) => {
+				if (GameApp.state != "End") return;
 				this.currentRoomId = roomId;
 			});
 			emitter.on("PlayerListUpdated", (players: PlayerDataType[]) => {
+				if (GameApp.state != "End") return;
 				this.currentRoomId = App.roomId ?? "";
 				this.playerList = this.convertPlayerList();
 			});
@@ -113,8 +112,9 @@
 			this.playerList = this.convertPlayerList();
 
 			emitter.on("HostChanged", () => {
+				if (GameApp.state != "End") return;
 				this.updateShowControls();
-				this.showButtons = App.host
+				this.showButtons = App.host;
 			});
 		},
 		methods: {
@@ -166,19 +166,19 @@
 				this.showCurrentRoomId = !this.showCurrentRoomId;
 				localStorage.setItem("showCurrentRoomId", this.showCurrentRoomId.toString());
 			},
-			totalTime(player: any) : number {
+			totalTime(player: any): number {
 				let total = 0;
 				for (let round in player.guesses) {
-					if (player.guesses[round].time != -1) total += player.guesses[round].time
-					else total += this.gameOptions.timeLimit
+					if (player.guesses[round].time != -1) total += player.guesses[round].time;
+					else total += this.gameOptions.timeLimit;
 				}
 				return total;
 			},
-			totalDistance(player: any) : number {
+			totalDistance(player: any): number {
 				let total = 0;
 				for (let round in player.guesses) {
-					if (player.guesses[round].distance != 0) total += player.guesses[round].distance
-					else total += 0
+					if (player.guesses[round].distance != 0) total += player.guesses[round].distance;
+					else total += 0;
 				}
 				return total;
 			}
@@ -204,7 +204,7 @@
 		background-color: var(--color-surface-3);
 		border-radius: 2rem;
 		box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-		transition: border-color .2s ease;
+		transition: border-color 0.2s ease;
 		&:hover {
 			border-color: var(--border-color-input--hover);
 		}
@@ -218,7 +218,7 @@
 			text-align: center;
 			font-size: 2rem;
 			margin-top: 1rem;
-			margin-bottom: .5rem;
+			margin-bottom: 0.5rem;
 		}
 
 		h2.first {
@@ -254,14 +254,14 @@
 		height: 2rem;
 		text-align: center;
 		margin-bottom: var(--space-md);
-	
+
 		label {
 			display: inline-block;
 			translate: 0 -3px;
-			margin-right: .25rem;
+			margin-right: 0.25rem;
 		}
 		input[type="number"] {
-  			-moz-appearance: textfield;
+			-moz-appearance: textfield;
 			appearance: textfield;
 			background-color: var(--color-surface-2);
 			border: 1px solid var(--border-color-base);
@@ -274,11 +274,11 @@
 			height: 100%;
 			translate: 0 -2px;
 		}
-		
-		input[type="number"]::-webkit-inner-spin-button, 
-		input[type="number"]::-webkit-outer-spin-button { 
-			-webkit-appearance: none; 
-			margin: 0; 
+
+		input[type="number"]::-webkit-inner-spin-button,
+		input[type="number"]::-webkit-outer-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
 		}
 
 		.input-buttons {
@@ -293,11 +293,11 @@
 				color: var(--color-base--subtle);
 				padding: var(--space-sm);
 				font-size: 2rem;
-				
+
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				border: 1px solid var(--border-color-base)
+				border: 1px solid var(--border-color-base);
 			}
 
 			span:first-of-type {
@@ -331,6 +331,6 @@
 	.seed {
 		margin: var(--space-md) 0;
 		text-align: center;
-		font-size: .8rem;
+		font-size: 0.8rem;
 	}
 </style>
