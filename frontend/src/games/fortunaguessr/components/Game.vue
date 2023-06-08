@@ -252,7 +252,7 @@
 		gap: calc(2 * var(--space-xl));
 		margin: 0 2rem;
 
-		@media screen and (max-width: 900px) {
+		@media screen and (max-width: 1100px) {
 			grid-template-columns: 1fr;
 			margin: 0 0.5rem;
 		}
