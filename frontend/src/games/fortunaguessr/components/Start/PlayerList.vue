@@ -29,7 +29,7 @@ export default defineComponent({
 	name: "PlayerList",
 	data: () => ({
 		playerList: [] as PlayerDataType[],
-		showControls: App.host
+		showControls: App.isHost
 	}),
 	mounted() {
 		emitter.on("PlayerListUpdated", (players: PlayerDataType[]) => {
@@ -40,8 +40,8 @@ export default defineComponent({
 
 		emitter.on("HostChanged", () => {
 			if (GameApp.state != "Start") return;
-			this.showControls = App.host;
-			console.log(App.host);
+			this.showControls = App.isHost;
+			///console.log(App.isHost);
 		});
 	},
 	methods: {

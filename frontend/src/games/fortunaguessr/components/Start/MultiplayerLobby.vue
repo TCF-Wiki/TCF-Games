@@ -70,13 +70,14 @@ export default defineComponent({
 			}
 		})(),
 		playerList: [] as PlayerDataType[],
-		showControls: App.host,
+		showControls: App.isHost,
 		canClickButton: true
 	}),
 	mounted() {
 		emitter.on("RoomJoined", (roomId: string) => {
 			if (GameApp.state != "Start") return;
 			this.currentRoomId = roomId;
+			toast.success("Joined room with ID: " + roomId);
 		});
 		emitter.on("PlayerListUpdated", (players: PlayerDataType[]) => {
 			if (GameApp.state != "Start") return;
@@ -88,8 +89,8 @@ export default defineComponent({
 
 		emitter.on("HostChanged", () => {
 			if (GameApp.state != "Start") return;
-			this.showControls = App.host;
-			console.log(App.host);
+			this.showControls = App.isHost;
+			///console.log(App.isHost);
 		});
 		emitter.on("RefreshName", (name: string) => {
 			this.name = name;
@@ -100,8 +101,7 @@ export default defineComponent({
 			if (!this.canClickButton) return;
 			this.disableButtons();
 			if (this.roomId == this.currentRoomId || this.roomId == "") return;
-			this.changeName();
-			if (this.name.length < 16) App.JoinRoom(this.roomId);
+			if (this.name.length < 16) App.JoinRoom(this.roomId, this.name);
 		},
 		leaveRoom() {
 			if (!this.canClickButton) return;
@@ -113,7 +113,7 @@ export default defineComponent({
 			this.disableButtons();
 			if (!this.name) this.name = App.myPlayerData.name;
 			if (this.name.length >= 16) {
-				toast.error("Names cannot be longer than 15 characters.");
+				toast.error("Names cannot be longer than 16 characters.");
 				return;
 			}
 			App.ChangeName(this.name);

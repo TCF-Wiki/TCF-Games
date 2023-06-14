@@ -119,7 +119,7 @@ export default defineComponent({
 		},
 		ShareLoadout: function () {
 			let shareString = "?";
-			console.log(this.weapons);
+			///console.log(this.weapons);
 			//Weapons
 			shareString += "weapon=" + this.weapons[0].img;
 			if (this.weapons.length == 2) shareString += "&weapon=" + this.weapons[1].img;

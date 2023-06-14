@@ -81,7 +81,7 @@ export default defineComponent({
 	name: "Start",
 	data: () => ({
 		enteredSeed: "" as string,
-		showControls: App.host,
+		showControls: App.isHost,
 		playerList: [] as PlayerDataType[],
 		canClickButton: true
 	}),
@@ -109,11 +109,11 @@ export default defineComponent({
 	},
 	mounted() {
 		this.playerList = App.playerList;
-		console.log(App.host);
+		///console.log(App.isHost);
 		emitter.on("HostChanged", () => {
 			if (GameApp.state != "Start") return;
-			this.showControls = App.host;
-			console.log(App.host);
+			this.showControls = App.isHost;
+			///console.log(App.isHost);
 		});
 	}
 });

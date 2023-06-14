@@ -46,7 +46,7 @@ export var GameApp = {
 		IO.socket.emit("submitGuess", {roomId: App.roomId, guess: guessInfo});
 	},
 	GuessSubmitted(data: {guess: guessInfoType; socket: string}) {
-		console.log("Guess submitted", data.guess);
+		console.log("(For debugging) Guess submitted with data: ", data.guess);
 		//Update player game data
 		App.UpdatePlayerData(
 			App.playerList.map((player) => {

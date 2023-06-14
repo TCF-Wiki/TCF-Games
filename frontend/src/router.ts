@@ -3,7 +3,6 @@ import {createRouter, createWebHistory} from "vue-router";
 /*@ts-ignore*/
 import fileRoutes from "~pages";
 import relevantRoutes from "./routes";
-console.log(relevantRoutes);
 const routes = relevantRoutes.map((route) => ({
 	path: route.path,
 	name: route.name,
@@ -21,7 +20,6 @@ const router = createRouter({
 //Reload page on route change
 router.beforeEach((to, from, next) => {
 	if (from.name && to.name != from.name) {
-		console.log("Reload!");
 		window.location.pathname = to.path;
 	}
 	next();

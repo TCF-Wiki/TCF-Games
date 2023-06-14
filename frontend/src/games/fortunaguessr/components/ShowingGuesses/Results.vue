@@ -71,7 +71,7 @@ export default defineComponent({
 	methods: {
 		updateShowControls() {
 			this.showControls = false;
-			if (App.host) {
+			if (App.isHost) {
 				if (App.playerList.length > 1) {
 					this.showControls = true;
 				}

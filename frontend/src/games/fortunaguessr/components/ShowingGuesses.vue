@@ -68,22 +68,22 @@ export default defineComponent({
 		showGuesses(): boolean {
 			for (let player in this.playerList) {
 				if (!this.playerList[player].gameData?.guesses[this.currentRound]) {
-					console.log("Player " + this.playerList[player].name + " has not guessed yet");
+					///console.log("Player " + this.playerList[player].name + " has not guessed yet");
 					return false;
 				}
 			}
-			console.log("Everyone has guessed");
+			///console.log("Everyone has guessed");
 			return true;
 		}
 	},
 	methods: {
 		nextRound() {
-			console.log("Next round");
+			///console.log("Next round");
 			emitter.emit("StartNextRound");
 		},
 		checkControl() {
 			//Check if host
-			if (!App.host) {
+			if (!App.isHost) {
 				this.showControls = false;
 			} else {
 				//Check if everyone has guessed
@@ -98,7 +98,7 @@ export default defineComponent({
 			}
 		},
 		getOwnScore() {
-			console.log("Here is my player data!!", App.myPlayerData.gameData);
+			///console.log("Here is my player data!!", App.myPlayerData.gameData);
 			const score = App.myPlayerData.gameData?.guesses[this.currentRound].score;
 
 			const gameScores = {
@@ -157,7 +157,7 @@ export default defineComponent({
 	mounted() {
 		this.playerList = App.playerList;
 		this.guessData = App.myPlayerData.gameData.guesses[this.currentRound];
-		console.log(this.playerList);
+		///console.log(this.playerList);
 		this.checkControl();
 		emitter.on("Guess", (guessData: guessInfoType) => {
 			if (GameApp.state != "ShowingGuesses") return;
@@ -166,7 +166,7 @@ export default defineComponent({
 		emitter.on("PlayerListUpdated", (players: PlayerDataType[]) => {
 			if (GameApp.state != "ShowingGuesses") return;
 			this.playerList = players;
-			console.log(this.playerList);
+			///console.log(this.playerList);
 			this.checkControl();
 			this.getOwnScore();
 		});

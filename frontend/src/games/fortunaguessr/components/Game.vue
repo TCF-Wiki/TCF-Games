@@ -49,7 +49,7 @@ import {App} from "@/multiplayer";
 export default defineComponent({
 	name: "Guessing",
 	data: () => ({
-		showControls: App.host,
+		showControls: App.isHost,
 		countdownNumber: 0,
 		countDownColor: "var(--color-base--emphasized)",
 		pulseColor: "var(--color-base--emphasized)",
@@ -77,7 +77,7 @@ export default defineComponent({
 	methods: {
 		guess() {
 			if (this.hasGuessed) return;
-			console.log("Making guess");
+			///console.log("Making guess");
 			if (JSON.stringify(this.currentGuess) == "{}" || !this.currentGuess) {
 				toast.info("You have not placed a guess yet.");
 				return;
@@ -97,12 +97,12 @@ export default defineComponent({
 		}
 	},
 	mounted() {
-		console.log(this.$props);
-		console.log(this.location);
+		///console.log(this.$props);
+		///console.log(this.location);
 		this.countdownNumber = this.gameOptions.timeLimit;
 		emitter.on("HostChanged", () => {
 			if (GameApp.state != "Guessing") return;
-			this.showControls = App.host;
+			this.showControls = App.isHost;
 		});
 
 		const frame = this;

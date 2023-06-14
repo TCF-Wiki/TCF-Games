@@ -5,7 +5,7 @@ import {toast} from "@/main";
 export var IO = {
 	socket: io(),
 	init: function () {
-		console.log("Initializing socket.io");
+		///console.log("Initializing socket.io");
 		IO.bindEvents();
 	},
 	// While connected, Socket.IO will listen to the following events and run the correct function.
@@ -20,7 +20,7 @@ export var IO = {
 		IO.socket.on("nameChanged", App.NameChanged);
 	},
 	onConnected: function () {
-		console.log("Connected to server");
+		///console.log("Connected to server");
 		App.CreateRoom();
 		const baseNames = ["Prospector", "Leafman", "Crusher", "Bertha", "Jeff", "KoroSlave", "Strider", "Tick", "Badum", "Rattler", "Howler", "Blueman"];
 		let localStorageName = localStorage.getItem("username");
@@ -56,7 +56,7 @@ export var App = {
 	roomId: null as string | null,
 	playerList: [] as PlayerDataType[],
 	myPlayerData: {} as PlayerDataType,
-	host: false,
+	isHost: false,
 
 	//Functions:
 	CreateRoom() {
@@ -64,23 +64,24 @@ export var App = {
 		IO.socket.on("roomCreated", (roomId: string) => {
 			App.roomId = roomId;
 			App.playerList = [] as PlayerDataType[];
-			App.host = true;
+			App.isHost = true;
 			App.playerList.push(App.myPlayerData);
 			App.RecievedUpdatedPlayerList(App.playerList);
 			emitter.emit("RoomJoined", roomId);
 			emitter.emit("HostChanged", true);
-			toast.success("Room created!");
+			///toast.success("Room created!");
 		});
 	},
-	JoinRoom(roomId: string) {
+	JoinRoom(roomId: string, name: string) {
+		App.myPlayerData.name = name;
 		IO.socket.emit("joinRoom", roomId, App.myPlayerData.name);
 		IO.socket.on("roomJoined", (roomId: string) => {
 			App.roomId = roomId;
 			App.playerList = [] as PlayerDataType[];
-			App.host = false;
+			App.isHost = false;
 			emitter.emit("RoomJoined", roomId);
 			emitter.emit("HostChanged", false);
-			toast.success("Room joined!");
+			///toast.success("Room joined!");
 		});
 	},
 	LeaveRoom() {
@@ -88,7 +89,7 @@ export var App = {
 		App.roomId = null;
 		App.playerList = [];
 		emitter.emit("PlayerListUpdated", [] as PlayerDataType[]);
-		toast.info("Left room!");
+		///toast.info("Left room!");
 		App.CreateRoom();
 	},
 	KickPlayer(socketId: string) {
@@ -112,14 +113,14 @@ export var App = {
 		toast.error(`${data.name} left the game!`);
 	},
 	HostLeft(data: {oldHost: string; newHost: string}) {
-		console.log("Host left");
+		///console.log("Host left");
 		if (App.myPlayerData.socketId === data.newHost) {
-			App.host = true;
+			App.isHost = true;
 			toast.error("The host left the game. You are the new host!");
 			App.playerList = App.playerList.filter((player) => player.socketId !== data.oldHost);
 			IO.socket.emit("playerList", {roomId: App.roomId, playerList: App.playerList});
 		} else {
-			App.host = false;
+			App.isHost = false;
 			toast.error("The host left the game. A new host has been assigned!");
 		}
 		emitter.emit("HostChanged");
@@ -131,9 +132,9 @@ export var App = {
 	RecievedUpdatedPlayerList(data: PlayerDataType[]) {
 		App.playerList = data;
 		App.myPlayerData = App.playerList.find((player) => player.socketId === IO.socket.id) as PlayerDataType;
-		console.log("New player list: ", App.playerList);
-		console.log("My player data: ", App.myPlayerData);
-		toast.info("Player list updated!", {duration: 1000});
+		console.log("(For debugging) New player list data: ", App.playerList);
+		///console.log("My player data: ", App.myPlayerData);
+		///toast.info("Player list updated!", {duration: 1000});
 		emitter.emit("PlayerListUpdated", App.playerList);
 	},
 	ChangeName(newName: string) {

@@ -52,21 +52,21 @@ const credentials = {
 const httpServer = http.createServer(app);
 
 /*httpsServer.listen(443, () => {
-	console.log("listening on *:443");
+	console.log("Server listening to port 443 (HTTPS)");
 });*/
 
 httpServer.listen(5000, () => {
-	console.log("listening on *:80");
+	console.log("Server listening to port 5000 (HTTP)");
 });
 
 //Setup socket.io
 import {Server as IOServer} from "socket.io";
 export const io = new IOServer(httpServer);
 
-/*setInterval(function () {
-	console.log("Connected sockets", io.engine.clientsCount);
-	console.log("Rooms", io.sockets.adapter.rooms);
-}, 5000);*/
+setInterval(function () {
+	console.log("Amount of connected sockets is " + io.engine.clientsCount);
+	console.log("Currently open rooms:", io.sockets.adapter.rooms);
+}, 60 * 1000);
 
 //Load main logic
 import "./mainLogic";

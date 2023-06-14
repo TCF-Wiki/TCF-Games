@@ -28,7 +28,7 @@ export default {
 				timeLimit: this.timeLength,
 				maps: maps
 			} as gameInfoType;
-			console.log("Starting game with options: ", options);
+			///console.log("Starting game with options: ", options);
 			emitter.emit("StartGameWithOptions", options);
 		},
 		sliderRatio: function (e: any): void {

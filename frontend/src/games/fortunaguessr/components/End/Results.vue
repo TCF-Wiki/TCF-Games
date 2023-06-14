@@ -85,7 +85,7 @@ export default defineComponent({
 		currentRoomId: App.roomId ?? "",
 		playerList: [] as {name: string; socketId: string; score: number; guesses: guessInfoType[]}[],
 		showControls: false,
-		showButtons: App.host,
+		showButtons: App.isHost,
 		showCurrentRoomId: (() => {
 			let storage = localStorage.getItem("showCurrentRoomId");
 			if (storage != null) {
@@ -114,13 +114,13 @@ export default defineComponent({
 		emitter.on("HostChanged", () => {
 			if (GameApp.state != "End") return;
 			this.updateShowControls();
-			this.showButtons = App.host;
+			this.showButtons = App.isHost;
 		});
 	},
 	methods: {
 		updateShowControls() {
 			this.showControls = false;
-			if (App.host) {
+			if (App.isHost) {
 				if (App.playerList.length > 1) {
 					this.showControls = true;
 				}
@@ -133,11 +133,11 @@ export default defineComponent({
 			App.KickPlayer(player.socketId);
 		},
 		restartGame() {
-			console.log("Restarting game");
+			///console.log("Restarting game");
 			emitter.emit("StartGameWithOptions", null);
 		},
 		backToLobby() {
-			console.log("Back to lobby");
+			///console.log("Back to lobby");
 			GameApp.SendBackToLobby();
 		},
 		leaveRoom() {

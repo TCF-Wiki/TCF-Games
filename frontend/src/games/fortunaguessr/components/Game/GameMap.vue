@@ -38,7 +38,7 @@ export default defineComponent({
 		}
 	},
 	mounted() {
-		console.log("Creating game map");
+		///console.log("Creating game map");
 		this.mapNumber = this.gameOptions.maps[0];
 		let map = L.map("GameMap", {
 			crs: L.CRS.Simple,

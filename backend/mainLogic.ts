@@ -23,7 +23,7 @@ setInterval(function () {
 }, 5000);
 
 io.on("connection", (socket: Socket) => {
-	console.log("New connection: ", socket.id);
+	console.log("New connection: " + socket.id);
 	socket.emit("connected");
 	socket.on("createRoom", () => {
 		//Leave old rooms
@@ -35,7 +35,7 @@ io.on("connection", (socket: Socket) => {
 		roomData.push({roomId: roomId, hostSocket: socket.id, gameState: "waiting", playerList: [] as PlayerDataType[]});
 	});
 	socket.on("joinRoom", (roomId: string, name: string) => {
-		console.log("Joining room: ", roomId);
+		console.log(name + " is joining room " + roomId);
 		//Find and check room
 		const room = GetRoom(roomId, socket);
 		if (!room) return;
@@ -58,7 +58,7 @@ io.on("connection", (socket: Socket) => {
 		EmitToHost(roomId, "newPlayerJoinedRoom", {name: name, socketId: socket.id} as PlayerDataType);
 	});
 	socket.on("leaveRoom", () => {
-		console.log("Leaving rooms");
+		console.log(socket.id + " is leaving rooms");
 		LeaveAllRooms(socket);
 	});
 	socket.on("kickPlayer", (socketId: string, roomId: string) => {
@@ -70,7 +70,7 @@ io.on("connection", (socket: Socket) => {
 		//Check if player is in room
 		if (!room.playerList.find((a) => a.socketId == socketId)) {
 			socket.emit("error", "Player not found in room.");
-			console.log("Player not found in room.");
+			console.log("Player (" + socketId + ") not found in room (" + roomId + ").");
 			return;
 		}
 		//Kick player from io room

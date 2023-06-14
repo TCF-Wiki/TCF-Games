@@ -10,7 +10,7 @@ io.on("connection", (socket: Socket) => {
 		//Check if player is host
 		if (GetHost(data.roomId) != socket.id) return;
 		//Start game
-		console.log("Game started with seed: " + data.seed);
+		console.log("Game started with seed: " + data.seed + " in room: " + data.roomId);
 		SetRoomGameState(data.roomId, "playing");
 		io.to(data.roomId).emit("gameStarted", data.seed);
 	});
@@ -20,7 +20,7 @@ io.on("connection", (socket: Socket) => {
 		//Check if player is host
 		if (GetHost(roomId) != socket.id) return;
 		//Start next round
-		console.log("Next round started");
+		console.log("Next round started in room: " + roomId);
 		io.to(roomId).emit("nextRoundStarted");
 	});
 	socket.on("endGame", (roomId: string) => {
@@ -29,7 +29,7 @@ io.on("connection", (socket: Socket) => {
 		//Check if player is host
 		if (GetHost(roomId) != socket.id) return;
 		//End game
-		console.log("Game ended");
+		console.log("Game ended in room: " + roomId);
 		SetRoomGameState(roomId, "done");
 		io.to(roomId).emit("gameEnded");
 	});
@@ -63,7 +63,7 @@ io.on("connection", (socket: Socket) => {
 		//Check if player is host
 		if (GetHost(roomId) != socket.id) return;
 		//Send back to lobby
-		console.log("Back to lobby");
+		console.log("Room " + roomId + "is returning to lobby");
 		SetRoomGameState(roomId, "waiting");
 		io.to(roomId).emit("backToLobby");
 	});

@@ -95,41 +95,41 @@ export default defineComponent({
 			}
 		);
 		emitter.on("Guess", (guessData: guessInfoType) => {
-			console.log("Received guess event", guessData);
+			///console.log("Received guess event", guessData);
 			GameApp.SubmitGuess(guessData);
 			this.state = "ShowingGuesses";
 		});
 		emitter.on("StartNextRound", () => {
-			if (App.host) {
+			if (App.isHost) {
 				GameApp.StartNextRound();
 			}
 		});
 		emitter.on("NextRound", () => {
-			console.log("Recieved next round event");
+			///console.log("Recieved next round event");
 			this.currentRound++;
 			if (this.currentRound >= this.gameOptions.length) {
-				if (App.host) GameApp.SendGameEnded();
+				if (App.isHost) GameApp.SendGameEnded();
 			} else {
 				this.state = "Guessing";
 			}
 		});
 		emitter.on("GameEnded", () => {
-			console.log("Received game ended event");
+			///console.log("Received game ended event");
 			this.state = "End";
 		});
 		emitter.on("BackToLobby", () => {
-			console.log("Received back to lobby event");
+			///console.log("Received back to lobby event");
 			this.state = "Start";
 		});
 		emitter.on("RoomJoined", () => {
-			console.log("Received room joined event");
+			///console.log("Received room joined event");
 			this.state = "Start";
 		});
 		this.state = "Start";
 	},
 	watch: {
 		state() {
-			console.log("State changed to", this.state);
+			///console.log("State changed to", this.state);
 			let VueFile = (() => {
 				switch (this.state) {
 					case "Start":
@@ -167,7 +167,7 @@ export default defineComponent({
 				maps: (1 | 2 | 3)[] | null;
 			} | null
 		) {
-			console.log("Received start game event", recievedOptions);
+			///console.log("Received start game event", recievedOptions);
 			let options = {} as {
 				length: number;
 				difficulty: number;
@@ -183,7 +183,7 @@ export default defineComponent({
 			} else {
 				options = this.gameOptions;
 			}
-			console.log("Game options", options);
+			///console.log("Game options", options);
 			//Check if all options are set
 			if (!options.length || !options.difficulty || !options.timeLimit || !options.maps) {
 				toast.error("Game options has not been set");
@@ -194,10 +194,10 @@ export default defineComponent({
 
 			//Generate game locations
 			let availableLocations: locationType[] = locationData.filter((a) => a.difficulty.includes(options.difficulty) && options.maps.includes(a.map));
-			console.log("Available locations", availableLocations);
+			///console.log("Available locations", availableLocations);
 			if (availableLocations.length < options.length) {
 				toast.error("Not enough locations available with the selected options");
-				console.log("Not enough locations available with the selected options");
+				///console.log("Not enough locations available with the selected options");
 				return;
 			}
 			for (let i = 0; i < options.length; i++) {
@@ -209,12 +209,12 @@ export default defineComponent({
 				//Remove location from available locations
 				availableLocations = availableLocations.filter((a) => a != location);
 			}
-			console.log("Game seed", seed);
+			///console.log("Game seed", seed);
 			//Start game
 			GameApp.StartGame(seed);
 		},
 		StartGameFromSeed(seed: string) {
-			console.log("Starting game from seed", seed);
+			///console.log("Starting game from seed", seed);
 			try {
 				//Set current round to 0
 				this.currentRound = 0;
@@ -238,8 +238,8 @@ export default defineComponent({
 				for (let i = 0; i < this.gameOptions.length; i++) {
 					this.locations.push(locationData[parseInt(splitSeed[i + 4])]);
 				}
-				console.log("Game options", this.gameOptions);
-				console.log("Game locations", this.locations);
+				///console.log("Game options", this.gameOptions);
+				///console.log("Game locations", this.locations);
 				//Set state to guessing
 				this.state = "Guessing";
 				//Show toast

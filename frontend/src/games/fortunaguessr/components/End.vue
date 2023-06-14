@@ -37,7 +37,7 @@ export default defineComponent({
 		}
 	},
 	data: () => ({
-		showControls: App.host,
+		showControls: App.isHost,
 		flairMessage: "",
 		showPopup: false,
 		shouldHaveHiddenClass: false
@@ -110,7 +110,7 @@ export default defineComponent({
 			return isSelfWinner ? "You won the game!" : winner.name + " won the game!";
 		},
 		closePopup(element: MouseEvent) {
-			console.log("Closing popup");
+			///console.log("Closing popup");
 			let target = element.target as HTMLElement;
 			while (!target.classList.contains("modal__bg")) {
 				target = target.parentElement as HTMLElement;
@@ -122,7 +122,7 @@ export default defineComponent({
 		if (App.playerList.length != 1) this.showPopup = true;
 		emitter.on("HostChanged", () => {
 			if (GameApp.state != "End") return;
-			this.showControls = App.host;
+			this.showControls = App.isHost;
 		});
 	},
 	components: {EndMap, Results}

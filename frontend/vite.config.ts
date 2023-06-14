@@ -16,7 +16,7 @@ export default defineConfig({
 		Pages({
 			dirs: "src/views",
 			onRoutesGenerated: (fileroutes) => {
-				console.log("Generating sitemap");
+				console.log("\nGenerating sitemap");
 				generateSitemap({
 					routes: siteMapRoutes,
 					readable: true,
