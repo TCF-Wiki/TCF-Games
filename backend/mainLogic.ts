@@ -16,14 +16,18 @@ export function SetRoomGameState(roomId: string, gameState: "waiting" | "playing
 		console.log("Room not found: ", roomId);
 		return;
 	}
+	//Update stats
+	if (room.gameState == "waiting" || room.gameState == "done") realtimeWaitingRoomsCounter.dec();
+	else if (room.gameState == "playing") realtimePlayingRoomsCounter.dec();
+	if (gameState == "waiting" || room.gameState == "done") realtimeWaitingRoomsCounter.inc();
+	else if (gameState == "playing") realtimePlayingRoomsCounter.inc();
+	//Update room data
 	room.gameState = gameState;
 }
-setInterval(function () {
-	///console.log("RoomData", roomData);
-}, 5000);
 
 io.on("connection", (socket: Socket) => {
 	console.log("New connection: " + socket.id);
+	realtimeConnectionsCounter.inc();
 	socket.emit("connected");
 	socket.on("createRoom", () => {
 		//Leave old rooms
@@ -33,6 +37,8 @@ io.on("connection", (socket: Socket) => {
 		socket.join(roomId);
 		socket.emit("roomCreated", roomId);
 		roomData.push({roomId: roomId, hostSocket: socket.id, gameState: "waiting", playerList: [] as PlayerDataType[]});
+		realtimeRoomsCounter.inc();
+		realtimeWaitingRoomsCounter.inc();
 	});
 	socket.on("joinRoom", (roomId: string, name: string) => {
 		console.log(name + " is joining room " + roomId);
@@ -94,6 +100,7 @@ io.on("connection", (socket: Socket) => {
 		io.to(data.roomId).emit("playerList", data.playerList);
 	});
 	socket.on("disconnecting", () => {
+		realtimeConnectionsCounter.dec();
 		LeaveAllRooms(socket);
 	});
 	socket.on("changeName", (name: string) => {
@@ -157,7 +164,13 @@ function LeaveAllRooms(socket: Socket) {
 			//Remove host from player list
 			room.playerList = room.playerList.filter((a) => a.socketId != socket.id);
 			//If no players left, remove room
-			if (room.playerList.length == 0) roomData = roomData.filter((a) => a.roomId != roomId);
+			if (room.playerList.length == 0) {
+				realtimeRoomsCounter.dec();
+				if (room.gameState == "waiting" || room.gameState == "done") realtimeWaitingRoomsCounter.dec();
+				else if (room.gameState == "playing") realtimePlayingRoomsCounter.dec();
+				roomData = roomData.filter((a) => a.roomId != roomId);
+				return;
+			}
 			//Else set new host
 			room.hostSocket = room.playerList[0]?.socketId;
 			//Tell players in room that host left
@@ -172,3 +185,30 @@ function LeaveAllRooms(socket: Socket) {
 		}
 	});
 }
+
+//Stats
+import pm2 from "@pm2/io";
+export const realtimeConnectionsCounter = pm2.counter({
+	name: "Realtime connections",
+	id: "app/realtime/connections",
+	unit: "connections",
+	historic: true
+});
+export const realtimeRoomsCounter = pm2.counter({
+	name: "Realtime rooms",
+	id: "app/realtime/rooms",
+	unit: "rooms",
+	historic: true
+});
+export const realtimePlayingRoomsCounter = pm2.counter({
+	name: "Realtime playing rooms",
+	id: "app/realtime/playing-rooms",
+	unit: "rooms",
+	historic: true
+});
+export const realtimeWaitingRoomsCounter = pm2.counter({
+	name: "Realtime waiting rooms",
+	id: "app/realtime/waiting-rooms",
+	unit: "rooms",
+	historic: true
+});

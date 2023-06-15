@@ -1,6 +1,10 @@
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv";
 //Debug vs production settings
-const enableHttps = false;
-const frontendPath = "../frontend/dist";
+dotenv.config();
+const enableHttps = (process.env.enableHttps == "true") as boolean;
+const frontendPath = path.join(__dirname, process.env.frontendPath as string);
 
 import express from "express";
 import bodyParser from "body-parser";
@@ -51,9 +55,7 @@ httpServer.listen(80, () => {
 });
 
 //Setup https server
-import fs from "fs";
 import https from "https";
-
 if (enableHttps) {
 	//Certificate
 	const privateKey = fs.readFileSync("/etc/letsencrypt/live/games.thecyclefrontier.wiki/privkey.pem", "utf8");
@@ -77,17 +79,10 @@ if (enableHttps) {
 }
 export const io = ioServer;
 
-//Stats
-setInterval(function () {
-	console.log("Amount of connected sockets is " + io.engine.clientsCount);
-	console.log("Currently open rooms:", io.sockets.adapter.rooms);
-}, 60 * 1000);
-
 //Load main logic
 import "./mainLogic";
 
 //Load logic
-import path from "path";
 const logicPath = path.join(__dirname, "games");
 const logicFiles = fs.readdirSync(logicPath);
 for (const file of logicFiles) {
