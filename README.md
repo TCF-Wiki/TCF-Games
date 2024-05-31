@@ -13,8 +13,11 @@ $ cd TCF-Games/frontend
 $ npm install --save
 $ cd ../backend 
 $ npm install --save
+
 // now to run it (start in backend folder), or press F5 in VSCode
 $ npm run start
 $ cd ../frontend
 $ npm run build
+// it will launch on localhost:80
 ```
+
