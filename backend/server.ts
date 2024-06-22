@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 //Debug vs production settings
 dotenv.config();
 const enableHttps = process.env.enableHttps == "true";
-const frontendPath = path.join(__dirname, process.env.frontendPath);
+const frontendPath = path.join(__dirname, process.env.frontendPath ?? "");
 
 import express from "express";
 import bodyParser from "body-parser";
