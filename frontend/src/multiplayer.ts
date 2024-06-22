@@ -36,7 +36,7 @@ export var IO = {
 			})();
 		App.myPlayerData = {
 			name: name,
-			socketId: IO.socket.id
+			socketId: IO.socket.id ?? ""
 		};
 		emitter.emit("RefreshName", name);
 	},
